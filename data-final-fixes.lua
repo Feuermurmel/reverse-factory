@@ -1,3 +1,10 @@
+--Remove Bio Industries dissassemble recipes
+if data.raw.recipe["bi-burner-mining-drill-disassemble"] then
+  data.raw.recipe["bi-burner-mining-drill-disassemble"] = nil
+  data.raw.recipe["bi-steel-furnace-disassemble"] = nil
+  thxbob.lib.tech.remove_recipe_unlock("advanced-material-processing", "bi-steel-furnace-disassemble")
+end
+
 --Initialisation
 --rf_recipes will contain all recipes that the reverse factory needs to know to disassemble the items
 --yuokiSuffix allows the mod to catch Yuoki recipes
