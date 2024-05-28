@@ -16,10 +16,9 @@ rf.norecycle_subgroups = {}
 rf.maxResults = {5,5,5,5}
 
 --If certain mods are detected, change some recipes later
-if mods["Fantario"] then
-	rf.mods = "fantario"
-end
-if mods["Fantario"] then
+if mods["bobplates"] then
+	rf.mods = "bobplates"
+elseif mods["Fantario"] then
 	rf.mods = "fantario"
 end
 

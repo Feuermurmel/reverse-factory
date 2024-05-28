@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.2
+Date: July 11, 2019
+  Minor Features:
+    - Fully featured Fantario compatibility.
+      T1-3 machines rely on heat as power source; T4 machine locked behind space science.
+      Recipes and technologies rebalanced for Fantario progression.
+  Changes:
+    - Set maxmimum results for lower tier machines.
+      T1 max of 5 products, T2 max of 10 products, T3 max of 15 products, T4 unlimited.
+      Only noticeable with certain mods (Fantario)
+    - Rebalanced module slots of machines to make T1 noticeably weaker.
+    - Reduced time in recipe for reverse factories from 20s to 5s.
+      Now it can actually recycle itself in a resonable amount of time.
+  Graphics:
+    - Changed icon graphics to match properly.
+  Bugfixes:
+    - Fixed accidental reduction of base recipe costs due to efficiency percentage setting.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.1
 Date: July 10, 2019
   Bugfixes:
@@ -25,6 +43,8 @@ Date: July 9, 2019
     - Removed non-recyclable intermediate ingredients setting.
     - Added 2 higher tiers of reverse factory, tier 4 of which can recycle intermediates.
     - Changed recipes of the 2 lower tiered machines when playing vanilla or bobs mods.
+    - Bobs mods will enable more complex recipes and different technology requirements.
+    - Recycling recipes changed from a set time cost to 3 times the original recipe's time cost.
   Minor Features:
     - Added efficiency percentage, to reduce the amount of returned ingredients (100% by default)
   Graphics:

@@ -28,7 +28,7 @@ local function rfRecipe(n)
 	local recipe = {
 		type = "recipe",
 		name = "reverse-factory-"..n,
-		energy_required = 20,
+		energy_required = 5,
 		enabled = "false",
 		ingredients = 
 		{
@@ -73,9 +73,9 @@ local function rfEntity(n)
 		},
 		collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
 		selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
-		--Module slots start at 3 for t1, end at 6 for t4
+		--Module slots set to 1,3,4,6 (T1 much weaker than T2, and T4 much stronger than t3)
 		module_specification = {
-			module_slots = 2+n,
+			module_slots = math.floor(1.5*n),
 			module_info_icon_shift = {0, 0.8},
 		},
 		allowed_effects = {"consumption", "speed", "pollution"},
@@ -309,3 +309,4 @@ for n=1,4 do
 	data:extend({rfEntity(n)})
 	data:extend({rfTech(n)})
 end
+

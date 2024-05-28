@@ -139,7 +139,7 @@ function makeRecipe(itemType, recipe)
 
 	Recipe(nrec):set_enabled(true)
 	Recipe(nrec):set_fields(toAdd)
-	
+
 	removeResults(nrec)
 	formatResults(nrec,recipe)
 	--rf.debug(data.raw.recipe[nrec])
@@ -174,7 +174,7 @@ function makeRecipe(itemType, recipe)
 	--rf.debug(nrecData)
 end
 
---Check recipe for result count 
+--Check recipe for result count and gate beind specific tier
 function checkResults(itemType,recipe)
 	--Default values for count and category
 	local normalCount = recipe.result_count and recipe.result_count or 1
@@ -305,8 +305,7 @@ function formatResults(nrec,recipe)
 	if recipe.normal then
 		for _, ingred in pairs(recipe.normal.ingredients) do
 			if ingred.type then
-				newResult = ingred
-				newResult.amount = (math.ceil(rf.efficiency*ingred.amount/100))
+				newResult = {type=ingred.type, name=ingred.name, amount = (math.ceil(rf.efficiency*ingred.amount/100))}
 			else
 				ingredAmount = ingred[2] or ingred.amount 
 				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
@@ -314,9 +313,8 @@ function formatResults(nrec,recipe)
 			table.insert(nrecData.normal.results, newResult)
 		end
 		for _, ingred in pairs(recipe.expensive.ingredients) do
-			if ingred.type then 
-				newResult = ingred
-				newResult.amount = (math.ceil(rf.efficiency*ingred.amount/100))
+			if ingred.type then
+				newResult = {type=ingred.type, name=ingred.name, amount = (math.ceil(rf.efficiency*ingred.amount/100))}
 			else 
 				ingredAmount = ingred[2] or ingred.amount
 				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
@@ -324,9 +322,8 @@ function formatResults(nrec,recipe)
 			table.insert(nrecData.expensive.results, newResult)
 		end
 	else for _, ingred in pairs(recipe.ingredients) do
-			if ingred.type then 
-				newResult = ingred
-				newResult.amount = (math.ceil(rf.efficiency*ingred.amount/100))
+			if ingred.type then
+				newResult = {type=ingred.type, name=ingred.name, amount = (math.ceil(rf.efficiency*ingred.amount/100))}
 			else
 				ingredAmount = ingred[2] or ingred.amount
 				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
