@@ -32,6 +32,7 @@ function createSimpleRecipe(recipe, item)
 	if recipe.results then if recipe.results[1] then if recipe.results[1].amount then
 		rec_count = recipe.results[1].amount
 	end end end
+	local new_ingreds = fixstackable(recipe.ingredients)
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
 	local new_recipe = {}
 	new_recipe = {
@@ -44,7 +45,7 @@ function createSimpleRecipe(recipe, item)
 		hidden = "true",
 		energy_required = 30,
 		ingredients = {{rec_name, rec_count}},
-		results = recipe.ingredients,
+		results = new_ingreds,
 		allow_decomposition = false
 	}
 	--Icons supercede the use of icon
@@ -77,6 +78,8 @@ function createDualRecipe(recipe, item)
 		expencount = recipe.expensive.results[1].amount
 	end end end
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
+	local new_normal_ingreds = fixstackable(recipe.normal.ingredients)
+	local new_expensive_ingreds = fixstackable(recipe.expensive.ingredients)
 	local new_recipe = {}
 	new_recipe = {
 		type = "recipe",
@@ -86,14 +89,14 @@ function createDualRecipe(recipe, item)
 		category = "recycle",
 		normal = {
 			ingredients = {{rec_name, normacount}},
-			results = recipe.normal.ingredients,
+			results = new_normal_ingreds,
 			hidden = "true",
 			energy_required = 30,
 			allow_decomposition = false
 			},
 		expensive = {
 			ingredients = {{rec_name, expencount}},
-			results = recipe.expensive.ingredients,
+			results = new_expensive_ingreds,
 			hidden = "true",
 			energy_required = 30,
 			allow_decomposition = false
@@ -192,7 +195,7 @@ end
 --Always true if safety is toggled off. Safety prevents ingredient loss. Only works for simple and normal variant recipes.
 --I also borrowed it to disable an angels crushed stone recipe (which just duplicates, for some reason)
 function uncraftable(recipe, item)
-	uncraft = true
+	local uncraft = true
 	if recipe.name == "stone-crushed" then
 		uncraft = false
 	end
@@ -200,8 +203,44 @@ function uncraftable(recipe, item)
 		if recipe.ingredients then
 			for _, ingred in ipairs(recipe.ingredients) do
 				--Do not attempt to uncraft if one of the ingredients exceeds its stack size
-				if (data.raw.item[ingred[1]]) then
+				if (data.raw.ammo[ingred[1]]) then
+					if (ingred[2] > data.raw.ammo[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.armor[ingred[1]]) then
+					if (ingred[2] > data.raw.armor[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.item[ingred[1]]) then
 					if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.gun[ingred[1]]) then
+					if (ingred[2] > data.raw.gun[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.capsule[ingred[1]]) then
+					if (ingred[2] > data.raw.capsule[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.module[ingred[1]]) then
+					if (ingred[2] > data.raw.module[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.tool[ingred[1]]) then
+					if (ingred[2] > data.raw.tool[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw["rail-planner"][ingred[1]]) then
+					if (ingred[2] > data.raw["rail-planner"][ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw["mining-tool"][ingred[1]]) then
+					if (ingred[2] > data.raw["mining-tool"][ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw["repair-tool"][ingred[1]]) then
+					if (ingred[2] > data.raw["repair-tool"][ingred[1]].stack_size) then
 						uncraft=false
 					end
 				end
@@ -209,9 +248,91 @@ function uncraftable(recipe, item)
 		elseif recipe.normal.ingredients then
 			for _, ingred in ipairs(recipe.normal.ingredients) do
 				--Do not attempt to uncraft if one of the ingredients exceeds its stack size
-				if (data.raw.item[ingred[1]]) then
+				if (data.raw.ammo[ingred[1]]) then
+					if (ingred[2] > data.raw.ammo[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.armor[ingred[1]]) then
+					if (ingred[2] > data.raw.armor[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.item[ingred[1]]) then
 					if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
 						uncraft=false
+					end
+				elseif (data.raw.gun[ingred[1]]) then
+					if (ingred[2] > data.raw.gun[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.capsule[ingred[1]]) then
+					if (ingred[2] > data.raw.capsule[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.module[ingred[1]]) then
+					if (ingred[2] > data.raw.module[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw.tool[ingred[1]]) then
+					if (ingred[2] > data.raw.tool[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw["rail-planner"][ingred[1]]) then
+					if (ingred[2] > data.raw["rail-planner"][ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw["mining-tool"][ingred[1]]) then
+					if (ingred[2] > data.raw["mining-tool"][ingred[1]].stack_size) then
+						uncraft=false
+					end
+				elseif (data.raw["repair-tool"][ingred[1]]) then
+					if (ingred[2] > data.raw["repair-tool"][ingred[1]].stack_size) then
+						uncraft=false
+					end
+				end
+			end
+			if recipe.expensive.ingredients then
+				for _, ingred in ipairs(recipe.expensive.ingredients) do
+					--Do not attempt to uncraft if one of the ingredients exceeds its stack size
+					if (data.raw.ammo[ingred[1]]) then
+						if (ingred[2] > data.raw.ammo[ingred[1]].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.armor[ingred[1]]) then
+						if (ingred[2] > data.raw.armor[ingred[1]].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.item[ingred[1]]) then
+						if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.gun[ingred[1]]) then
+						if (ingred[2] > data.raw.gun[ingred[1]].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.capsule[ingred[1]]) then
+						if (ingred[2] > data.raw.capsule[ingred[1]].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.module[ingred[1]]) then
+						if (ingred[2] > data.raw.module[ingred[1]].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.tool[ingred[1]]) then
+						if (ingred[2] > data.raw.tool[ingred[1]].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["rail-planner"][ingred[1]]) then
+						if (ingred[2] > data.raw["rail-planner"][ingred[1]].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["mining-tool"][ingred[1]]) then
+						if (ingred[2] > data.raw["mining-tool"][ingred[1]].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["repair-tool"][ingred[1]]) then
+						if (ingred[2] > data.raw["repair-tool"][ingred[1]].stack_size) then
+							uncraft=false
+						end
 					end
 				end
 			end
@@ -220,6 +341,86 @@ function uncraftable(recipe, item)
 	if not uncraft then log("Item cannot be uncrafted: "..item.name) end
 	return uncraft
 end
+
+function fixstackable(ingredients, item)
+	local new_ingreds = {}
+	for _, ingred in ipairs (ingredients) do
+		if data.raw.ammo[ingred[1]] then 
+			if data.raw.ammo[ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw.ammo[ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		elseif data.raw.armor[ingred[1]] then
+			if data.raw.armor[ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw.armor[ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		elseif data.raw.item[ingred[1]] then
+			if data.raw.item[ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw.item[ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		elseif data.raw.gun[ingred[1]] then
+			if data.raw.gun[ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw.gun[ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		elseif data.raw.capsule[ingred[1]] then
+			if data.raw.capsule[ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw.capsule[ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		elseif data.raw.module[ingred[1]] then
+			if data.raw.module[ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw.module[ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		elseif data.raw.tool[ingred[1]] then
+			if data.raw.tool[ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw.tool[ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		elseif data.raw["rail-planner"][ingred[1]] then
+			if data.raw["rail-planner"][ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw["rail-planner"][ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		elseif data.raw["mining-tool"][ingred[1]] then
+			if data.raw["mining-tool"][ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw["mining-tool"][ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		elseif data.raw["repair-tool"][ingred[1]] then
+			if data.raw["repair-tool"][ingred[1]].stack_size >= ingred[2] then
+				table.insert(new_ingreds, ingred)
+			else 
+				ingred[2] = data.raw["repair-tool"][ingred[1]].stack_size
+				table.insert(new_ingreds, ingred)
+			end
+		end
+	end
+	return new_ingreds
+end
+
+
 
 --[[
 --Checks recipe for inconsistencies; Possibly no longer necessary

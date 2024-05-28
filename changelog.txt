@@ -1,5 +1,10 @@
 REVERSE FACTORY
 ---------------------------------------------------------------------------------------------------
+Version: 6.0.3
+  Changes:
+    - Fix for recipes with nonstackable ingredients (these shouldn't exist in the first place)
+    - To recycle these recipes, ingredient safety toggle must be disabled (is not lossless)
+---------------------------------------------------------------------------------------------------
 Version: 6.0.2
   Changes:
     - Potentially fixed the "total raw" calculation bug (thanks to mrudat if it works!)
