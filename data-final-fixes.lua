@@ -49,6 +49,13 @@ for _, itemType in pairs(itemTypes) do
 	addRecipes(itemType, data.raw[itemType])
 end
 
+for _, recycle in pairs(rf.custom_recycle) do
+	itemType = recycle[1]
+	item = data.raw[itemType][recycle[2]]
+	recipe = data.raw.recipe[recycle[3]]
+	makeRecipe(itemType, item, recipe)
+end
+
 fixMaxResults()
 
 --Set result size of entities based on largest recipe count in current game
@@ -58,7 +65,6 @@ for n=1,4 do
 		data.raw["furnace"]["nullius-reverse-factory-"..n].result_inventory_size = rf.maxResults[n]
 	end
 end
-
 
 
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))

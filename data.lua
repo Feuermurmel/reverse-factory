@@ -12,6 +12,7 @@ rf.noprod = settings.startup["rf-prod-loop"].value
 rf.norecycle_items = {}
 rf.norecycle_categories = {}
 rf.norecycle_subgroups = {}
+rf.custom_recycle = {}  --Format of {item-type, item-name, recipe-name}
 rf.maxResults = {5,5,5,5}
 
 --If certain mods are detected, change some recipes later
@@ -71,3 +72,7 @@ table.insert(rf.norecycle_items, "stone-crushed")
 table.insert(rf.norecycle_subgroups, "smelting_fantario")
 table.insert(rf.norecycle_subgroups, "petrochem-catalysts")
 table.insert(rf.norecycle_categories, "seed-extractor")
+--Test for adding custom recycling recipes, only for use with Robot Army
+--This feature is not needed for vanilla or most mods
+--table.insert(rf.custom_recycle, {"item", "droid-smg-dummy", "droid-smg-deploy"})
+--table.insert(rf.custom_recycle, {"item", "terminator-dummy", "terminator-deploy"})

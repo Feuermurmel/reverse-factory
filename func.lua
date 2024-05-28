@@ -121,7 +121,7 @@ function addRecipes(itemType, group)
 			if reversible then
 				if checkProbs(recipe,item) then
 					if checkRecipe(recipe,item) then
-						makeRecipe(itemType,recipe)
+						makeRecipe(itemType,item,recipe)
 					end
 				end
 			end
@@ -177,9 +177,9 @@ function checkRecipe(recipe,item)
 end
 
 --Create a reverse recipe for input recipe
-function makeRecipe(itemType, recipe)
-	local nrec = "rf-"..recipe.name
-	local rfCategory, normalCount, expenCount = checkResults(itemType,recipe)
+function makeRecipe(itemType,item,recipe)
+	local nrec = "rf-"..item.name
+	local rfCategory, normalCount, expenCount = checkResults(itemType,item,recipe)
 	local toAdd = {category = rfCategory, subgroup = "recycling", enabled = true, hidden = true, allow_decomposition = false}
 	--local energyMult = 3
 	local energyMin = 5
@@ -189,20 +189,21 @@ function makeRecipe(itemType, recipe)
 
 	--Copy icon or icons from item if recipe did not have it set
 	if not recipe.icon and not recipe.icons then
-		if data.raw[itemType][recipe.name].icon then
-			Recipe(nrec):set_field("icon",data.raw[itemType][recipe.name].icon)
+		if data.raw[itemType][item.name].icon then
+			Recipe(nrec):set_field("icon",data.raw[itemType][item.name].icon)
 		end
-		if data.raw[itemType][recipe.name].icons then
-			Recipe(nrec):set_field("icons",data.raw[itemType][recipe.name].icons)
+		if data.raw[itemType][item.name].icons then
+			Recipe(nrec):set_field("icons",data.raw[itemType][item.name].icons)
 		end
-		if data.raw[itemType][recipe.name].icon_size then
-			Recipe(nrec):set_field("icon_size",data.raw[itemType][recipe.name].icon_size)
+		if data.raw[itemType][item.name].icon_size then
+			Recipe(nrec):set_field("icon_size",data.raw[itemType][item.name].icon_size)
 		end
-		if data.raw[itemType][recipe.name].icon_mipmaps then
-			Recipe(nrec):set_field("icon_mipmaps",data.raw[itemType][recipe.name].icon_mipmaps)
+		if data.raw[itemType][item.name].icon_mipmaps then
+			Recipe(nrec):set_field("icon_mipmaps",data.raw[itemType][item.name].icon_mipmaps)
 		end
 	end
 
+	--If normal/expensive recipe, make edits to those parts as well
 	if data.raw.recipe[nrec].normal then
 		data.raw.recipe[nrec].normal.hidden = true
 		data.raw.recipe[nrec].normal.allow_decomposition = false
@@ -216,15 +217,15 @@ function makeRecipe(itemType, recipe)
 	if expenCount then
 		--This implies only expensive is defined, while normal is empty
 		if Recipe(nrec):get_field("normal") == Recipe(nrec):get_field("expensive") then
-			Recipe(nrec):add_ingredient({recipe.name,normalCount})
+			Recipe(nrec):add_ingredient({item.name,normalCount})
 		else --Otherwise, both normal and expensive are defined
-			Recipe(nrec):add_ingredient({recipe.name,normalCount},{recipe.name,expenCount})
+			Recipe(nrec):add_ingredient({item.name,normalCount},{item.name,expenCount})
 		end
 	else --Otherwise, only normal or only recipe is defined, but not expensive
 		if itemType == "fluid" then
-			Recipe(nrec):add_ingredient({type="fluid",name=recipe.name,amount=normalCount})
+			Recipe(nrec):add_ingredient({type="fluid",name=item.name,amount=normalCount})
 		else  --This has the unintentional side effect of converting normal to simply recipe
-			Recipe(nrec):add_ingredient({recipe.name,normalCount})
+			Recipe(nrec):add_ingredient({item.name,normalCount})
 		end
 	end
 
@@ -238,22 +239,21 @@ function makeRecipe(itemType, recipe)
 	if mods ["nullius"] then
 		Recipe(nrec):set_field("order","nullius-b")
 	end
-	
 	--rf.debug(nrecData)
 end
 
 --Check recipe for result count and gate beind specific tier
-function checkResults(itemType,recipe)
+function checkResults(itemType,item,recipe)
 	--Default values for count and category
 	local normalCount = recipe.result_count and recipe.result_count or 1
 	local category = "recycle-products"
 	local expenCount = nil
 
 	--Recycling intermediate products are tier 2
-	if data.raw[itemType][recipe.name].subgroup then
-		if string.match(data.raw[itemType][recipe.name].subgroup, "intermediate") then
+	if data.raw[itemType][item.name].subgroup then
+		if string.match(data.raw[itemType][item.name].subgroup, "intermediate") then
 			category = "recycle-intermediates"
-		elseif string.match(data.raw[itemType][recipe.name].subgroup, "raw") then
+		elseif string.match(data.raw[itemType][item.name].subgroup, "raw") then
 			category = "recycle-intermediates"
 		end
 	end
@@ -648,9 +648,73 @@ function nulliusRecycling()
 		end
 	end
 end
+--[[
+function makeManualRecipe(item, itemType, recipe)
+	local nrec = "rf-"..item.name
+	local rfCategory, normalCount, expenCount = checkResults(itemType,item,recipe)
+	local toAdd = {category = rfCategory, subgroup = "recycling", enabled = true, hidden = true, allow_decomposition = false}
+	--local energyMult = 3
+	local energyMin = 5
+	
+	Data(recipe):copy(nrec)
+	Recipe(nrec):clear_ingredients()
 
+	--Copy icon or icons from item if recipe did not have it set
+	if not recipe.icon and not recipe.icons then
+		if data.raw[itemType][item.name].icon then
+			Recipe(nrec):set_field("icon",data.raw[itemType][item.name].icon)
+		end
+		if data.raw[itemType][item.name].icons then
+			Recipe(nrec):set_field("icons",data.raw[itemType][item.name].icons)
+		end
+		if data.raw[itemType][item.name].icon_size then
+			Recipe(nrec):set_field("icon_size",data.raw[itemType][item.name].icon_size)
+		end
+		if data.raw[itemType][item.name].icon_mipmaps then
+			Recipe(nrec):set_field("icon_mipmaps",data.raw[itemType][item.name].icon_mipmaps)
+		end
+	end
 
+	--If normal/expensive recipe, make edits to those parts as well
+	if data.raw.recipe[nrec].normal then
+		data.raw.recipe[nrec].normal.hidden = true
+		data.raw.recipe[nrec].normal.allow_decomposition = false
+	end
+	if data.raw.recipe[nrec].expensive then
+		data.raw.recipe[nrec].expensive.hidden = true
+		data.raw.recipe[nrec].expensive.allow_decomposition = false
+	end
+	
+	--If expenCount is defined, then expensive must be defined
+	if expenCount then
+		--This implies only expensive is defined, while normal is empty
+		if Recipe(nrec):get_field("normal") == Recipe(nrec):get_field("expensive") then
+			Recipe(nrec):add_ingredient({item.name,normalCount})
+		else --Otherwise, both normal and expensive are defined
+			Recipe(nrec):add_ingredient({item.name,normalCount},{item.name,expenCount})
+		end
+	else --Otherwise, only normal or only recipe is defined, but not expensive
+		if itemType == "fluid" then
+			Recipe(nrec):add_ingredient({type="fluid",name=item.name,amount=normalCount})
+		else  --This has the unintentional side effect of converting normal to simply recipe
+			Recipe(nrec):add_ingredient({item.name,normalCount})
+		end
+	end
 
+	Recipe(nrec):set_enabled(true)
+	Recipe(nrec):set_fields(toAdd)
+
+	removeResults(nrec)	
+	formatResults(nrec,recipe)
+	fixCategory(nrec,rfCategory)
+	
+	if mods ["nullius"] then
+		Recipe(nrec):set_field("order","nullius-b")
+	end
+	
+	--rf.debug(data.raw.recipe[nrec])
+end
+]]--
 
 
 
