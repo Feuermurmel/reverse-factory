@@ -61,12 +61,21 @@ if rf.mods == "nullius" then
 	Tech("nullius-reverse-factory-3"):remove_prereq("advanced-material-processing-2")
 	Tech("nullius-reverse-factory-4"):remove_prereq("automation-3")
 	
-	--rf.debug(data.raw.technology["nullius-automation"].unit)
-	--Then add the nullius prereqs
+	--Then add the nullius prereq techs and copy nullius tech requirements
+	Tech("nullius-reverse-factory-1"):add_prereq("nullius-automation")
 	Tech("nullius-reverse-factory-1"):set_field("unit",Tech("nullius-automation"):get_field("unit"))
+	Tech("nullius-reverse-factory-2"):add_prereq("nullius-mass-production-1")
 	Tech("nullius-reverse-factory-2"):set_field("unit",Tech("nullius-mass-production-1"):get_field("unit"))
+	Tech("nullius-reverse-factory-3"):add_prereq("nullius-mass-production-2")
 	Tech("nullius-reverse-factory-3"):set_field("unit",Tech("nullius-mass-production-2"):get_field("unit"))
+	Tech("nullius-reverse-factory-4"):add_prereq("nullius-metallurgy-3")
 	Tech("nullius-reverse-factory-4"):set_field("unit",Tech("nullius-metallurgy-3"):get_field("unit"))
+	
+	--Finally, set crafting categories for all machines to only be built by assemblers
+	Recipe("nullius-reverse-factory-1"):set_field("category","medium-assembly")
+	Recipe("nullius-reverse-factory-2"):set_field("category","medium-assembly")
+	Recipe("nullius-reverse-factory-3"):set_field("category","medium-assembly")
+	Recipe("nullius-reverse-factory-4"):set_field("category","medium-assembly")
 end
 
 --If bobs intermediates is detected, then check if these items exist, and replace ingredients.
@@ -173,8 +182,6 @@ if rf.mods == "fantario" then
 	Data("reverse-factory-4","item"):set_field("subgroup",Data("assembling-machine-4","item"):get_field("subgroup"))
 	Data("reverse-factory-4","item"):set_field("order",Data("assembling-machine-4","item"):get_field("order").."-z")
 end
-
-
 
 
 

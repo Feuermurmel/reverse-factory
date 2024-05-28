@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.0.6
+Date: August 12, 2021
+  Bugfixes:
+    - Fixed uncraftable recycling machine with nullius mod.
+    - Added prerequisite techs when used with nullius mod.
+---------------------------------------------------------------------------------------------------
 Version: 8.0.5
 Date: August 10, 2021
   Bugfixes:
