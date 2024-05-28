@@ -4,16 +4,12 @@ local Recipe = require('__stdlib__/stdlib/data/recipe')
 local Technology = require('__stdlib__/stdlib/data/technology')
 
 if mods["IndustrialRevolution"] then
-	--Remove the scrapper technology
-	data.raw.technology["deadlock-scrapping-1"].hidden = true
-	data.raw.technology["deadlock-scrapping-1"].enabled = true
-	data.raw.technology["deadlock-scrapping-2"].hidden = true
-	data.raw.technology["deadlock-scrapping-2"].enabled = true
 	--Hide and disable the scrapper recipe
-	Recipe("copper-scrapper"):set_enabled(false)
-	data.raw.recipe["copper-scrapper"].hidden = true
+	Recipe("iron-scrapper"):remove_unlock("automation-2")
+	Recipe("iron-scrapper"):set_enabled(false)
+	data.raw.recipe["iron-scrapper"].hidden = true
 
-	local scraplist = {"iron","copper","tin","gold","bronze","steel","lead","glass","titanium","duranium"}
+	local scraplist = {"iron","copper","tin","gold","bronze","steel","lead","glass","titanium","duranium","stainless"}
 	if data.raw.item["tantalum-ingot"] and data.raw.item["tantalum-scrap"] then table.insert(scraplist,"tantalum") end
 	for _, material in pairs(scraplist) do
 		name = material.."-ingot-from-scrap"
@@ -34,6 +30,7 @@ if mods["IndustrialRevolution"] then
 		end
 	end
 end
+
 
 --List of item types to be recycled
 local itemTypes = {
@@ -63,6 +60,7 @@ end
 
 
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
---rf.debug(data.raw.recipe["rf-chemical-steel-furnace"])
+--rf.debug(data.raw.technology["reverse-factory-2"])
+--rf.debug(data.raw.recipe["reverse-factory-1"])
 --rf.debug(data.raw.module["productivity-module"].limitation)
 --rf.debug(data.raw["rail-planner"].rail)

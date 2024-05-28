@@ -53,48 +53,39 @@ end
 
 --If Industrial Revolution is installed, complete overwrite recipes and technologies
 if rf.mods == "DIR" then
-	data.raw.recipe["reverse-factory-1"].ingredients = {
-	{"assembling-machine-1",1},
-	{"bronze-chassis-large",1},
-	{"copper-motor",2},
-	{"copper-piston",2},
-	{"bronze-gear-wheel",4},
-	}
-	data.raw.recipe["reverse-factory-2"].ingredients = {
-	{"reverse-factory-1",1},
-	{"iron-chassis-large",1},
-	{"controller-mk1",1},
-	{"iron-piston",2},
-	{"iron-gear-wheel",4},
-	}
-	data.raw.recipe["reverse-factory-3"].ingredients = {
-	{"reverse-factory-2",1},
-	{"steel-chassis-large",1},
-	{"controller-mk2",1},
-	{"steel-piston",2},
-	{"steel-gear-wheel",4},
-	}
-	data.raw.recipe["reverse-factory-4"].ingredients = {
-	{"reverse-factory-3",1},
-	{"titanium-chassis-large",1},
-	{"controller-mk3",1},
-	{"chromium-piston",2},
-	{"chromium-gear-wheel",4},
-	}
+	Recipe("reverse-factory-1"):set_field("ingredients",{})
+	Recipe("reverse-factory-1"):add_ingredient("assembling-machine-1")
+	for _, ingredient in pairs(data.raw.recipe["assembling-machine-1"].ingredients) do
+		Recipe("reverse-factory-1"):add_ingredient(ingredient)
+	end
+	Recipe("reverse-factory-2"):set_field("ingredients",{})
+	Recipe("reverse-factory-2"):add_ingredient("assembling-machine-2")
+	for _, ingredient in pairs(data.raw.recipe["assembling-machine-2"].expensive.ingredients) do
+		Recipe("reverse-factory-2"):add_ingredient(ingredient)
+	end
+	Recipe("reverse-factory-3"):set_field("ingredients",{})
+	Recipe("reverse-factory-3"):add_ingredient("assembling-machine-3")
+	for _, ingredient in pairs(data.raw.recipe["assembling-machine-3"].ingredients) do
+		Recipe("reverse-factory-3"):add_ingredient(ingredient)
+	end
+	Recipe("reverse-factory-4"):set_field("ingredients",{})
+	Recipe("reverse-factory-4"):add_ingredient("arc-furnace")
+	for _, ingredient in pairs(data.raw.recipe["arc-furnace"].ingredients) do
+		Recipe("reverse-factory-4"):add_ingredient(ingredient)
+	end
+	
 	Data("reverse-factory-1","furnace"):set_field("energy_source",Data("assembling-machine-1","assembling-machine"):get_field("energy_source"))
 	Data("reverse-factory-1","furnace"):set_field("energy_usage",Data("assembling-machine-1","assembling-machine"):get_field("energy_usage"))
-
-	Tech("reverse-factory-1"):add_prereq("deadlock-bronze-age")
-	Tech("reverse-factory-2"):add_prereq("deadlock-electronics-1")
-	Tech("reverse-factory-2"):remove_prereq("automation-2")
-	Tech("reverse-factory-3"):add_prereq("deadlock-electronics-2")
+	
 	Tech("reverse-factory-3"):remove_prereq("advanced-material-processing-2")
+	Tech("reverse-factory-3"):add_prereq("automation-3")
 	Tech("reverse-factory-4"):remove_prereq("automation-3")
-	Tech("reverse-factory-4"):add_prereq("deadlock-electronics-3")
+	Tech("reverse-factory-4"):add_prereq("ir2-furnaces-3")
 
-	Tech("reverse-factory-2"):set_field("unit",Tech("deadlock-electronics-1"):get_field("unit"))
-	Tech("reverse-factory-3"):set_field("unit",Tech("deadlock-electronics-2"):get_field("unit"))
-	Tech("reverse-factory-4"):set_field("unit",Tech("deadlock-electronics-3"):get_field("unit"))
+	--Tech("reverse-factory-1"):set_field("unit",Tech("automation-1"):get_field("unit"))
+	Tech("reverse-factory-2"):set_field("unit",Tech("automation-2"):get_field("unit"))
+	Tech("reverse-factory-3"):set_field("unit",Tech("automation-3"):get_field("unit"))
+	Tech("reverse-factory-4"):set_field("unit",Tech("ir2-furnaces-3"):get_field("unit"))
 end
 
 --If Fantario is installed
