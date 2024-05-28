@@ -188,13 +188,18 @@ function makeRecipe(itemType, recipe)
 	Recipe(nrec):clear_ingredients()
 
 	--Copy icon or icons from item if recipe did not have it set
-	if not recipe.icon and not recipe.icons then
+	if not (recipe.icon and recipe.icons) then
 		if data.raw[itemType][recipe.name].icon then
 			Recipe(nrec):set_field("icon",data.raw[itemType][recipe.name].icon)
-			Recipe(nrec):set_field("icon_size",data.raw[itemType][recipe.name].icon_size)
-		elseif data.raw[itemType][recipe.name].icons then
+		end
+		if data.raw[itemType][recipe.name].icons then
 			Recipe(nrec):set_field("icons",data.raw[itemType][recipe.name].icons)
+		end
+		if data.raw[itemType][recipe.name].icon_size then
 			Recipe(nrec):set_field("icon_size",data.raw[itemType][recipe.name].icon_size)
+		end
+		if data.raw[itemType][recipe.name].icon_mipmaps then
+			Recipe(nrec):set_field("icon_mipmaps",data.raw[itemType][recipe.name].icon_mipmaps)
 		end
 	end
 

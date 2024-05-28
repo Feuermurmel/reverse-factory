@@ -1,5 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 7.0.5
+Date: June 24, 2020
+  Bugfixes:
+    - Improved compatibility with "Artisanal Reskins: Bob's Mods".
+      Fixed issue with recipes using both icon and icons, causing an error with wrong icon_size.
+---------------------------------------------------------------------------------------------------
+Version: 7.0.5
 Date: June 22, 2020
   Bugfixes:
     - Fixed compatibility issue when running with Krastorio 2 and Space Exploration.
