@@ -18,19 +18,51 @@ function addRecipes(itemType, group)
 			--Recipe must have ingredients to be uncraftable
 			if recipe.ingredients then
 				if next(recipe.ingredients) then
-					if checkRecipe(recipe,item) then
-						makeRecipe(itemType,recipe)
+					if checkProbs(recipe,item) then
+						if checkRecipe(recipe,item) then
+							makeRecipe(itemType,recipe)
+						end
 					end
 				end
 			elseif recipe.normal.ingredients and recipe.expensive.ingredients then
 				if next(recipe.normal.ingredients) and next(recipe.expensive.ingredients) then 
-					if checkRecipe(recipe,item) then
-						makeRecipe(itemType,recipe)
+					if checkProbs(recipe,item) then
+						if checkRecipe(recipe,item) then
+							makeRecipe(itemType,recipe)
+						end
 					end
 				end
 			end
 		end
 	end
+end
+
+--Check if recipe uses probability or has multiple products (do NOT attempt to reeycle)
+function checkProbs(recipe,item)
+	local noProb = true
+	if recipe.results then
+		if #recipe.results > 1 then noProb = false end
+		for _, ingred in ipairs(recipe.results) do
+			if ingred.probability then noProb = false end
+		end
+	end
+	if recipe.normal then
+		if recipe.normal.results then
+			if #recipe.normal.results > 1 then noProb = false end
+			for _, ingred in ipairs(recipe.normal.results) do
+				if ingred.probability then noProb = false end
+			end
+		end
+	end
+	if recipe.expensive then
+		if recipe.expensive.results then
+			if #recipe.expensive.results > 1 then noProb = false end
+			for _, ingred in ipairs(recipe.expensive.results) do
+				if ingred.probability then noProb = false end
+			end
+		end
+	end
+	return noProb
 end
 
 --Check if recipe should be recyclable.
@@ -62,6 +94,7 @@ function makeRecipe(itemType, recipe)
 	Data(recipe):copy(nrec)
 	Recipe(nrec):clear_ingredients()
 
+	--Copy icon or icons from item if recipe did not have it set
 	if not recipe.icon then
 		if data.raw[itemType][recipe.name].icon then
 			Recipe(nrec):set_field("icon",data.raw[itemType][recipe.name].icon)
@@ -73,7 +106,11 @@ function makeRecipe(itemType, recipe)
 	end
 
 	if expenCount then
-		Recipe(nrec):add_ingredient({recipe.name,normalCount},{recipe.name,expenCount})
+		if Recipe(nrec):get_field("normal") == Recipe(nrec):get_field("expensive") then
+			Recipe(nrec):add_ingredient({recipe.name,normalCount})
+		else
+			Recipe(nrec):add_ingredient({recipe.name,normalCount},{recipe.name,expenCount})
+		end
 		data.raw.recipe[nrec].normal.hidden = true
 		data.raw.recipe[nrec].expensive.hidden = true
 		data.raw.recipe[nrec].normal.allow_decomposition = false
@@ -103,8 +140,6 @@ function makeRecipe(itemType, recipe)
 	Recipe(nrec):set_enabled(true)
 	Recipe(nrec):set_fields(toAdd)
 	
-	--Recipe(nrec):remove_result(recipe.name,true)
-	--Recipe(nrec):remove_main_product(true,true)
 	removeResults(nrec)
 	formatResults(nrec,recipe)
 	--rf.debug(data.raw.recipe[nrec])
@@ -220,9 +255,11 @@ function checkResults(itemType,recipe)
 		category = "recycle-with-fluids"
 	end
 	--Any recipes with productivity are tier 4
-	for _, name in pairs(rf.limitations) do
-		if recipe.name == name then
-			category = "recycle-productivity"
+	if rf.limitations then
+		for _, name in pairs(rf.limitations) do
+			if recipe.name == name then
+				category = "recycle-productivity"
+			end
 		end
 	end
 	return category, normalCount, expenCount
@@ -267,20 +304,32 @@ function formatResults(nrec,recipe)
 	local nrecData = data.raw.recipe[nrec]
 	if recipe.normal then
 		for _, ingred in pairs(recipe.normal.ingredients) do
-			if ingred.type then newResult = ingred
-			else newResult = {type="item",name=ingred[1],amount=(math.ceil(rf.efficiency*ingred[2]/100))}
+			if ingred.type then
+				newResult = ingred
+				newResult.amount = (math.ceil(rf.efficiency*ingred.amount/100))
+			else
+				ingredAmount = ingred[2] or ingred.amount 
+				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
 			end
 			table.insert(nrecData.normal.results, newResult)
 		end
 		for _, ingred in pairs(recipe.expensive.ingredients) do
-			if ingred.type then newResult = ingred
-			else newResult = {type="item",name=ingred[1],amount=(math.ceil(rf.efficiency*ingred[2]/100))}
+			if ingred.type then 
+				newResult = ingred
+				newResult.amount = (math.ceil(rf.efficiency*ingred.amount/100))
+			else 
+				ingredAmount = ingred[2] or ingred.amount
+				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
 			end
 			table.insert(nrecData.expensive.results, newResult)
 		end
 	else for _, ingred in pairs(recipe.ingredients) do
-			if ingred.type then newResult = ingred
-			else newResult = {type="item",name=ingred[1],amount=(math.ceil(rf.efficiency*ingred[2]/100))}
+			if ingred.type then 
+				newResult = ingred
+				newResult.amount = (math.ceil(rf.efficiency*ingred.amount/100))
+			else
+				ingredAmount = ingred[2] or ingred.amount
+				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
 			end
 			table.insert(nrecData.results, newResult)
 		end

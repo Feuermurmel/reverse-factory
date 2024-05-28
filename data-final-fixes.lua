@@ -20,6 +20,6 @@ for n=1,4 do
 end
 
 
---rf.debug(data.raw.recipe["temperate-3-seed"])
+--rf.debug(data.raw.recipe["se-data-storage-substrate"])
 --rf.debug(rf.maxResults)
 --rf.debug(data.raw.module["productivity-module"].limitation)

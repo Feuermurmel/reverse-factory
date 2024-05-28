@@ -1,6 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.1
+Date: July 10, 2019
+  Bugfixes:
+    - Fixed incompatibility with Tarawind Beacons RELOAD mod.
+      Also works with any other mods that remove productivity module limitations.
+    - Fixed incompatibility with Amator Phasma's Nuclear mod.
+      Also with any other mods that set either normal or expensive results to nil.
+    - Fixed incompatibility with Krastorio.
+      Also with any other mods that define ingredient name/amount without type.
+    - Fixed incompatibility with Space Exploration.
+      Also with any other mods that use probability in matching recipes.
+    - Fixed efficiency percentage setting not affecting certain recipes.
+  Changes:
+    - Items whose recipes use probability can no longer be recycled.
+  Other:
+    - Thanks to everyone on the mod portal who helped with debugging the above issues.
+      Pi-C, Ambaire, Snoman314, KeisariJulma, CyberWizard2261, Ratmaniak, Davidbest, ElAdamo, slippycheeze, rebirth101, TalDoMula, xilr, alatarqq, and NickNDS for both of the error threads.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.0
-Date: July X, 2019
+Date: July 9, 2019
   Changes:
     - Internal functions and logic has been optimized, hopefully preventing future incompatibility.
       Due to this rewrite, the Factorio Standard Library mod is now a mandatory requirement.
@@ -11,6 +29,8 @@ Date: July X, 2019
     - Added efficiency percentage, to reduce the amount of returned ingredients (100% by default)
   Graphics:
     - Added new high resolution graphics and updated icons (thanks to Krastor from Krastorio!)
+  Locale:
+    - Added Russian locale provided by Krastor (slightly out of date)
 ---------------------------------------------------------------------------------------------------
 Version: 6.0.9
 Date: June 21, 2019
