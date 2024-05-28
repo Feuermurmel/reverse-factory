@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.0.3
+Date: April 21, 2021
+  Info:
+    - Added Vill's Recipe Randomizer as optional dependency, enabling compatibility. 
+---------------------------------------------------------------------------------------------------
 Version: 8.0.2
 Date: February 17, 2021
   Bugfixes:
