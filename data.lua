@@ -38,6 +38,9 @@ if mods["bobplates"] and mods["attach-notes"] then
 	table.insert(rf.norecycle_items, "heavy-water")
 end
 
+--Prevent duplication of crushed stone
 table.insert(rf.norecycle_items, "stone-crushed")
+--Prevent duplication of scrap recipes
+table.insert(rf.norecycle_subgroups, "smelting_fantario")
 table.insert(rf.norecycle_subgroups, "petrochem-catalysts")
 table.insert(rf.norecycle_categories, "seed-extractor")

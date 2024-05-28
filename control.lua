@@ -48,18 +48,17 @@ function scanworld()
 		local r4 = surface.find_entities_filtered{name="reverse-factory-4"}
 		local recyclers = {}
 		for _, value in pairs (r1) do
-			table.insert(recyclers, value)
+			table.insert(global.recyclers, value)
 		end
 		for _, value in pairs (r2) do
-			table.insert(recyclers, value)
+			table.insert(global.recyclers, value)
 		end
 		for _, value in pairs (r3) do
-			table.insert(recyclers, value)
+			table.insert(global.recyclers, value)
 		end
 		for _, value in pairs (r4) do
-			table.insert(recyclers, value)
+			table.insert(global.recyclers, value)
 		end
-		global.recyclers = recyclers
 	end
 	for i=0, (#global.recyclers) do
 		table.insert(global.marks,false)
