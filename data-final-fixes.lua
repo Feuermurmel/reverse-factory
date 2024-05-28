@@ -154,6 +154,10 @@ function addRecipes(t_elts)
 							end end
 							--If no fluid ingredients detected, create reverse recipe
 							if uncraft and (not fluid) then
+								--Someone fucked up
+								if not recipe.expensive then
+									error("\nNOTE: This is a courtesy error by Reverse Factory. The problem mod is something else.\n\nRecipe missing expensive counterpart: " .. recipe.name .. "\n" .. serpent.block(recipe))
+								end
 								local normacount = recipe.normal.result_count and recipe.normal.result_count or 1
 								local expencount = recipe.expensive.result_count and recipe.expensive.result_count or 1
 								local name = string.gsub(recipe.name, yuokiSuffix, "")
@@ -264,6 +268,10 @@ function addRecipes(t_elts)
 								table.insert(rf_recipes, new_recipe)
 							--If fluid ingredients detected, create fluid reverse recipe
 							elseif uncraft and fluid then
+								--Someone fucked up
+								if not recipe.expensive then
+									error("\nNOTE: This is a courtesy error by Reverse Factory. The problem mod is something else.\n\nRecipe missing expensive counterpart: " .. recipe.name .. "\n" .. serpent.block(recipe))
+								end
 								local normacount = recipe.normal.result_count and recipe.normal.result_count or 1
 								local expencount = recipe.expensive.result_count and recipe.expensive.result_count or 1
 								local name = string.gsub(recipe.name, yuokiSuffix, "")
