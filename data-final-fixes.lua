@@ -53,10 +53,11 @@ if rf.limitations and rf.noprod then
 	end
 end
 
+--Automatic reverse recipe creation
 for _, itemType in pairs(itemTypes) do
 	addRecipes(itemType, data.raw[itemType])
 end
-
+--Manual recipes added
 for _, recycle in pairs(rf.custom_recycle) do
 	itemType = recycle[1]
 	item = data.raw[itemType][recycle[2]]
@@ -88,9 +89,10 @@ end
 if not rf.prevented_final_fixes then
 	rf.final_fixes()
 end
+
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
 --rf.debug(data.raw.recipe["rf-wooden-chest"])
---rf.debug(data.raw.recipe["empty-barrel"])
+--rf.debug(data.raw.recipe["rf-sweater"])
 --rf.debug(data.raw.technology["reverse-factory-1"])
 --rf.debug(data.raw.armor["starry-armor"])
 --rf.debug(data.raw.module["productivity-module"].limitation)

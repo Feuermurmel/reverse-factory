@@ -1,8 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.19
+Date: November 23, 2023
+  Bugfixes:
+    - Fixed compatibility with pyhardmode.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.18
 Date: September 10, 2023
   Bugfixes:
-    - Fixes unrecyclable empty-fuel-canister from pyanodons coal processing mod
+    - Fixed unrecyclable empty-fuel-canister from pyanodons coal processing mod.
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.17
 Date: January 9, 2023

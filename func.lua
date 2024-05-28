@@ -123,6 +123,7 @@ function addRecipes(itemType, group)
 					end
 				end
 			end
+			--Recipe must 
 			if reversible then
 				if checkProbs(recipe,item) then
 					if noRecycle(recipe,item) then

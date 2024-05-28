@@ -78,6 +78,9 @@ if mods["homeworld_redux"] then
 	table.insert(rf.norecycle_categories, "seeder")
 	table.insert(rf.norecycle_categories, "terraformer")
 end
+if mods ["pyhardmode"] then
+	table.insert(rf.norecycle_items, "sweater")
+end
 if mods ["nullius"] then
 	nulliusRecycling()
 end
