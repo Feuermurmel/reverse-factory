@@ -8,16 +8,19 @@ function addRecipes(category)
 		local recipe = data.raw.recipe[item_name] and data.raw.recipe[item_name] or data.raw.recipe[item_name..yuokiSuffix]
 		--If recipe is not nil
 		if recipe then
-			--Check if simple recipes has ingredients table, and at least one ingredient under that table
-			if recipe.ingredients then if next(recipe.ingredients) then
-				if uncraftable(recipe, item) then new_recipe = createSimpleRecipe(recipe, item) end
-			end end
-			--Same check, but for normal/expensive recipes; fails unless both recipe types were properly defined
-			if recipe.normal then if recipe.normal.ingredients then if next(recipe.normal.ingredients) then
-				if recipe.expensive then if recipe.expensive.ingredients then if next(recipe.expensive.ingredients) then
-					if uncraftable(recipe,item) then new_recipe = createDualRecipe(recipe, item) end
+			--Check recipe has at least 1 product to use as an ingredient
+			if recipe.result_count ~= 0 then
+				--Check if simple recipes has ingredients table, and at least one ingredient under that table
+				if recipe.ingredients then if next(recipe.ingredients) then
+					if uncraftable(recipe, item) then new_recipe = createSimpleRecipe(recipe, item) end
+				end end
+				--Same check, but for normal/expensive recipes; fails unless both recipe types were properly defined
+				if recipe.normal then if recipe.normal.ingredients then if next(recipe.normal.ingredients) then
+					if recipe.expensive then if recipe.expensive.ingredients then if next(recipe.expensive.ingredients) then
+						if uncraftable(recipe,item) then new_recipe = createDualRecipe(recipe, item) end
+					end end end
 				end end end
-			end end end
+			end
 		end
 		table.insert(rf.recipes, new_recipe)
 	end
