@@ -4,10 +4,36 @@ local Recipe = require('__stdlib__/stdlib/data/recipe')
 local Technology = require('__stdlib__/stdlib/data/technology')
 
 if mods["IndustrialRevolution"] then
-	--Remove the disassembling machine technology
-	data.raw.technology["deadlock-disassembling"].hidden = true
-	--Hide and disable the starter disassembling recipes
-	Recipe("disassemble-wooden-chest"):set_enabled(false)
+	--Remove the scrapper technology
+	data.raw.technology["deadlock-scrapping"].hidden = true
+	data.raw.technology["deadlock-scrapping"].enabled = true
+	--Hide and disable the scrapper recipe
+	Recipe("iron-scrapper"):set_enabled(false)
+	data.raw.recipe["iron-scrapper"].hidden = true
+
+	local scraplist = {"iron","copper","tin","gold","bronze","steel","lead","glass","titanium","duranium"}
+	if data.raw.item["tantalum-ingot"] and data.raw.item["tantalum-scrap"] then table.insert(scraplist,"tantalum") end
+	for _, material in pairs(scraplist) do
+		name = material.."-ingot-from-scrap"
+		Recipe(name):set_enabled(false)
+		Recipe(name):set_field("hidden", true)
+		--data.raw.recipe[name].hidden = true
+		for _, tech in pairs(data.raw.technology) do
+			if tech.effects then
+				for _, unlock in pairs(tech.effects) do
+					if unlock.type == "unlock-recipe" then
+						if unlock.recipe == name then
+							Recipe(unlock.recipe):remove_unlock(tech)
+							Technology(tech):remove_effect(tech, "unlock-recipe",unlock.recipe)
+						end
+					end
+				end
+			end
+		end
+	end
+	--rf.debug(data.raw.recipe["iron-ingot-from-scrap"])
+
+	--[[
 	Recipe("disassemble-tin-chest"):set_enabled(false)
 	Recipe("disassemble-transport-belt"):set_enabled(false)
 	Recipe("disassemble-burner-inserter"):set_enabled(false)
@@ -41,7 +67,7 @@ if mods["IndustrialRevolution"] then
 			end
 		end
 	end
-	
+	]]--
 	--error(serpent.block(data.raw.furnace["iron-disassembler"]))
 end
 
