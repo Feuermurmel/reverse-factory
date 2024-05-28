@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.13
+Date: October 7, 2022
+  Bugfixes:
+    - Fixed changelog again.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.12
 Date: August 12, 2022
   Bugfixes:
@@ -15,7 +20,7 @@ Date: August 8, 2022
     - Removed from mod portal due to crash on load error when productivity loop is disabled.
   Bugfixes:
     - Fixed empty-barrel not being recyclable until tier 4, despite not receiving prod bonuses.
-	  It is now recyclable at tier 1, as it should have been.
+      It is now recyclable at tier 1, as it should have been.
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.9
 Date: June 20, 2022
