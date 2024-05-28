@@ -1,21 +1,24 @@
 function checkinvs()
 	if next(rf.recyclers) then
-		for _, rf in pairs(rf.recyclers) do
+		for _, ent in pairs(rf.recyclers) do
 			--If recycler has power
-			if rf.energy > 0 then
+			if ent.energy > 0 then
 				--Check if not currently recycling
-				if not rf.is_crafting() then
-					--Check if any items in the input
-					if rf.get_inventory(defines.inventory.assembling_machine_input).get_item_count() > 0 then
-						--Grab input contents, stored as table (pairs)
-						local items = rf.get_inventory(defines.inventory.assembling_machine_input).get_contents()
-						for key, num in pairs(items) do
-							--Squirrely-do to make a proper item table with strings
-							item = {name=key, count=num}
-							--And finally take the items and push them from input to output
-							if rf.get_output_inventory().can_insert(item) then
-								rf.get_output_inventory().insert(item)
-								rf.get_inventory(defines.inventory.assembling_machine_input).clear()
+				if not ent.is_crafting() then
+					--Check if output is not blocked
+					if ent.get_output_inventory().is_empty() then
+						--Check if any items in the input
+						if ent.get_inventory(defines.inventory.assembling_machine_input).get_item_count() > 0 then
+							--Grab input contents, stored as table (pairs)
+							local items = ent.get_inventory(defines.inventory.assembling_machine_input).get_contents()
+							for key, num in pairs(items) do
+								--Squirrely-do to make a proper item table with strings
+								item = {name=key, count=num}
+								--And finally take the items and push them from input to output
+								if ent.get_output_inventory().can_insert(item) then
+									ent.get_output_inventory().insert(item)
+									ent.get_inventory(defines.inventory.assembling_machine_input).clear()
+								end
 							end
 						end
 					end
@@ -43,7 +46,7 @@ script.on_configuration_changed( function()
 end)
 
 script.on_event(defines.events.on_tick, function(event)
-	if event.tick % 240 == 0 then
+	if event.tick % 120 == 0 then
 		if rf then checkinvs() end
 	end
 end)

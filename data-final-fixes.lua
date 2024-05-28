@@ -18,93 +18,294 @@ function addRecipes(t_elts)
         --After the search of the recipe if recipe is sill not nil, we add the reverse factory recipe
         if recipe then
 			--Check if recipe has ingredients (can't uncraft into nothing)
-		    if next(recipe.ingredients) then
-				--Set default value for recipe without category property (default value = "crafting")
-				recipe.category = recipe.category and recipe.category or "crafting"
-				--Loop through all categories in game
-				for rcat in pairs(data.raw["recipe-category"]) do
-					--Default uncraftable is true, false if current category was added by rf
-					uncraft=true
-					--Prevents recursive loop of checking reverse recipes
-					if (rcat == "recycle") or (rcat == "recycle-with-fluid") then
-						uncraft = false end
-					--Default fluid is false, true if fluid detected
-					fluid = false
-					if uncraft then for _, ingred in ipairs(recipe.ingredients) do
-						if ingred.type == "fluid"
-							then fluid=true end
-					end end
-					--If no fluid ingredients detected, create reverse recipe
-					if uncraft and (not fluid) then
-						local count = recipe.result_count and recipe.result_count or 1
-						local name = string.gsub(recipe.name, yuokiSuffix, "")
-						local new_recipe 
-						if elt.icon then
-						--For all regular items and mods (elt.icon)
-							new_recipe =
+		    if recipe.ingredients then
+				if next(recipe.ingredients) then
+					--Set default value for recipe without category property (default value = "crafting")
+					recipe.category = recipe.category and recipe.category or "crafting"
+					--Loop through all categories in game
+					for rcat in pairs(data.raw["recipe-category"]) do
+						--Default uncraftable is true, false if current category was added by rf
+						uncraft=true
+						--Prevents recursive loop of checking reverse recipes
+						if (rcat == "recycle") or (rcat == "recycle-with-fluid") then
+							uncraft = false end
+						--Default fluid is false, true if fluid detected
+						fluid = false
+						if uncraft then for _, ingred in ipairs(recipe.ingredients) do
+							if ingred.type == "fluid"
+								then fluid=true end
+						end end
+						--If no fluid ingredients detected, create reverse recipe
+						if uncraft and (not fluid) then
+							local count = recipe.result_count and recipe.result_count or 1
+							local name = string.gsub(recipe.name, yuokiSuffix, "")
+							local new_recipe 
+							if elt.icon then
+							--For all regular items and mods (elt.icon)
+								new_recipe =
+								{
+									type = "recipe",
+									name = "rf-" .. name,
+									icon =  elt.icon,
+									category = "recycle",
+									hidden = "true",
+									energy_required = 30,
+									ingredients = {{name, count}},
+									results = recipe.ingredients
+								}
+							--Fix for annoying mods who use unnecessary tints (elt.icons)
+							else new_recipe=
+								{
+									type = "recipe",
+									name = "rf-" .. name,
+									icons =  elt.icons,
+									category = "recycle",
+									hidden = "true",
+									energy_required = 30,
+									ingredients = {{name, count}},
+									results = recipe.ingredients
+								}
+							end
+
+							if new_recipe.results then
+								if #new_recipe.results > 1 then
+									new_recipe.subgroup = "rf-multiple-outputs"
+								end
+							end
+							
+							--Add the recipe to rf_recipes
+							table.insert(rf_recipes, new_recipe)
+							--break
+						--If fluid ingredients detected, create fluid reverse recipe
+						elseif uncraft and fluid then
+							local count = recipe.result_count and recipe.result_count or 1
+							local name = string.gsub(recipe.name, yuokiSuffix, "")
+							local new_recipe =
 							{
 								type = "recipe",
 								name = "rf-" .. name,
 								icon =  elt.icon,
-								category = "recycle",
+								category = "recycle-with-fluid",
 								hidden = "true",
 								energy_required = 30,
 								ingredients = {{name, count}},
 								results = recipe.ingredients
 							}
-						--Fix for annoying mods who use unnecessary tints (elt.icons)
-						else new_recipe=
-							{
-								type = "recipe",
-								name = "rf-" .. name,
-								icons =  elt.icons,
-								category = "recycle",
-								hidden = "true",
-								energy_required = 30,
-								ingredients = {{name, count}},
-								results = recipe.ingredients
-							}
-						end
 
-						if #new_recipe.results > 1 then
-							new_recipe.subgroup = "rf-multiple-outputs"
+							if new_recipe.results then
+								if #new_recipe.results > 1 then
+									new_recipe.subgroup = "rf-multiple-outputs"
+								end
+							end
+							
+							--Add the recipe to rf_recipes
+							table.insert(rf_recipes, new_recipe)
+							--break
+							end
 						end
-						
-						--Add the recipe to rf_recipes
-						table.insert(rf_recipes, new_recipe)
-						break
-					--If fluid ingredients detected, create fluid reverse recipe
-					else if uncraft and fluid then
-						local count = recipe.result_count and recipe.result_count or 1
-						local name = string.gsub(recipe.name, yuokiSuffix, "")
-						local new_recipe =
-						{
-							type = "recipe",
-							name = "rf-" .. name,
-							icon =  elt.icon,
-							category = "recycle-with-fluid",
-							hidden = "true",
-							energy_required = 30,
-							ingredients = {{name, count}},
-							results = recipe.ingredients
-						}
+				end
+			--For recipes with differing difficulties
+			elseif recipe.normal then
+				if recipe.normal.ingredients then
+					if next(recipe.normal.ingredients) then
+						--Set default value for recipe without category property (default value = "crafting")
+						recipe.category = recipe.category and recipe.category or "crafting"
+						--Loop through all categories in game
+						for rcat in pairs(data.raw["recipe-category"]) do
+							--Default uncraftable is true, false if current category was added by rf
+							uncraft=true
+							--Prevents recursive loop of checking reverse recipes
+							if (rcat == "recycle") or (rcat == "recycle-with-fluid") then
+								uncraft = false end
+							--Default fluid is false, true if fluid detected
+							fluid = false
+							if uncraft then for _, ingred in ipairs(recipe.normal.ingredients) do
+								if ingred.type == "fluid"
+									then fluid=true end
+							end end
+							--If no fluid ingredients detected, create reverse recipe
+							if uncraft and (not fluid) then
+								local normacount = recipe.normal.result_count and recipe.normal.result_count or 1
+								local expencount = recipe.expensive.result_count and recipe.expensive.result_count or 1
+								local name = string.gsub(recipe.name, yuokiSuffix, "")
+								local new_recipe
+								--Dynamic hard mode recipes
+								if rf.dynamic then
+									if elt.icon then
+									--For all regular items and mods (elt.icon)
+										new_recipe =
+										{
+											type = "recipe",
+											name = "rf-" .. name,
+											icon =  elt.icon,
+											category = "recycle",
+											hidden = "true",
+											energy_required = 30,
+											normal = {
+												ingredients = {{name, normacount}},
+												results = recipe.normal.ingredients
+												},
+											expensive = {
+												ingredients = {{name, expencount}},
+												results = recipe.expensive.ingredients
+												},
+											main_product = "",
+											subgroup = "recycling"
+										}
+									--Fix for annoying mods who use unnecessary tints (elt.icons)
+									else new_recipe=
+										{
+											type = "recipe",
+											name = "rf-" .. name,
+											icons =  elt.icons,
+											category = "recycle",
+											hidden = "true",
+											energy_required = 30,
+											normal = {
+												ingredients = {{name, normacount}},
+												results = recipe.normal.ingredients
+												},
+											expensive = {
+												ingredients = {{name, expencount}},
+												results = recipe.expensive.ingredients
+												},
+											main_product = "",
+											subgroup = "recycling"
+										}
+									end
+								--Hard coded reverse recipes (easy)
+								elseif rf.difficulty then
+									if elt.icon then
+									--For all regular items and mods (elt.icon)
+										new_recipe =
+										{
+											type = "recipe",
+											name = "rf-" .. name,
+											icon =  elt.icon,
+											category = "recycle",
+											hidden = "true",
+											energy_required = 30,
+											ingredients = {{name, normacount}},
+											results = recipe.normal.ingredients
+										}
+									--Fix for annoying mods who use unnecessary tints (elt.icons)
+									else new_recipe=
+										{
+											type = "recipe",
+											name = "rf-" .. name,
+											icons =  elt.icons,
+											category = "recycle",
+											hidden = "true",
+											energy_required = 30,
+											ingredients = {{name, normacount}},
+											results = recipe.normal.ingredients
+										}
+									end
+								--Hard coded reverse recipes (hard)
+								else
+									if elt.icon then
+									--For all regular items and mods (elt.icon)
+										new_recipe =
+										{
+											type = "recipe",
+											name = "rf-" .. name,
+											icon =  elt.icon,
+											category = "recycle",
+											hidden = "true",
+											energy_required = 30,
+											ingredients = {{name, expencount}},
+											results = recipe.expensive.ingredients
+										}
+									--Fix for annoying mods who use unnecessary tints (elt.icons)
+									else new_recipe=
+										{
+											type = "recipe",
+											name = "rf-" .. name,
+											icons =  elt.icons,
+											category = "recycle",
+											hidden = "true",
+											energy_required = 30,
+											ingredients = {{name, expencount}},
+											results = recipe.expensive.ingredients
+										}
+									end
+								end
 
-						if #new_recipe.results > 1 then
-							new_recipe.subgroup = "rf-multiple-outputs"
-						end
-						
-						--Add the recipe to rf_recipes
-						table.insert(rf_recipes, new_recipe)
-						break
+								if new_recipe.results then
+									if #new_recipe.results > 1 then
+										new_recipe.subgroup = "rf-multiple-outputs"
+									end
+								end
+								
+								--Add the recipe to rf_recipes
+								table.insert(rf_recipes, new_recipe)
+							--If fluid ingredients detected, create fluid reverse recipe
+							elseif uncraft and fluid then
+								local normacount = recipe.normal.result_count and recipe.normal.result_count or 1
+								local expencount = recipe.expensive.result_count and recipe.expensive.result_count or 1
+								local name = string.gsub(recipe.name, yuokiSuffix, "")
+								local new_recipe
+								if rf.dynamic then
+									new_recipe =
+									{
+										type = "recipe",
+										name = "rf-" .. name,
+										icon =  elt.icon,
+										category = "recycle-with-fluid",
+										hidden = "true",
+										energy_required = 30,
+										normal = {
+												ingredients = {{name, normacount}},
+												results = recipe.normal.ingredients
+												},
+										expensive = {
+												ingredients = {{name, expencount}},
+												results = recipe.expensive.ingredients
+												},
+										main_product = "",
+										subgroup = "recycling"
+									}
+								elseif rf.difficulty then
+									new_recipe =
+									{
+										type = "recipe",
+										name = "rf-" .. name,
+										icon =  elt.icon,
+										category = "recycle-with-fluid",
+										hidden = "true",
+										energy_required = 30,
+										ingredients = {{name, normacount}},
+										results = recipe.normal.ingredients
+									}
+								else
+									new_recipe =
+									{
+										type = "recipe",
+										name = "rf-" .. name,
+										icon =  elt.icon,
+										category = "recycle-with-fluid",
+										hidden = "true",
+										energy_required = 30,
+										ingredients = {{name, expencount}},
+										results = recipe.expensive.ingredients
+									}
+								end
+								
+								if new_recipe.results then
+									if #new_recipe.results > 1 then
+										new_recipe.subgroup = "rf-multiple-outputs"
+									end
+								end
+								
+								--Add the recipe to rf_recipes
+								table.insert(rf_recipes, new_recipe)
+							end
 						end
 					end
 				end
 			end
-        end
+		end
     end
-end
-
-function addFluidRecipes(t_elts)
 end
 
 --Create recycling recipes
