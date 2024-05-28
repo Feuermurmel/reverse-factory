@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 7.0.3
+Date: May 29, 2020
+  Bugfixes:
+    - Fixed bug with reverse factories not upgrading properly with upgrade planner.
+---------------------------------------------------------------------------------------------------
 Version: 7.0.2
 Date: May 5, 2020
   Bugfixes:

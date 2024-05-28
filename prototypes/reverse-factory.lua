@@ -220,12 +220,13 @@ local function rfEntity(n)
 		},
 	}
 	if n==1 then
+		entity.next_upgrade = "reverse-factory-"..(n+1)
 		entity.crafting_categories = {"recycle-products"}
 	elseif n==2 then
-		entity.next_upgrade = "reverse-factory-"..(n-1)
+		entity.next_upgrade = "reverse-factory-"..(n+1)
 		entity.crafting_categories = {"recycle-products", "recycle-intermediates"}
 	elseif n==3 then
-		entity.next_upgrade = "reverse-factory-"..(n-1)
+		entity.next_upgrade = "reverse-factory-"..(n+1)
 		entity.crafting_categories = {"recycle-products", "recycle-intermediates", "recycle-with-fluids"}
 		entity.fluid_boxes = {
 			{
@@ -244,7 +245,6 @@ local function rfEntity(n)
 			}
 		}
 	elseif n==4 then
-		entity.next_upgrade = "reverse-factory-"..(n-1)
 		entity.crafting_categories = {"recycle-products", "recycle-intermediates", "recycle-with-fluids", "recycle-productivity"}
 		entity.fluid_boxes = {
 			{
