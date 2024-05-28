@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 7.0.0
+Date: January 24, 2020
+  Info:
+    - Initial realse for Factorio v0.18; thanks to FallenPaladin for the notification.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.22
 Date: January 20, 2020
   Minor Features:
