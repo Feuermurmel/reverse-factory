@@ -41,13 +41,18 @@ function checkinvs()
 	end
 end
 
---Function to check the world for recyclers and place them in a list
-function scanworld()
+--This should only run on map initialization, resetting the global variables needed
+function initworld()
 	--It's easier to remake the list of recyclers, than to check for duplicates, on map load
 	global = {}
 	global.activeSurfaces = {}
 	global.delay = settings.global["rf-delay"].value
 	global.timer = settings.global["rf-timer"].value
+	scanworld()
+end
+
+--Scan the world for recyclers and place them in a list, previously created by initworld()
+function scanworld()
 	--Check every game surface in the world
 	for _, surface in pairs(game.surfaces) do
 		for n=1, 4 do
@@ -68,25 +73,27 @@ end
 
 --On game load, scan the world for existing recyclers
 script.on_init( function()
-	scanworld()
+	initworld()
 end)
 
 script.on_configuration_changed( function()
-	scanworld()
+	initworld()
 end)
 
 --Every 15 ticks, do a thing
 script.on_event(defines.events.on_tick, function(event)
-	if global.delay then
-		if event.tick % global.delay == 0 then
-			checkinvs()
+	if global then
+		if global.delay then
+			if event.tick % global.delay == 0 then
+				checkinvs()
+			end
 		end
-	--else game.players[1].print(("Global delay not yet set."))
-	end
-	if global.activeSurfaces then
-		if event.tick % 60 == 0 then
-			--game.players[1].print(serpent.block(global))
+		if global.activeSurfaces then
+			if event.tick % 60 == 0 then
+				--game.players[1].print(serpent.block(global))
+			end
 		end
+	--else game.players[1].print(("Global variable not set."))
 	end
 end)
 
@@ -165,8 +172,9 @@ end)
 
 --When a player changes surfaces (Warptorio 2)
 script.on_event(defines.events.on_player_changed_surface, function(event)
-	--removeActiveSurface(game.surfaces[event.surface_index].name)
+	removeActiveSurface(game.surfaces[event.surface_index].name)
 	addActiveSurface(game.players[event.player_index].surface.name)
+	scanworld()
 end)
 
 --Check if the entity was a recycler, and if so, add it to the list with its own timer
@@ -178,6 +186,7 @@ function addRecycler(entity, surface)
 		if not global[surface] then
 			global[surface] = {}
 		end
+		game.players[1].print(("Recycler added to: "..surface))
 		table.insert(global[surface],new_entity)
 	end
 end
