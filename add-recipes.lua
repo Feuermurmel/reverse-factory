@@ -29,6 +29,9 @@ end
 --Used for basic recipes
 function createSimpleRecipe(recipe, item)
 	local rec_count = recipe.result_count and recipe.result_count or 1
+	if recipe.results then if recipe.results[1] then
+		rec_count = recipe.results[1].amount
+	end end
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
 	local new_recipe = {}
 	new_recipe = {

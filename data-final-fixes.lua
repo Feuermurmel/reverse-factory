@@ -25,6 +25,8 @@ if data.raw.recipe["copper_bullets"] then if data.raw.item["copper-bullet-magazi
 	createManualSimpleRecipe(data.raw.recipe["copper_bullets"], data.raw.item["copper-bullet-magazine"])
 end end
 
+--error(serpent.block(data.raw.recipe["bronze-alloy"].results[1].amount))
+
 --Create recycling recipes
 addRecipes(data.raw.ammo)					--Create recipes for all ammunitions
 addRecipes(data.raw.armor)					--Create recipes for all armors
@@ -36,6 +38,9 @@ addRecipes(data.raw.tool)						--Create recipes for all forms of science packs
 addRecipes(data.raw["rail-planner"])		--Create recipe for rail. Seriously, just rail.
 addRecipes(data.raw["mining-tool"])		--Create recipes for all mining tools
 addRecipes(data.raw["repair-tool"]) 		--Create recipes for all repair tools
+if rf.vehicles then
+	addRecipes(data.raw["item-with-entity-data"]) 		--Create recipes for vehicles
+end
 
 --Add the new recipes in data
 data:extend(rf.recipes)

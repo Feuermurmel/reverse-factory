@@ -10,3 +10,4 @@ require("prototypes.catgroups")
 rf = {}
 rf.recipes = {}
 rf.safety = settings.startup["rf-safety"].value
+rf.vehicles = settings.startup["rf-vehicles"].value

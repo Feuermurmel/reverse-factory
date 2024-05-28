@@ -19,4 +19,10 @@ data:extend({
 		minimum_value = "10",
 		maximum_value = "1200"
 	},
+	{
+		type = "bool-setting",
+		name = "rf-vehicles",
+		setting_type = "startup",
+		default_value = "false"
+	},
 })
