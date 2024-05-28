@@ -41,4 +41,10 @@ data:extend({
 		setting_type = "startup",
 		default_value = "false"
 	},
+	{
+		type = "bool-setting",
+		name = "rf-fluid-items",
+		setting_type = "startup",
+		default_value = "false"
+	},
 })

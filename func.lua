@@ -247,7 +247,6 @@ function makeRecipe(itemType,item,recipe)
 	if mods ["nullius"] then
 		Recipe(nrec):set_field("order","nullius-b")
 	end
-	--rf.debug(nrecData)
 end
 
 --Check recipe for result count and gate beind specific tier
@@ -356,6 +355,11 @@ function checkResults(itemType,item,recipe)
 	if itemType == "fluid" then
 		category = "recycle-with-fluids"
 	end
+	
+	--Add any fluid results to the list of fluid recipes
+	if string.match(category,"fluids") then
+		table.insert(rf.fluidrecipe_list,"rf-"..item.name)
+	end
 
 	--Any recipes with productivity are tier 4
 	if rf.limitations then
@@ -398,7 +402,7 @@ function checkResults(itemType,item,recipe)
 			end
 		end
 	end
-
+	
 	return category, normalCount, expenCount
 end
 
@@ -623,6 +627,99 @@ function checkForGrids(ingredient)
 		end
 	end
 	return possibleGrid
+end
+
+function makeFluidItem(fluid)
+	makeFluid = true
+	for _, item in pairs(rf.nofluid_items) do
+		if fluid.name == item then makeFluid = false end
+	end
+	if makeFluid then
+		new_item = {
+			type = "item",
+			name = Data(fluid,"fluid"):get_field("name"),
+			icon = Data(fluid,"fluid"):get_field("icon"),
+			icon_size = Data(fluid,"fluid"):get_field("icon_size"),
+			icon_mipmaps = Data(fluid,"fluid"):get_field("icon_mipmaps"),
+			subgroup = "fluid-recipes",
+			order = Data(fluid,"fluid"):get_field("order"),
+			stack_size = "100"
+		}
+		if fluid.icons then
+			new_item.icons = Data(fluid,"fluid"):get_icons()
+		end
+		data:extend({new_item})
+		makeFluidRecipe(fluid)
+	end
+end
+
+function makeFluidRecipe(fluid)
+	new_recipe = {
+		type = "recipe",
+		name = fluid.name.."-conversion",
+		subgroup = "fluid-recipes",
+		category = "crafting-with-fluid",
+		energy_required = 0.25,
+		ingredients = {
+			{fluid.name, 1}
+		},
+		results = {
+			{type="fluid",name=fluid.name,amount=10}
+		},
+		allow_as_intermediate = false,
+		hide_from_player_crafting = true
+	}
+	if mods["barreling-machine"] then
+		table.insert(data.raw.furnace["barreling-machine"].crafting_categories,"recycle-unbarreling")
+		new_recipe.category = "recycle-unbarreling"
+	end
+	if mods["auto-barrel"] then
+		table.insert(data.raw.furnace["unbarreling-machine"].crafting_categories,"recycle-unbarreling")
+		new_recipe.category = "recycle-unbarreling"
+	end
+	if mods["beltbox-barreling"] then
+		for _, furnace in pairs(data.raw.furnace) do
+			if string.match(furnace.name,"beltbox") then
+				table.insert(data.raw.furnace[furnace.name].crafting_categories,"recycle-unbarreling")
+			end
+		end
+		new_recipe.category = "recycle-unbarreling"
+	end
+	data:extend({new_recipe})
+end
+
+function convertFluidResults(recipe)
+	--For simple recipes
+	if recipe.results then
+		for _, result in pairs(recipe.results) do
+			if result.type == "fluid" then
+				result.type = "item"
+				result.amount = math.floor(result.amount/10)
+			end
+		end
+	end
+	--For more complex recipe, with normal variant
+	if recipe.normal then
+		if recipe.normal.results then
+			for _, result in pairs(recipe.normal.results) do
+				if result.type == "fluid" then
+					result.type = "item"
+					result.amount = math.floor(result.amount/10)
+				end
+			end
+		end
+	end
+	--For more complex recipe, with expensive variant
+	if recipe.expensive then
+		if recipe.expensive.results then
+			for _, result in pairs(recipe.expensive.results) do
+				if result.type == "fluid" then
+					result.type = "item"
+					result.amount = math.floor(result.amount/10)
+				end
+			end
+		end
+	end
 end
 
 --Ensure that t2 recyclers make enough room for t1 and t2 recipes, and so on for each tier.

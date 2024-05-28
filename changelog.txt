@@ -1,9 +1,26 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.2.1
+Date: January 29, 2024
+  Minor Features:
+    - Added an experimental setting that converts recycled fluids into items instead.
+      Currently disabled by default, since the icons are unchanged, and the concept of
+      "fluids on a belt" might be a bit too silly for most people.
+    - Enhanced compatibility with Barreling Machine, Beltbox Barreling, and
+      Automatic Barreling/Unbarreling Machines, so the item-fluids must be unbarreled.
+      If no barrel mods are enabled, then the item-fluids can be converted in an assembler.
+  Info:
+    - Previous upload accidentally ommitted v8.1.21 from the changelog, fixed.
+---------------------------------------------------------------------------------------------------
 Version: 8.2.0
 Date: January 28, 2024
   Major Features:
     - Rewrote the code for the auto ingredient push setting, so it should work more properly now.
       Added new options for the timer and delay. Still not tested in multiplayer.
+---------------------------------------------------------------------------------------------------
+Version: 8.1.21
+Date: January 28, 2024
+  Minor Features:
+    - Added compatibility with King Jo's Fuels, per request by Mr.Thomas
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.20
 Date: January 22, 2024

@@ -53,6 +53,13 @@ if rf.limitations and rf.noprod then
 	end
 end
 
+--Makes item versions of every fluid in the game
+if rf.fluid_items then
+	for _, fluid in pairs(data.raw.fluid) do
+		makeFluidItem(fluid)
+	end
+end
+ 
 --Automatic reverse recipe creation
 for _, itemType in pairs(itemTypes) do
 	addRecipes(itemType, data.raw[itemType])
@@ -64,6 +71,16 @@ for _, recycle in pairs(rf.custom_recycle) do
 	recipe = data.raw.recipe[recycle[3]]
 	makeRecipe(itemType, item, recipe)
 end
+--Convert fluid results to items if that setting is enabled
+if rf.fluid_items then
+	for _, recipe in pairs(rf.fluidrecipe_list) do
+		convertFluidResults(data.raw.recipe[recipe])
+	end
+	data.raw.furnace["reverse-factory-3"].fluid_boxes = nil
+	data.raw.furnace["reverse-factory-4"].fluid_boxes[2] = nil
+	data.raw.furnace["reverse-factory-4"].fluid_boxes[3] = nil
+end
+
 
 --Fix required for Space Exploration to allow early recycling of empty-barrel
 --  only works if productivity loop is not disabled
@@ -98,3 +115,4 @@ end
 --rf.debug(data.raw.module["productivity-module"].limitation)
 --rf.debug(data.raw.module["productivity-module"])
 --rf.debug(data.raw.recipe["rf-empty-barrel"])
+--rf.debug(data.raw.item["crude-oil"])

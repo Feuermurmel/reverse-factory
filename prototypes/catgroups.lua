@@ -16,6 +16,10 @@ data:extend({
 		type = "recipe-category",
 		name = "recycle-productivity"
 	},
+	{
+		type = "recipe-category",
+		name = "recycle-unbarreling"
+	},
 --Hidden group and subgroup which contains the reverse recipes
 	{
 		type = "item-group",

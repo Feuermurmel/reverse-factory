@@ -9,7 +9,10 @@ rf.recipes = {}
 rf.vehicles = settings.startup["rf-vehicles"].value
 rf.efficiency = settings.startup["rf-efficiency"].value
 rf.noprod = settings.startup["rf-prod-loop"].value
+rf.fluid_items = settings.startup["rf-fluid-items"].value
+rf.fluidrecipe_list = {}
 rf.norecycle_items = {}
+rf.nofluid_items = {}
 rf.norecycle_categories = {}
 rf.norecycle_subgroups = {}
 rf.custom_recycle = {}  --Format of {item-type, item-name, recipe-name}
@@ -93,6 +96,10 @@ table.insert(rf.norecycle_subgroups, "smelting_fantario")
 table.insert(rf.norecycle_subgroups, "petrochem-catalysts")
 table.insert(rf.norecycle_categories, "seed-extractor")
 table.insert(rf.norecycle_categories, "fu_tokamak_reactor_crafting_category")
+
+--Prevent these fluids from becoming items (they are unused)
+table.insert(rf.nofluid_items, "ee-super-pump-speed-fluid")
+table.insert(rf.nofluid_items, "fluid-unknown")
 
 --Examples for adding custom recipes to reverse-factory, for external mod use.
 --table.insert(rf.custom_recycle, {"item", "droid-smg-dummy", "droid-smg-deploy"})
