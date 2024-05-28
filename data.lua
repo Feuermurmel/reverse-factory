@@ -37,6 +37,9 @@ end
 if mods["bobplates"] and mods["attach-notes"] then
 	table.insert(rf.norecycle_items, "heavy-water")
 end
+if mods["warptorio2"] then
+	table.insert(rf.norecycle_items, "warptorio-armor")
+end
 
 --Prevent duplication of crushed stone
 table.insert(rf.norecycle_items, "stone-crushed")

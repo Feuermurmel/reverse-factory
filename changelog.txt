@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.14
+Date: July 29, 2019
+  Bugfixes:
+    - Disabled recycling of a warptorio armor when using the warptorio2 mod to prevent crash.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.13
 Date: July 28, 2019
   Bugfixes:
