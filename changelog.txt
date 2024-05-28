@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.0
+Date: July X, 2019
+  Changes:
+    - Internal functions and logic has been optimized, hopefully preventing future incompatibility.
+      Due to this rewrite, the Factorio Standard Library mod is now a mandatory requirement.
+    - Removed non-recyclable intermediate ingredients setting.
+    - Added 2 higher tiers of reverse factory, tier 4 of which can recycle intermediates.
+    - Changed recipes of the 2 lower tiered machines when playing vanilla or bobs mods.
+  Minor Features:
+    - Added efficiency percentage, to reduce the amount of returned ingredients (100% by default)
+  Graphics:
+    - Added new high resolution graphics and updated icons (thanks to Krastor from Krastorio!)
+---------------------------------------------------------------------------------------------------
 Version: 6.0.9
 Date: June 21, 2019
   Bugfixes:

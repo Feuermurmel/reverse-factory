@@ -20,9 +20,11 @@ data:extend({
 		default_value = "false"
 	},
 	{
-		type = "bool-setting",
-		name = "rf-intermediates",
+		type = "int-setting",
+		name = "rf-efficiency",
 		setting_type = "startup",
-		default_value = "true"
+		default_value = "100",
+		minimum_value = "10",
+		maximum_value = "100"
 	},
 })

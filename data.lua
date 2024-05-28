@@ -1,20 +1,30 @@
---Setup for the reverse factory item, entity, recipe, and tech
-require("prototypes.technology")
-require("prototypes.item")
-require("prototypes.recipe")
+--Setup for the reverse factory item, entity, recipe, and technology
 require("prototypes.pipe-covers")
-require("prototypes.entity")
+require("prototypes.reverse-factory")
 --Setup for the reverse recipe groups and categories
 require("prototypes.catgroups")
 
 
+--Insantiating tables needed for the rest of the mod to function
 rf = {}
 rf.recipes = {}
 rf.vehicles = settings.startup["rf-vehicles"].value
-rf.intermediates = settings.startup["rf-intermediates"].value
+rf.efficiency = settings.startup["rf-efficiency"].value
 rf.norecycle_items = {}
 rf.norecycle_categories = {}
---table.insert(rf.norecycle_items, "electronic-circuit")
+rf.norecycle_subgroups = {}
+rf.maxResults = {5,5,5,5}
+
+--If certain mods are detected, change some recipes later
+if mods["Fantario"] then
+	rf.mods = "fantario"
+end
+if mods["Fantario"] then
+	rf.mods = "fantario"
+end
+
+require('dbug')
+
 --[[
     Construction Drones adds equipment grid to light armor
     This prevents light armor from being used in reverse recipe
@@ -24,11 +34,11 @@ rf.norecycle_categories = {}
 if mods["Construction_Drones"] and mods["robotarmy"] then
 	table.insert(rf.norecycle_items, "droid-flame")
 end
+--Attach notes creates item version of this fluid, which does not have a canon recipe
 if mods["bobplates"] and mods["attach-notes"] then
 	table.insert(rf.norecycle_items, "heavy-water")
 end
-table.insert(rf.norecycle_categories, "recycle")
-table.insert(rf.norecycle_categories, "recycle-with-fluids")
-table.insert(rf.norecycle_categories, "oil-processing")
---table.insert(rf.norecycle_categories, "centrifuging")
---table.insert(rf.norecycle_categories, "smelting")
+
+table.insert(rf.norecycle_items, "stone-crushed")
+table.insert(rf.norecycle_subgroups, "petrochem-catalysts")
+table.insert(rf.norecycle_categories, "seed-extractor")

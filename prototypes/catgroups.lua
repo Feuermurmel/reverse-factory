@@ -1,30 +1,22 @@
 data:extend({
---Categories for reverse recipes
+--Categories for reverse recipes, used to define tiers
 	{
 		type = "recipe-category",
-		name = "recycle"
+		name = "recycle-products"
+	},
+	{
+		type = "recipe-category",
+		name = "recycle-intermediates"
 	},
 	{
 		type = "recipe-category",
 		name = "recycle-with-fluids"
 	},
---For recipes with multiple outputs
 	{
-		type = "item-group",
-		name = "rf-multiple-outputs",
-		order = "f",
-		inventory_order = "f",
-		icon = "__core__/graphics/questionmark.png",
-		icon_size = 64
+		type = "recipe-category",
+		name = "recycle-productivity"
 	},
-	{
-		type = "item-subgroup",
-		name = "rf-multiple-outputs",
-		group = "rf-multiple-outputs",
-		order = "a",
-		icon_size = 64
-	},
---A hidden group to store the reverse recipes
+--Hidden group and subgroup which contains the reverse recipes
 	{
 		type = "item-group",
 		name = "recycling",
@@ -32,7 +24,6 @@ data:extend({
 		icon_size = 64,
 		order = "z",
 	},
---Subgroup for the reverse factory itself
 	{
 		type = "item-subgroup",
 		name = "recycling",
