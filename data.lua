@@ -33,6 +33,8 @@ elseif mods["bobplates"] then
 	rf.mods = "bobplates"
 elseif mods["IndustrialRevolution"] then
 	rf.mods = "DIR"
+elseif mods["IndustrialRevolution3"] then
+	rf.mods = "DIR3"
 elseif mods["Fantario"] then
 	rf.mods = "fantario"
 elseif mods["bobassembly"] then

@@ -1,10 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.15
+Date: December 29, 2022
+  Minor Features:
+    - Added compatibility with Industrial Revolution 3 mod.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.14
 Date: November 14, 2022
   Info:
     - Wrapped the main reverse-recipes function so that it can be accessed by another mod.
-      This function is to be used by my newly uploaded mod (Reverse Factory Postprocess)
-      This should fix certain compatibility issues with Space Exploration, may be expanded later.
+      This function is to be used exclusively by my newly uploaded mod (Reverse Factory Postprocess)
+      Should fix certain compatibility issues with Space Exploration, may be expanded upon later.
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.13
 Date: October 7, 2022
@@ -32,7 +37,7 @@ Date: August 8, 2022
 Version: 8.1.9
 Date: June 20, 2022
   Minor Features:
-    - Added compatibility for 248k mod.
+    - Added compatibility with 248k mod.
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.8
 Date: April 16, 2022

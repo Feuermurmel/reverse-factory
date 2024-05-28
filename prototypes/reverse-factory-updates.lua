@@ -3,27 +3,75 @@ local Data = require('__stdlib__/stdlib/data/data')
 local Recipe = require('__stdlib__/stdlib/data/recipe')
 local Tech = require('__stdlib__/stdlib/data/technology')
 
---Game should be mostly vanilla at this point
-Recipe("reverse-factory-1"):add_ingredient({"assembling-machine-1",2})
-Recipe("reverse-factory-2"):add_ingredient({"steel-plate",5})
-Recipe("reverse-factory-3"):add_ingredient({"stone-brick",10})
-Recipe("reverse-factory-4"):add_ingredient({"electric-furnace",2})
-Recipe("reverse-factory-2"):replace_ingredient("iron-plate","iron-gear-wheel")
-Recipe("reverse-factory-3"):replace_ingredient("iron-plate","pipe")
-Recipe("reverse-factory-3"):replace_ingredient("electronic-circuit","advanced-circuit")
-Recipe("reverse-factory-4"):replace_ingredient("iron-plate","steel-plate")
-Recipe("reverse-factory-4"):remove_ingredient("electronic-circuit")
-Recipe("reverse-factory-4"):add_ingredient({"effectivity-module",2})
-Tech("reverse-factory-1"):add_prereq("automation")
-Tech("reverse-factory-2"):add_prereq("automation-2")
-Tech("reverse-factory-3"):add_prereq("advanced-material-processing-2")
-Tech("reverse-factory-4"):add_prereq("automation-3")
-if not (mods["Krastorio2"] and mods["space-exploration"]) then
-	Tech("reverse-factory-1"):set_field("unit",Tech("automation"):get_field("unit"))
+function Recipe:clear_ingredients()
+    if self:is_valid() then
+        if self.normal then
+            if self.normal.ingredients then
+                self.normal.ingredients = {}
+            end
+		end
+		if self.expensive then
+            if self.expensive.ingredients then
+                self.expensive.ingredients = {}
+            end
+		end
+        if self.ingredients then
+            self.ingredients = {}
+        end
+    end
+    return self
 end
-Tech("reverse-factory-2"):set_field("unit",Tech("automation-2"):get_field("unit"))
-Tech("reverse-factory-3"):set_field("unit",Tech("advanced-material-processing-2"):get_field("unit"))
-Tech("reverse-factory-4"):set_field("unit",Tech("automation-3"):get_field("unit"))
+
+function Recipe:set_ingredients(oldrecipe)
+    if self:is_valid() then
+		self:clear_ingredients()
+		if data.raw.recipe[oldrecipe].ingredients then
+			for _, ingredient in pairs(data.raw.recipe[oldrecipe].ingredients) do
+				self:add_ingredient(ingredient)
+			end
+		else
+			if data.raw.recipe[oldrecipe].normal then
+				if data.raw.recipe[oldrecipe].normal.ingredients then
+					for _, ingredient in pairs(data.raw.recipe[oldrecipe].normal.ingredients) do
+						self:add_ingredient(ingredient)
+					end
+				end
+			end
+			if data.raw.recipe[oldrecipe].expensive then
+				if data.raw.recipe[oldrecipe].normal.expensive then
+					for _, ingredient in pairs(data.raw.recipe[oldrecipe].normal.expensive) do
+						self:add_ingredient("",ingredient)
+					end
+				end
+			end
+		end
+    end
+    return self
+end
+
+--Game should be mostly vanilla at this point
+if rf.mods ~= "DIR3" then
+	Recipe("reverse-factory-1"):add_ingredient({"assembling-machine-1",2})
+	Recipe("reverse-factory-2"):add_ingredient({"steel-plate",5})
+	Recipe("reverse-factory-3"):add_ingredient({"stone-brick",10})
+	Recipe("reverse-factory-4"):add_ingredient({"electric-furnace",2})
+	Recipe("reverse-factory-2"):replace_ingredient("iron-plate","iron-gear-wheel")
+	Recipe("reverse-factory-3"):replace_ingredient("iron-plate","pipe")
+	Recipe("reverse-factory-3"):replace_ingredient("electronic-circuit","advanced-circuit")
+	Recipe("reverse-factory-4"):replace_ingredient("iron-plate","steel-plate")
+	Recipe("reverse-factory-4"):remove_ingredient("electronic-circuit")
+	Recipe("reverse-factory-4"):add_ingredient({"effectivity-module",2})
+	Tech("reverse-factory-1"):add_prereq("automation")
+	Tech("reverse-factory-2"):add_prereq("automation-2")
+	Tech("reverse-factory-3"):add_prereq("advanced-material-processing-2")
+	Tech("reverse-factory-4"):add_prereq("automation-3")
+	if not (mods["Krastorio2"] and mods["space-exploration"]) then
+		Tech("reverse-factory-1"):set_field("unit",Tech("automation"):get_field("unit"))
+	end
+	Tech("reverse-factory-2"):set_field("unit",Tech("automation-2"):get_field("unit"))
+	Tech("reverse-factory-3"):set_field("unit",Tech("advanced-material-processing-2"):get_field("unit"))
+	Tech("reverse-factory-4"):set_field("unit",Tech("automation-3"):get_field("unit"))
+end
 
 --Only one of the below conditions will ever be true at one time.
 --Priority follows what is set under data.lua, so intercompatibility is not guaranteed
@@ -149,6 +197,31 @@ if rf.mods == "DIR" then
 	Tech("reverse-factory-2"):set_field("unit",Tech("automation-2"):get_field("unit"))
 	Tech("reverse-factory-3"):set_field("unit",Tech("automation-3"):get_field("unit"))
 	Tech("reverse-factory-4"):set_field("unit",Tech("ir2-furnaces-3"):get_field("unit"))
+end
+
+if rf.mods == "DIR3" then
+	Recipe("reverse-factory-1"):set_ingredients("assembling-machine-1")
+	--Recipe("reverse-factory-1"):add_ingredient("assembling-machine-1")
+	
+	Recipe("reverse-factory-2"):set_ingredients("assembling-machine-2")
+	Recipe("reverse-factory-2"):add_ingredient("reverse-factory-1")
+	
+	Recipe("reverse-factory-3"):set_ingredients("assembling-machine-3")
+	Recipe("reverse-factory-3"):add_ingredient("reverse-factory-2")
+	
+	Recipe("reverse-factory-4"):set_ingredients("laser-assembler")
+	Recipe("reverse-factory-4"):remove_ingredient("assembling-machine-3")
+	Recipe("reverse-factory-4"):add_ingredient("reverse-factory-3")
+	
+	Tech("reverse-factory-1"):add_prereq("automation")
+	Tech("reverse-factory-2"):add_prereq("automation-2")
+	Tech("reverse-factory-3"):add_prereq("automation-3")
+	Tech("reverse-factory-4"):add_prereq("automation-4")
+
+	Tech("reverse-factory-1"):set_field("unit",Tech("automation"):get_field("unit"))
+	Tech("reverse-factory-2"):set_field("unit",Tech("automation-2"):get_field("unit"))
+	Tech("reverse-factory-3"):set_field("unit",Tech("automation-3"):get_field("unit"))
+	Tech("reverse-factory-4"):set_field("unit",Tech("automation-4"):get_field("unit"))
 end
 
 --If Fantario is installed
