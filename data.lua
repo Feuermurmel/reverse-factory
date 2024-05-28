@@ -45,8 +45,8 @@ if mods ["248k"] then
 end
 
 --This is where the magic happens
-require('func')
 require('dbug')
+require('func')
 
 --[[
     Construction Drones adds equipment grid to light armor

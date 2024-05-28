@@ -235,7 +235,7 @@ local function rfEntity(n)
 				pipe_covers = pipecoverspictures(),
 				base_level = 1,
 				base_area = 10,
-				pipe_connections = {{ position = {-1, -2} }}
+				pipe_connections = {{ position = {-1, -2},type="output"}}
 			},
 			{
 				production_type = "output",
@@ -243,7 +243,7 @@ local function rfEntity(n)
 				pipe_covers = pipecoverspictures(),
 				base_level = 1,
 				base_area = 10,
-				pipe_connections = {{ position = {1, -2} }}
+				pipe_connections = {{ position = {1, -2},type="output"}}
 			}
 		}
 	elseif n==4 then
@@ -255,7 +255,7 @@ local function rfEntity(n)
 				pipe_covers = pipecoverspictures(),
 				base_level = -1,
 				base_area = 10,
-				pipe_connections = {{ position = {-1, 2} }}
+				pipe_connections = {{ position = {-1, 2},type="input"}}
 			},
 			{
 				production_type = "output",
@@ -263,7 +263,7 @@ local function rfEntity(n)
 				pipe_covers = pipecoverspictures(),
 				base_level = 1,
 				base_area = 10,
-				pipe_connections = {{ position = {-1, -2} }}
+				pipe_connections = {{ position = {-1, -2},type="output"}}
 			},
 			{
 				production_type = "output",
@@ -271,7 +271,7 @@ local function rfEntity(n)
 				pipe_covers = pipecoverspictures(),
 				base_level = 1,
 				base_area = 10,
-				pipe_connections = {{ position = {1, -2} }}
+				pipe_connections = {{ position = {1, -2},type="output"}}
 			}
 		}
 	end
