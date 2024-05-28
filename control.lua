@@ -1,8 +1,8 @@
 if settings.global["rf-compat"].value then
 
 function checkinvs()
-	if next(rf.recyclers) then
-		for _, ent in pairs(rf.recyclers) do
+	if next(global.recyclers) then
+		for _, ent in pairs(global.recyclers) do
 			--If recycler has power
 			if ent.energy > 0 then
 				--Check if not currently recycling. 
@@ -31,11 +31,10 @@ function checkinvs()
 end
 
 function scanworld()
-	rf = {}
-	rf.recyclers = {}
+	global.recyclers = {}
 	for _, surface in pairs(game.surfaces) do
 		local recyclers = surface.find_entities_filtered{name= "reverse-factory"}
-		rf.recyclers = recyclers
+		global.recyclers = recyclers
 	end
 end
 
@@ -48,63 +47,54 @@ script.on_configuration_changed( function()
 end)
 
 script.on_event(defines.events.on_tick, function(event)
-	if event.tick % 600 == 0 then
-		if rf then checkinvs() end
+	if not global.recyclers then scanworld() end
+	if event.tick % settings.global["rf-delay"].value == 0 then
+		checkinvs()
 	end
 end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
-	if not rf then
-		scanworld()
-	end
+	if not global.recyclers then scanworld() end
 	if event.created_entity.name == "reverse-factory" then
-		table.insert(rf.recyclers, event.created_entity)
+		table.insert(global.recyclers, event.created_entity)
 	end
 end)
 
 script.on_event(defines.events.on_built_entity, function(event)
-	if not rf then
-		scanworld()
-	end
+	if not global.recyclers then scanworld() end
 	if event.created_entity.name == "reverse-factory" then
-		table.insert(rf.recyclers, event.created_entity)
+		table.insert(global.recyclers, event.created_entity)
 	end
 end)
 
 script.on_event(defines.events.on_entity_died, function(event)
-	if not rf then
-		scanworld()
-	end
+	if not global.recyclers then scanworld() end
 	if event.entity.name == "reverse-factory" then
-		for key, entity in pairs(rf.recyclers) do
+		for key, entity in pairs(global.recyclers) do
 			if entity == event.entity then
-				table.remove(rf.recyclers, key)
+				table.remove(global.recyclers, key)
 			end
 		end
 	end
 end)
 
 script.on_event(defines.events.on_robot_pre_mined, function(event)
-	if not rf then
-		scanworld()
-	end
+	if not global.recyclers then scanworld() end
 	if event.entity.name == "reverse-factory" then
-		for key, entity in pairs(rf.recyclers) do
+		for key, entity in pairs(global.recyclers) do
 			if entity == event.entity then
-				table.remove(rf.recyclers, key)
+				table.remove(global.recyclers, key)
 			end
 		end
 	end
 end)
 
 script.on_event(defines.events.on_preplayer_mined_item, function(event)
-	if not rf then
-		scanworld()
-	end
+	if not global.recyclers then scanworld() end
 	if event.entity.name == "reverse-factory" then
-		for key, entity in pairs(rf.recyclers) do
+		for key, entity in pairs(global.recyclers) do
 			if entity == event.entity then
-				table.remove(rf.recyclers, key)
+				table.remove(global.recyclers, key)
 			end
 		end
 	end
