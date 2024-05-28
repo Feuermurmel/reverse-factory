@@ -3,7 +3,7 @@ if settings.global["rf-compati"].value then
 function checkinvs()
 	if next(global.recyclers) then
 		for key, ent in pairs(global.recyclers) do
-			if ent then
+			if ent.valid then
 			--If recycler has power
 				if ent.energy > 0 then
 					--Check if not currently recycling. 
@@ -34,6 +34,7 @@ function checkinvs()
 						end
 					end
 				end
+			else table.remove(global.recyclers, key)
 			end
 		end
 	end
@@ -77,7 +78,7 @@ end)
 script.on_event(defines.events.on_tick, function(event)
 	if not global.marks then scanworld() end
 	if event.tick % settings.global["rf-delays"].value == 0 then
-		--game.players[1].print(serpent.block(global.recyclers))
+		game.players[1].print(serpent.block(global.recyclers))
 		checkinvs()
 	end
 end)

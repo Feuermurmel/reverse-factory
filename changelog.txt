@@ -1,6 +1,12 @@
 ---------------------------------------------------------------------------------------------------
-Version: 6.1.11
+Version: 6.1.12
 Date: July 28, 2019
+  Bugfixes:
+    - Fixed error when using New Game Plus after launching the rocket by adding validity check.
+      (thanks to slippycheeze and indirectly to Klonan)
+---------------------------------------------------------------------------------------------------
+Version: 6.1.11
+Date: July 27, 2019
   Bugfixes:
     - Fixed startup error caused by reversible variable not resetting to false.
 ---------------------------------------------------------------------------------------------------
