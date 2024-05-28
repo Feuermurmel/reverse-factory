@@ -4,6 +4,7 @@ data:extend({
     type = "technology",
     name = "reverse-factory",
     icon = "__reverse-factory__/graphics/technology/reverse-factory.png",
+	icon_size = 128,
     prerequisites = {"advanced-material-processing"},
     effects =
     {
