@@ -61,6 +61,7 @@ for n=1,4 do
 	data.raw["furnace"]["reverse-factory-"..n].result_inventory_size = rf.maxResults[n]
 end
 
+
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
 --rf.debug(data.raw.recipe["rf-chemical-steel-furnace"])
 --rf.debug(data.raw.module["productivity-module"].limitation)
