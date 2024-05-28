@@ -56,8 +56,9 @@ for _, recycle in pairs(rf.custom_recycle) do
 	makeRecipe(itemType, item, recipe)
 end
 
---Fix required for empty barrels being recyclable before tier 4.
-if data.raw.recipe["rf-empty-barrel"] then 
+--Fix required for Space Exploration to allow early recycling of empty-barrel
+--  only works if productivity loop is not disabled
+if mods["space-exploration"] and data.raw.recipe["rf-empty-barrel"] then 
 	data.raw.recipe["rf-empty-barrel"].category = "recycle-products"
 end
 

@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.12
+Date: August 12, 2022
+  Bugfixes:
+    - Updated previous empty-barrel fix to only apply when Space Exploration is detected.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.11
 Date: August 9, 2022
   Bugfixes:
