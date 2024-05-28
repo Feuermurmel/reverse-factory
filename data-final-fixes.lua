@@ -56,6 +56,11 @@ for _, recycle in pairs(rf.custom_recycle) do
 	makeRecipe(itemType, item, recipe)
 end
 
+--Fix required for empty barrels being recyclable before tier 4.
+if data.raw.recipe["rf-empty-barrel"] then 
+	data.raw.recipe["rf-empty-barrel"].category = "recycle-products"
+end
+
 fixMaxResults()
 
 --Set result size of entities based on largest recipe count in current game
@@ -72,7 +77,9 @@ end
 
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
 --rf.debug(data.raw.recipe["rf-wooden-chest"])
+--rf.debug(data.raw.recipe["empty-barrel"])
 --rf.debug(data.raw.technology["reverse-factory-1"])
 --rf.debug(data.raw.armor["starry-armor"])
 --rf.debug(data.raw.module["productivity-module"].limitation)
---rf.debug(data.raw["rail-planner"].rail)
+--rf.debug(data.raw.module["productivity-module"])
+--rf.debug(data.raw.recipe["rf-empty-barrel"])

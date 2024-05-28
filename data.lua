@@ -72,11 +72,12 @@ end
 
 --Prevent duplication of crushed stone
 table.insert(rf.norecycle_items, "stone-crushed")
+
 --Prevent duplication of scrap recipes
 table.insert(rf.norecycle_subgroups, "smelting_fantario")
 table.insert(rf.norecycle_subgroups, "petrochem-catalysts")
 table.insert(rf.norecycle_categories, "seed-extractor")
---Test for adding custom recycling recipes, only for use with Robot Army
---This feature is not needed for vanilla or most mods
+
+--Examples for adding custom recipes to reverse-factory, for external mod use.
 --table.insert(rf.custom_recycle, {"item", "droid-smg-dummy", "droid-smg-deploy"})
 --table.insert(rf.custom_recycle, {"item", "terminator-dummy", "terminator-deploy"})
