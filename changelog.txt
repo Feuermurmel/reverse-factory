@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.0.4
+Date: May 16, 2021
+  Bugfixes:
+    - Fixed compatibilty with Seablock and Angel's mods (when Plastics tech is removed/replaced)
+---------------------------------------------------------------------------------------------------
 Version: 8.0.3
 Date: April 21, 2021
   Info:

@@ -38,10 +38,17 @@ if rf.mods == "bobplates" then
 		Recipe("reverse-factory-2"):replace_ingredient("iron-gear-wheel","steel-gear-wheel")
 	end
 	if data.raw.item["plastic-pipe"] then
-		Recipe("reverse-factory-3"):replace_ingredient("pipe","plastic-pipe")
-		Tech("reverse-factory-3"):remove_prereq("advanced-material-processing-2")
-		Tech("reverse-factory-3"):add_prereq("plastics")
-		Tech("reverse-factory-3"):set_field("unit",Tech("plastics"):get_field("unit"))
+		if data.raw.technology["plastic-1"] then
+			Recipe("reverse-factory-3"):replace_ingredient("pipe","plastic-pipe")
+			Tech("reverse-factory-3"):remove_prereq("advanced-material-processing-2")
+			Tech("reverse-factory-3"):add_prereq("plastic-1")
+			Tech("reverse-factory-3"):set_field("unit",Tech("plastic-1"):get_field("unit"))
+		else
+			Recipe("reverse-factory-3"):replace_ingredient("pipe","plastic-pipe")
+			Tech("reverse-factory-3"):remove_prereq("advanced-material-processing-2")
+			Tech("reverse-factory-3"):add_prereq("plastics")
+			Tech("reverse-factory-3"):set_field("unit",Tech("plastics"):get_field("unit"))
+		end
 	end
 	if data.raw.technology["tungsten-alloy-processing"] then
 		Recipe("reverse-factory-4"):replace_ingredient("steel-plate","titanium-plate")
