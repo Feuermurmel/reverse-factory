@@ -45,6 +45,7 @@ function createSimpleRecipe(recipe, item)
 		energy_required = 30,
 		ingredients = {{rec_name, rec_count}},
 		results = recipe.ingredients,
+		allow_decomposition = false
 	}
 	--Icons supercede the use of icon
 	if item.icons then
@@ -88,12 +89,14 @@ function createDualRecipe(recipe, item)
 			results = recipe.normal.ingredients,
 			hidden = "true",
 			energy_required = 30,
+			allow_decomposition = false
 			},
 		expensive = {
 			ingredients = {{rec_name, expencount}},
 			results = recipe.expensive.ingredients,
 			hidden = "true",
 			energy_required = 30,
+			allow_decomposition = false
 			},
 		subgroup = "rf-multiple-outputs"
 		}
@@ -131,7 +134,8 @@ function createManualSimpleRecipe(recipe, item)
 		hidden = "true",
 		energy_required = 30,
 		ingredients = {{item.name, rec_count}},
-		subgroup="rf-multiple-outputs"
+		subgroup="rf-multiple-outputs",
+		allow_decomposition = false
 	}
 	--Icons supercede the use of icon
 	if item.icons then
@@ -161,12 +165,14 @@ function createManualDualRecipe(recipe, item)
 			results = recipe.normal.ingredients,
 			hidden = "true",
 			energy_required = 30,
+			allow_decomposition = false
 			},
 		expensive = {
 			ingredients = {{item.name, expencount}},
 			results = recipe.expensive.ingredients,
 			hidden = "true",
 			energy_required = 30,
+			allow_decomposition = false
 			},
 		subgroup="rf-multiple-outputs"
 	}

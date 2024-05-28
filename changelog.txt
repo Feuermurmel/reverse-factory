@@ -1,5 +1,9 @@
 REVERSE FACTORY
 ---------------------------------------------------------------------------------------------------
+Version: 6.0.2
+  Changes:
+    - Potentially fixed the "total raw" calculation bug (thanks to mrudat if it works!)
+---------------------------------------------------------------------------------------------------
 Version: 6.0.1
   Changes:
     - Added optional dependencies to GDIW and Bobs Assembling Machines
