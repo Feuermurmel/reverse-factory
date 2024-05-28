@@ -10,6 +10,7 @@ rf = {}
 rf.recipes = {}
 rf.vehicles = settings.startup["rf-vehicles"].value
 rf.efficiency = settings.startup["rf-efficiency"].value
+rf.noprod = settings.startup["rf-prod-loop"].value
 rf.norecycle_items = {}
 rf.norecycle_categories = {}
 rf.norecycle_subgroups = {}

@@ -27,4 +27,10 @@ data:extend({
 		minimum_value = "10",
 		maximum_value = "100"
 	},
+	{
+		type = "bool-setting",
+		name = "rf-prod-loop",
+		setting_type = "startup",
+		default_value = "false"
+	},
 })

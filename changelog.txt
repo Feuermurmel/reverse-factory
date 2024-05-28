@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.22
+Date: January 20, 2020
+  Minor Features:
+    - Re-implemented setting to disable productivity loop, for -DeadlyKitten.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.21
 Date: December 11, 2019
   Bugfixes:

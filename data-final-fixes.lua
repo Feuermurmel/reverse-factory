@@ -39,8 +39,15 @@ end
 local itemTypes = {
 	"ammo","armor","item","gun","capsule","module","tool","repair-tool","fluid"
 }
+--Disables vehicle recycling
 if rf.vehicles then 
 	table.insert(itemTypes,"item-with-entity-data")
+end
+--Disable productivity loop
+if rf.limitations and rf.noprod then 
+	for _, item in pairs(rf.limitations) do
+		table.insert(rf.norecycle_items, item)
+	end
 end
 
 for _, itemType in pairs(itemTypes) do
