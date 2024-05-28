@@ -32,7 +32,9 @@ function createSimpleRecipe(recipe, item)
 	if recipe.results then if recipe.results[1] then if recipe.results[1].amount then
 		rec_count = recipe.results[1].amount
 	end end end
-	local new_ingreds = fixstackable(recipe.ingredients)
+	local new_ingreds = {}
+	if rf.safety then new_ingreds = recipe.ingredients
+	else new_ingreds = fixstackable(recipe.ingredients) end
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
 	local new_recipe = {}
 	new_recipe = {
@@ -78,8 +80,15 @@ function createDualRecipe(recipe, item)
 		expencount = recipe.expensive.results[1].amount
 	end end end
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
-	local new_normal_ingreds = fixstackable(recipe.normal.ingredients)
-	local new_expensive_ingreds = fixstackable(recipe.expensive.ingredients)
+	local new_normal_ingreds = {} 
+	local new_expensive_ingreds = {}
+	if rf.safety then 
+		new_normal_ingreds = recipe.normal.ingredients
+		new_expensive_ingreds = recipe.expensive.ingredients
+	else
+		new_normal_ingreds = fixstackable(recipe.normal.ingredients)
+		new_expensive_ingreds = fixstackable(recipe.expensive.ingredients)
+	end
 	local new_recipe = {}
 	new_recipe = {
 		type = "recipe",
@@ -203,7 +212,49 @@ function uncraftable(recipe, item)
 		if recipe.ingredients then
 			for _, ingred in ipairs(recipe.ingredients) do
 				--Do not attempt to uncraft if one of the ingredients exceeds its stack size
-				if (data.raw.ammo[ingred[1]]) then
+				if ingred.name then
+					if (data.raw.ammo[ingred.name]) then
+						if (ingred.amount > data.raw.ammo[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.armor[ingred.name]) then
+						if (ingred.amount > data.raw.armor[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.item[ingred.name]) then
+						if (ingred.amount > data.raw.item[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.gun[ingred.name]) then
+						if (ingred.amount > data.raw.gun[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.capsule[ingred.name]) then
+						if (ingred.amount > data.raw.capsule[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.module[ingred.name]) then
+						if (ingred.amount > data.raw.module[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.tool[ingred.name]) then
+						if (ingred.amount > data.raw.tool[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["rail-planner"][ingred.name]) then
+						if (ingred.amount > data.raw["rail-planner"][ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["mining-tool"][ingred.name]) then
+						if (ingred.amount > data.raw["mining-tool"][ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["repair-tool"][ingred.name]) then
+						if (ingred.amount > data.raw["repair-tool"][ingred.name].stack_size) then
+							uncraft=false
+						end
+					end
+				elseif (data.raw.ammo[ingred[1]]) then
 					if (ingred[2] > data.raw.ammo[ingred[1]].stack_size) then
 						uncraft=false
 					end
@@ -248,7 +299,49 @@ function uncraftable(recipe, item)
 		elseif recipe.normal.ingredients then
 			for _, ingred in ipairs(recipe.normal.ingredients) do
 				--Do not attempt to uncraft if one of the ingredients exceeds its stack size
-				if (data.raw.ammo[ingred[1]]) then
+				if ingred.name then
+					if (data.raw.ammo[ingred.name]) then
+						if (ingred.amount > data.raw.ammo[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.armor[ingred.name]) then
+						if (ingred.amount > data.raw.armor[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.item[ingred.name]) then
+						if (ingred.amount > data.raw.item[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.gun[ingred.name]) then
+						if (ingred.amount > data.raw.gun[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.capsule[ingred.name]) then
+						if (ingred.amount > data.raw.capsule[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.module[ingred.name]) then
+						if (ingred.amount > data.raw.module[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.tool[ingred.name]) then
+						if (ingred.amount > data.raw.tool[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["rail-planner"][ingred.name]) then
+						if (ingred.amount > data.raw["rail-planner"][ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["mining-tool"][ingred.name]) then
+						if (ingred.amount > data.raw["mining-tool"][ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["repair-tool"][ingred.name]) then
+						if (ingred.amount > data.raw["repair-tool"][ingred.name].stack_size) then
+							uncraft=false
+						end
+					end
+				elseif (data.raw.ammo[ingred[1]]) then
 					if (ingred[2] > data.raw.ammo[ingred[1]].stack_size) then
 						uncraft=false
 					end
@@ -293,7 +386,49 @@ function uncraftable(recipe, item)
 			if recipe.expensive.ingredients then
 				for _, ingred in ipairs(recipe.expensive.ingredients) do
 					--Do not attempt to uncraft if one of the ingredients exceeds its stack size
-					if (data.raw.ammo[ingred[1]]) then
+				if ingred.name then
+					if (data.raw.ammo[ingred.name]) then
+						if (ingred.amount > data.raw.ammo[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.armor[ingred.name]) then
+						if (ingred.amount > data.raw.armor[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.item[ingred.name]) then
+						if (ingred.amount > data.raw.item[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.gun[ingred.name]) then
+						if (ingred.amount > data.raw.gun[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.capsule[ingred.name]) then
+						if (ingred.amount > data.raw.capsule[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.module[ingred.name]) then
+						if (ingred.amount > data.raw.module[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw.tool[ingred.name]) then
+						if (ingred.amount > data.raw.tool[ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["rail-planner"][ingred.name]) then
+						if (ingred.amount > data.raw["rail-planner"][ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["mining-tool"][ingred.name]) then
+						if (ingred.amount > data.raw["mining-tool"][ingred.name].stack_size) then
+							uncraft=false
+						end
+					elseif (data.raw["repair-tool"][ingred.name]) then
+						if (ingred.amount > data.raw["repair-tool"][ingred.name].stack_size) then
+							uncraft=false
+						end
+					end
+					elseif (data.raw.ammo[ingred[1]]) then
 						if (ingred[2] > data.raw.ammo[ingred[1]].stack_size) then
 							uncraft=false
 						end
