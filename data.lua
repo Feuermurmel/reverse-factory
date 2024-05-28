@@ -53,6 +53,10 @@ if mods["spaceblock"] then
 	table.insert(rf.norecycle_items, "stone")
 	table.insert(rf.norecycle_items, "uranium-ore")
 end
+if mods["homeworld_redux"] then
+	table.insert(rf.norecycle_categories, "seeder")
+	table.insert(rf.norecycle_categories, "terraformer")
+end
 
 --Prevent duplication of crushed stone
 table.insert(rf.norecycle_items, "stone-crushed")
