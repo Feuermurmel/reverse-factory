@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.5
+Date: July 20, 2019
+  Bugfixes:
+    - Fixed bug with recyclers not being removed from list when using automatic ingredient push.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.4
 Date: July 20, 2019
   Bugfixes:
