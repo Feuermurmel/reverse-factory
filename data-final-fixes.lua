@@ -34,6 +34,20 @@ if mods["IndustrialRevolution"] then
 	end
 end
 
+--Cheap cliff explosives setting makes the reverse recipe crash
+if mods["FTweaks"] then
+	if Config.cheapCliffExplosives then
+		for key1, ingredient in pairs(data.raw.recipe["cliff-explosives"].ingredients) do
+			for key2, item in ipairs(ingredient) do
+				if string.match(item, "item") then
+					data.raw.recipe["cliff-explosives"].ingredients[key1][key2] = nil
+					data.raw.recipe["cliff-explosives"].ingredients[key1]["item"] = "item"
+				end
+			end
+		end
+	end
+end
+
 --This function can be prevented from running by using "rf.prevent_final_fixes()" in data.lua
 --DO NOT USE THIS FUNCTION IN YOUR MOD- DOWNLOAD reverse-factory-postprocess INSTEAD
 function rf.final_fixes()
@@ -114,5 +128,5 @@ end
 --rf.debug(data.raw.armor["starry-armor"])
 --rf.debug(data.raw.module["productivity-module"].limitation)
 --rf.debug(data.raw.module["productivity-module"])
---rf.debug(data.raw.recipe["rf-empty-barrel"])
+--rf.debug(data.raw.recipe["cliff-explosives"])
 --rf.debug(data.raw.item["crude-oil"])

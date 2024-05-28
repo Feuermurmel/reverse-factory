@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.2.2
+Date: January 29, 2024
+  Bugfixes:
+    - Fixed compatibility with FTweaks cheaper cliff explosives.
+---------------------------------------------------------------------------------------------------
 Version: 8.2.1
 Date: January 29, 2024
   Minor Features:
