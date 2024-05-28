@@ -38,17 +38,33 @@ function addRecipes(t_elts)
 					if uncraft and (not fluid) then
 						local count = recipe.result_count and recipe.result_count or 1
 						local name = string.gsub(recipe.name, yuokiSuffix, "")
-						local new_recipe =
-						{
-							type = "recipe",
-							name = "rf-" .. name,
-							icon =  elt.icon,
-							category = "recycle",
-							hidden = "true",
-							energy_required = 30,
-							ingredients = {{name, count}},
-							results = recipe.ingredients
-						}
+						local new_recipe 
+						if elt.icon then
+						--For all regular items and mods (elt.icon)
+							new_recipe =
+							{
+								type = "recipe",
+								name = "rf-" .. name,
+								icon =  elt.icon,
+								category = "recycle",
+								hidden = "true",
+								energy_required = 30,
+								ingredients = {{name, count}},
+								results = recipe.ingredients
+							}
+						--Fix for annoying mods who use unnecessary tints (elt.icons)
+						else new_recipe=
+							{
+								type = "recipe",
+								name = "rf-" .. name,
+								icons =  elt.icons,
+								category = "recycle",
+								hidden = "true",
+								energy_required = 30,
+								ingredients = {{name, count}},
+								results = recipe.ingredients
+							}
+						end
 
 						if #new_recipe.results > 1 then
 							new_recipe.subgroup = "rf-multiple-outputs"
