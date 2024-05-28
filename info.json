@@ -1,9 +1,9 @@
 {
   "name": "reverse-factory",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "factorio_version": "0.14",
   "title": "Reverse Factory",
   "author": "Victor Ros, Kryzeth",
   "description": "Reverse Factory machine will recycle (uncraft) nearly any item placed inside. Supports all modded items",
-  "dependencies": ["base >= 0.14"]
+  "dependencies": ["base >= 0.14", "? BobExtended"]
 }
