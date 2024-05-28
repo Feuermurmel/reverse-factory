@@ -115,9 +115,23 @@ script.on_event(defines.events.on_pre_player_mined_item, function(event)
 	killRecycler(event.entity, event.entity.surface.name)
 end)
 
+script.on_event(defines.events.on_surface_created, function(event)
+	addActiveSurface(game.surfaces[event.surface_index].name)
+end)
+
+script.on_event(defines.events.on_pre_surface_deleted, function(event)
+	--game.players[1].print(game.surfaces[event.surface_index].name)
+	removeActiveSurface(game.surfaces[event.surface_index].name)
+end)
+
+script.on_event(defines.events.on_surface_renamed, function(event)
+	removeActiveSurface(event.old_name)
+	addActiveSurface(event.new_name)
+end)
+
 --When a player changes surfaces (Warptorio 2)
 script.on_event(defines.events.on_player_changed_surface, function(event)
-	removeActiveSurface(game.surfaces[event.surface_index].name)
+	--removeActiveSurface(game.surfaces[event.surface_index].name)
 	addActiveSurface(game.players[event.player_index].surface.name)
 end)
 
@@ -161,11 +175,8 @@ function removeActiveSurface(surface)
 	local removeSurface = false
 	for key, oldSurface in pairs (global.activeSurfaces) do
 		if string.match(surface, oldSurface) then
-			removeSurface = true
+			table.remove(global.activeSurfaces, key)
 		end
-	end
-	if removeSurface then
-		table.remove(global.activeSurfaces, key)
 	end
 end
 

@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.2.6
+Date: March 28, 2024
+  Bugfixes:
+    - Potential fix for error due to previous fix regarding multiple surfaces.
+---------------------------------------------------------------------------------------------------
 Version: 8.2.5
 Date: March 27, 2024
   Bugfixes:
