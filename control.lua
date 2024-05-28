@@ -3,7 +3,7 @@ function checkinvs()
 		for _, ent in pairs(rf.recyclers) do
 			--If recycler has power
 			if ent.energy > 0 then
-				--Check if not currently recycling
+				--Check if not currently recycling. 
 				if not ent.is_crafting() then
 					--Check if output is not blocked
 					if ent.get_output_inventory().is_empty() then
@@ -46,7 +46,7 @@ script.on_configuration_changed( function()
 end)
 
 script.on_event(defines.events.on_tick, function(event)
-	if event.tick % 120 == 0 then
+	if event.tick % 600 == 0 then
 		if rf then checkinvs() end
 	end
 end)
