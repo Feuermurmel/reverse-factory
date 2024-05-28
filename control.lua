@@ -46,12 +46,20 @@ script.on_event(defines.events.on_tick, function(event)
 end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
+	if not rf then
+		rf = {}
+		rf.recyclers = {}
+	end
 	if event.created_entity.name == "reverse-factory" then
 		table.insert(rf.recyclers, event.created_entity)
 	end
 end)
 
 script.on_event(defines.events.on_built_entity, function(event)
+	if not rf then
+		rf = {}
+		rf.recyclers = {}
+	end
 	if event.created_entity.name == "reverse-factory" then
 		table.insert(rf.recyclers, event.created_entity)
 	end
