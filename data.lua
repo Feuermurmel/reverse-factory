@@ -7,6 +7,7 @@ require("prototypes.entity")
 --Setup for the reverse recipe groups and categories
 require("prototypes.catgroups")
 
+
 rf = {}
 rf.recipes = {}
 rf.vehicles = settings.startup["rf-vehicles"].value
@@ -22,6 +23,9 @@ rf.norecycle_categories = {}
 ]]--
 if mods["Construction_Drones"] and mods["robotarmy"] then
 	table.insert(rf.norecycle_items, "droid-flame")
+end
+if mods["bobplates"] and mods["attach-notes"] then
+	table.insert(rf.norecycle_items, "heavy-water")
 end
 table.insert(rf.norecycle_categories, "recycle")
 table.insert(rf.norecycle_categories, "recycle-with-fluids")
