@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.16
+Date: December 29, 2022
+  Bugfixes:
+    - Fixed error when running bobassembly without bobplates, and disabling furnaces.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.15
 Date: December 29, 2022
   Minor Features:

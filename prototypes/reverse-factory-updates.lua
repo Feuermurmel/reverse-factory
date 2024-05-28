@@ -258,9 +258,12 @@ end
 
 --If bobs assembly without bobs intermediates
 if rf.mods == "bobassembly" then
-	Tech("reverse-factory-4"):remove_prereq("automation-3")
-	Tech("reverse-factory-4"):add_prereq("advanced-material-processing-3")
-	Tech("reverse-factory-4"):set_field("unit",Tech("advanced-material-processing-3"):get_field("unit"))
+	if data.raw.technology["advanced-material-processing-3"] then
+		Tech("reverse-factory-4"):remove_prereq("automation-3")
+		Tech("reverse-factory-4"):add_prereq("advanced-material-processing-3")
+		Tech("reverse-factory-4"):set_field("unit",Tech("advanced-material-processing-3"):get_field("unit"))
+	end
+	
 end
 
 
