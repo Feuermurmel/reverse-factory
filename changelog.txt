@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.2.3
+Date: February 21, 2024
+  Bugfixes:
+    - Fixed vehicles from Hovercrafts mod not being recyclable, even with the setting enabled.
+---------------------------------------------------------------------------------------------------
 Version: 8.2.2
 Date: January 29, 2024
   Bugfixes:

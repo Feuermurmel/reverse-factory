@@ -23,3 +23,15 @@ if mods["kj_fuel"] then
 		table.insert(rf.custom_recycle, {"item", "kj_gasbarrel", "kj_gasbarrel_fill"})
 	end
 end
+
+if mods["Hovercrafts"] then
+	if data.raw["item-with-entity-data"]["hcraft-entity"] and data.raw.recipe["hcraft-recipe"] then
+		table.insert(rf.custom_recycle, {"item-with-entity-data", "hcraft-entity", "hcraft-recipe"})
+	end
+	if data.raw["item-with-entity-data"]["mcraft-entity"] and data.raw.recipe["mcraft-recipe"] then
+		table.insert(rf.custom_recycle, {"item-with-entity-data", "mcraft-entity", "mcraft-recipe"})
+	end
+	if data.raw["item-with-entity-data"]["lcraft-entity"] and data.raw.recipe["lcraft-recipe"] then
+		table.insert(rf.custom_recycle, {"item-with-entity-data", "lcraft-entity", "lcraft-recipe"})
+	end
+end
