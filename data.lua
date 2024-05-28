@@ -16,6 +16,16 @@ rf.custom_recycle = {}  --Format of {item-type, item-name, recipe-name}
 rf.maxResults = {5,5,5,5}
 rf.mod248k = false
 
+--Prevents this mod's data-final-fixes from fully loading
+rf.prevented_final_fixes = false
+--If another mod lists this mod as an optional dependency (space-exploration-postprocess)
+--Allows them to prevent this mod from loading, by running this in their data.lua
+--Then, they can run this mod's final-fixes during their own final-fixes via "rf.final_fixes()"
+--DO NOT USE THIS FUNCTION - DOWNLOAD reverse-factory-postprocess INSTEAD
+function rf.prevent_final_fixes()
+	rf.prevented_final_fixes = true
+end
+
 --If certain mods are detected, change some recipes later
 if mods ["nullius"] then
 	rf.mods = "nullius"

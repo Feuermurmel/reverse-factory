@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.14
+Date: November 14, 2022
+  Info:
+    - Wrapped the main reverse-recipes function so that it can be accessed by another mod.
+      This function is to be used by my newly uploaded mod (Reverse Factory Postprocess)
+      This should fix certain compatibility issues with Space Exploration, may be expanded later.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.13
 Date: October 7, 2022
   Bugfixes:

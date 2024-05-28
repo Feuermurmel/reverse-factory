@@ -29,6 +29,9 @@ if mods["IndustrialRevolution"] then
 	end
 end
 
+--This function can be prevented from running by using "rf.prevent_final_fixes()" in data.lua
+--DO NOT USE THIS FUNCTION IN YOUR MOD- DOWNLOAD reverse-factory-postprocess INSTEAD
+function rf.final_fixes()
 
 --List of item types to be recycled
 local itemTypes = {
@@ -75,7 +78,11 @@ for n=1,4 do
 	end
 end
 
+end
 
+if not rf.prevented_final_fixes then
+	rf.final_fixes()
+end
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
 --rf.debug(data.raw.recipe["rf-wooden-chest"])
 --rf.debug(data.raw.recipe["empty-barrel"])
