@@ -20,6 +20,6 @@ for n=1,4 do
 	data.raw["furnace"]["reverse-factory-"..n].result_inventory_size = rf.maxResults[n]
 end
 
---rf.debug(data.raw.recipe["se-data-storage-substrate"])
+--rf.debug(data.raw.recipe["rf-small-electric-pole"])
 --rf.debug(rf.maxResults)
 --rf.debug(data.raw.module["productivity-module"].limitation)

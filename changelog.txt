@@ -1,4 +1,26 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.8
+Date: July 23, 2019
+  Bugfixes:
+    - Fixed issue with reverse recipes not being properly hidden.
+---------------------------------------------------------------------------------------------------
+Version: 6.1.7
+Date: July 23, 2019
+  Bugfixes:
+    - Fixed load error due to forgot to comment out a single line.
+---------------------------------------------------------------------------------------------------
+Version: 6.1.6
+Date: July 23, 2019
+  Bugfixes:
+    - Fixed bug with mods that define normal recipes without expensive variants.
+    - Fixed bug with minimum energy required not applying to certain recipes.
+  Changes:
+    - Minimum energy required dependent on which tier of recycler can recycle.
+      This means t1 recipes in t1 machines recycle at the same speed as t4 recipes in t4 machines.
+      This also means t1 recipes in a t4 machine should recycle them even faster.
+    - Also reduced minimum energy requirement from 5 to 4. This only applies to t4 recipes.
+      Similarly, minimum energy requirement of t1 recipes set to 1, t2 recipes to 2, and t3 to 3.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.5
 Date: July 20, 2019
   Bugfixes:

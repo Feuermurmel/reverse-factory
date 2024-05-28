@@ -1,6 +1,88 @@
 --Data contains all functions contained in the Factorio stdlib
 local Data = require('__stdlib__/stdlib/data/data')
 local Recipe = require('__stdlib__/stdlib/data/recipe')
+local table = require('__stdlib__/stdlib/utils/table')
+
+--Fixing some of the Factorio stdlib functions to work properly with all recipes
+function Recipe:clear_ingredients()
+    if self:is_valid() then
+        if self.normal then
+            if self.normal.ingredients then
+                self.normal.ingredients = {}
+            end
+		end
+		if self.expensive then
+            if self.expensive.ingredients then
+                self.expensive.ingredients = {}
+            end
+		end
+        if self.ingredients then
+            self.ingredients = {}
+        end
+    end
+    return self
+end
+
+function Recipe:set_enabled(enabled)
+    if self:is_valid() then
+        if self.normal then
+            self.normal.enabled = enabled
+		end
+		if self.expensive then
+            self.expensive.enabled = enabled
+		end
+        if self.enabled  then
+            self.enabled = enabled
+        end
+    end
+    return self
+end
+
+function Data:copy(new_name, mining_result, opts)
+    --Is.Assert.String(new_name, 'New name is required')
+    if self:is_valid() then
+        mining_result = mining_result or new_name
+        --local from = self.name
+        local copy = table.deep_copy(rawget(self, '_raw'))
+        copy.name = new_name
+
+        -- For Entities
+        -- Need to also check mining_results!!!!!!
+        if mining_result then
+            if copy.minable and copy.minable.result then
+                copy.minable.result = mining_result
+            end
+        end
+
+        -- For items
+        if copy.place_result then
+            copy.place_result = new_name
+        end
+
+        -- For recipes, should also to check results!!
+        if copy.type == 'recipe' then
+            if copy.normal and copy.normal.result then
+                copy.normal.result = new_name
+			end
+            if copy.expensive and copy.expensive.result then
+                copy.expensive.result = new_name
+			end
+			if copy.result then
+				copy.result = new_name
+			end
+        end
+
+        -- rail planners
+        if copy.placeable_by and copy.placeable_by.item then
+            copy.placeable_by.item = mining_result
+        end
+
+        return self(copy, nil, opts or self.options)
+    else
+        error('Cannot Copy, invalid prototype', 4)
+    end
+end
+
 --Used to gate intermediate products behind higher tier recyclers
 if data.raw.module["productivity-module"] then
 	rf.limitations = data.raw.module["productivity-module"].limitation
@@ -18,18 +100,27 @@ function addRecipes(itemType, group)
 			--Recipe must have ingredients to be uncraftable
 			if recipe.ingredients then
 				if next(recipe.ingredients) then
-					if checkProbs(recipe,item) then
-						if checkRecipe(recipe,item) then
-							makeRecipe(itemType,recipe)
-						end
+					revRec = true
+				end
+			end
+			if recipe.normal then
+				if recipe.normal.ingredients then
+					if next(recipe.normal.ingredients) then 
+						revRec = true
 					end
 				end
-			elseif recipe.normal.ingredients and recipe.expensive.ingredients then
-				if next(recipe.normal.ingredients) and next(recipe.expensive.ingredients) then 
-					if checkProbs(recipe,item) then
-						if checkRecipe(recipe,item) then
-							makeRecipe(itemType,recipe)
-						end
+			end
+			if recipe.expensive then
+				if recipe.expensive.ingredients then
+					if next(recipe.expensive.ingredients) then 
+						revRec = true
+					end
+				end
+			end
+			if revRec then
+				if checkProbs(recipe,item) then
+					if checkRecipe(recipe,item) then
+						makeRecipe(itemType,recipe)
 					end
 				end
 			end
@@ -88,7 +179,7 @@ end
 function makeRecipe(itemType, recipe)
 	local nrec = "rf-"..recipe.name
 	local rfCategory, normalCount, expenCount = checkResults(itemType,recipe)
-	local toAdd = {category = rfCategory, subgroup = "recycling", enabled = true, allow_decomposition = false}
+	local toAdd = {category = rfCategory, subgroup = "recycling", enabled = true, hidden = true, allow_decomposition = false}
 	--local energyMult = 3
 	local energyMin = 5
 	
@@ -106,37 +197,28 @@ function makeRecipe(itemType, recipe)
 		end
 	end
 
+	if data.raw.recipe[nrec].normal then
+		data.raw.recipe[nrec].normal.hidden = true
+		data.raw.recipe[nrec].normal.allow_decomposition = false
+	end
+	if data.raw.recipe[nrec].expensive then
+		data.raw.recipe[nrec].expensive.hidden = true
+		data.raw.recipe[nrec].expensive.allow_decomposition = false
+	end
+
+	--If expenCount is defined, then expensive must be defined
 	if expenCount then
+		--This implies only expensive is defined, while normal is empty
 		if Recipe(nrec):get_field("normal") == Recipe(nrec):get_field("expensive") then
 			Recipe(nrec):add_ingredient({recipe.name,normalCount})
-		else
+		else --Otherwise, both normal and expensive are defined
 			Recipe(nrec):add_ingredient({recipe.name,normalCount},{recipe.name,expenCount})
 		end
-		data.raw.recipe[nrec].normal.hidden = true
-		data.raw.recipe[nrec].expensive.hidden = true
-		data.raw.recipe[nrec].normal.allow_decomposition = false
-		data.raw.recipe[nrec].expensive.allow_decomposition = false
-		if data.raw.recipe[nrec].normal.energy_required then
-			if data.raw.recipe[nrec].normal.energy_required < energyMin then
-				data.raw.recipe[nrec].normal.energy_required = energyMin
-			end
-		end
-		if data.raw.recipe[nrec].expensive.energy_required then
-			if data.raw.recipe[nrec].expensive.energy_required < energyMin then
-				data.raw.recipe[nrec].expensive.energy_required = energyMin
-			end
-		end
-	else
+	else --Otherwise, only normal or only recipe is defined, but not expensive
 		if itemType == "fluid" then
 			Recipe(nrec):add_ingredient({type="fluid",name=recipe.name,amount=normalCount})
-		else
+		else  --This has the unintentional side effect of converting normal to simply recipe
 			Recipe(nrec):add_ingredient({recipe.name,normalCount})
-		end
-		Recipe(nrec):set_field("hidden", true)
-		if Recipe(nrec):get_field("energy_required") then
-			if Recipe(nrec):get_field("energy_required") < energyMin then
-				Recipe(nrec):set_field("energy_required",energyMin)
-			end
 		end
 	end
 
@@ -145,35 +227,7 @@ function makeRecipe(itemType, recipe)
 
 	removeResults(nrec)
 	formatResults(nrec,recipe)
-	--rf.debug(data.raw.recipe[nrec])
-	local nrecData = data.raw.recipe[nrec]
-
-	if rfCategory == "recycle-products" then
-		if expenCount then
-			rf.maxResults[1] = math.max(rf.maxResults[1],#nrecData.normal.results,#nrecData.expensive.results)
-		else
-			rf.maxResults[1] = math.max(rf.maxResults[1],#nrecData.results)
-		end
-	elseif rfCategory == "recycle-intermediates" then
-		if expenCount then
-			rf.maxResults[2] = math.max(rf.maxResults[1],rf.maxResults[2],#nrecData.normal.results,#nrecData.expensive.results)
-		else
-			rf.maxResults[2] = math.max(rf.maxResults[1],rf.maxResults[2],#nrecData.results)
-		end
-	elseif rfCategory == "recycle-with-fluids" then
-		if expenCount then
-			rf.maxResults[3] = math.max(rf.maxResults[1],rf.maxResults[2],rf.maxResults[3],#nrecData.normal.results,#nrecData.expensive.results)
-		else
-			rf.maxResults[3] = math.max(rf.maxResults[1],rf.maxResults[2],rf.maxResults[3],#nrecData.results)
-		end
-	elseif rfCategory == "recycle-productivity" then
-		if expenCount then
-			rf.maxResults[4] = math.max(rf.maxResults[1],rf.maxResults[2],rf.maxResults[3],rf.maxResults[4],#nrecData.normal.results,#nrecData.expensive.results)
-		else
-			--if not nrecData.results then rf.debug() end
-			rf.maxResults[4] = math.max(rf.maxResults[1],rf.maxResults[2],rf.maxResults[3],rf.maxResults[4],#nrecData.results)
-		end
-	end
+	fixCategory(nrec)
 	--rf.debug(nrecData)
 end
 
@@ -183,6 +237,7 @@ function checkResults(itemType,recipe)
 	local normalCount = recipe.result_count and recipe.result_count or 1
 	local category = "recycle-products"
 	local expenCount = nil
+
 	--Recycling intermediate products are tier 2
 	if data.raw[itemType][recipe.name].subgroup then
 		if string.match(data.raw[itemType][recipe.name].subgroup, "intermediate") then
@@ -191,14 +246,15 @@ function checkResults(itemType,recipe)
 			category = "recycle-intermediates"
 		end
 	end
-	--Check for normal/expensive recipes
-	if recipe.normal and recipe.expensive then
+
+	--Check for normal recipes
+	if recipe.normal then
 		--Recycling fluids into items are tier 3
-		if recipe.normal.results and recipe.expensive.results then
+		if recipe.normal.results then
 			if recipe.normal.results.type == "fluid" then
 				category = "recycle-with-fluids"
 			end
-		--Also check for results count
+			--Also check for results count
 			for _, ingred in ipairs(recipe.normal.results) do
 				for _, object in pairs(ingred) do
 					if type(object) == "number" then
@@ -206,6 +262,28 @@ function checkResults(itemType,recipe)
 					end
 				end
 			end
+		--Default back to 1
+		elseif recipe.normal.result then
+			normalCount = 1
+		end
+		--Recycling items or fluids into fluids are tier 3
+		if recipe.normal.ingredients then
+			for _, ingredient in ipairs(recipe.normal.ingredients) do
+				if ingredient.type == "fluid" then
+					category = "recycle-with-fluids"
+				end
+			end
+		end
+	end
+
+	--Check for expensive recipes
+	if recipe.expensive then
+		--Recycling fluids into items are tier 3
+		if recipe.expensive.results then
+			if recipe.expensive.results.type == "fluid" then
+				category = "recycle-with-fluids"
+			end
+			--Also check for results count
 			for _, ingred in ipairs(recipe.expensive.results) do
 				for _, object in pairs(ingred) do
 					if type(object) == "number" then
@@ -213,50 +291,49 @@ function checkResults(itemType,recipe)
 					end
 				end
 			end
-		--Default back to 1, ensure that expenCount is set
-		elseif recipe.normal.result and recipe.expensive.result then
-			normalCount = 1
+		--Default back to 1
+		elseif recipe.expensive.result then
 			expenCount = 1
 		end
 		--Recycling items or fluids into fluids are tier 3
-		if recipe.normal.ingredients and recipe.expensive.ingredients then
-			for _, ingredient in ipairs(recipe.normal.ingredients) do
-				if ingredient.type == "fluid" then
-					category = "recycle-with-fluids"
-				end
-			end
+		if recipe.expensive.ingredients then
 			for _, ingredient in ipairs(recipe.expensive.ingredients) do
 				if ingredient.type == "fluid" then
 					category = "recycle-with-fluids"
 				end
 			end
 		end
-	else --Check for simple recipes
-		if recipe.results then
-			--Recycling fluids into items are tier 3
-			if recipe.results.type == "fluid" then
-				category = "recycle-with-fluids"
-			end
-			--Also check for results count
-			for _, ingred in pairs(recipe.results) do
-				for _, object in pairs(ingred) do
-					if type(object) == "number" then
-						normalCount = object
-					end
+	end
+
+	--Check for simple recipes
+	if recipe.results then
+		--Recycling fluids into items are tier 3
+		if recipe.results.type == "fluid" then
+			category = "recycle-with-fluids"
+		end
+		--Also check for results count
+		for _, ingred in pairs(recipe.results) do
+			for _, object in pairs(ingred) do
+				if type(object) == "number" then
+					normalCount = object
 				end
 			end
 		end
-		--Recycling items or fluids into fluids are tier 3
+	end
+	if recipe.ingredients then
+		--Recycling items into fluids are tier 3
 		for _, ingredient in ipairs(recipe.ingredients) do
 			if ingredient.type == "fluid" then
 				category = "recycle-with-fluids"
 			end
 		end
 	end
+
 	--Recycling fluids in general are tier 3
 	if itemType == "fluid" then
 		category = "recycle-with-fluids"
 	end
+
 	--Any recipes with productivity are tier 4
 	if rf.limitations then
 		for _, name in pairs(rf.limitations) do
@@ -315,21 +392,27 @@ function removeResults(nrec)
 	if nrecData.main_product then
 		nrecData.main_product = nil
 	end
-	if nrecData.normal and nrecData.expensive then
-		if nrecData.normal.result and nrecData.expensive.result then
+	if nrecData.normal then
+		if nrecData.normal.result then
 			nrecData.normal.results = {}
-			nrecData.expensive.results = {}
 			nrecData.normal.result = nil
-			nrecData.expensive.result = nil
 			nrecData.normal.result_count = nil
-			nrecData.expensive.result_count = nil
 		end
-		if nrecData.normal.results and nrecData.expensive.results then
+		if nrecData.normal.results then
 			nrecData.normal.results = {}
-			nrecData.expensive.results = {}
 		end
 		if nrecData.normal.main_product then
 			nrecData.normal.main_product = nil
+		end
+	end
+	if nrecData.expensive then
+		if nrecData.expensive.result then
+			nrecData.expensive.results = {}
+			nrecData.expensive.result = nil
+			nrecData.expensive.result_count = nil
+		end
+		if nrecData.expensive.results then
+			nrecData.expensive.results = {}
 		end
 		if nrecData.expensive.main_product then
 			nrecData.expensive.main_product = nil
@@ -349,6 +432,8 @@ function formatResults(nrec,recipe)
 			end
 			table.insert(nrecData.normal.results, newResult)
 		end
+	end
+	if recipe.expensive then
 		for _, ingred in pairs(recipe.expensive.ingredients) do
 			if ingred.type then
 				newResult = {type=ingred.type, name=ingred.name, amount = (math.ceil(rf.efficiency*ingred.amount/100))}
@@ -358,7 +443,9 @@ function formatResults(nrec,recipe)
 			end
 			table.insert(nrecData.expensive.results, newResult)
 		end
-	else for _, ingred in pairs(recipe.ingredients) do
+	end
+	if recipe.ingredients then
+		for _, ingred in pairs(recipe.ingredients) do
 			if ingred.type then
 				newResult = {type=ingred.type, name=ingred.name, amount = (math.ceil(rf.efficiency*ingred.amount/100))}
 			else
@@ -370,7 +457,122 @@ function formatResults(nrec,recipe)
 	end
 end
 
+function fixCategory(nrec)
+	local nrecData = data.raw.recipe[nrec]
 
+	if nrecData.results then
+		if rfCategory == "recycle-products" then
+			rf.maxResults[1] = math.max(rf.maxResults[1],#nrecData.results)
+			if Recipe(nrec):get_field("energy_required") then
+				if Recipe(nrec):get_field("energy_required") < 1 then
+					Recipe(nrec):set_field("energy_required",1)
+				end
+			else Recipe(nrec):set_field("energy_required",1)
+			end
+		elseif rfCategory == "recycle-intermediates" then
+			rf.maxResults[2] = math.max(rf.maxResults[2],#nrecData.results)
+			if Recipe(nrec):get_field("energy_required") then
+				if Recipe(nrec):get_field("energy_required") < 2 then
+					Recipe(nrec):set_field("energy_required",2)
+				end
+			else Recipe(nrec):set_field("energy_required",2)
+			end
+		elseif rfCategory == "recycle-with-fluids" then
+			rf.maxResults[3] = math.max(rf.maxResults[3],#nrecData.results)
+			if Recipe(nrec):get_field("energy_required") then
+				if Recipe(nrec):get_field("energy_required") < 3 then
+					Recipe(nrec):set_field("energy_required",3)
+				end
+			else Recipe(nrec):set_field("energy_required",3)
+			end
+		elseif rfCategory == "recycle-productivity" then
+			rf.maxResults[4] = math.max(rf.maxResults[4],#nrecData.results)
+			if Recipe(nrec):get_field("energy_required") then
+				if Recipe(nrec):get_field("energy_required") < 4 then
+					Recipe(nrec):set_field("energy_required",4)
+				end
+			else Recipe(nrec):set_field("energy_required",4)
+			end
+		end
+	end
+
+	if nrecData.normal then
+		if nrecData.normal.results then
+			if rfCategory == "recycle-products" then
+				rf.maxResults[1] = math.max(rf.maxResults[1],#nrecData.normal.results)
+				if data.raw.recipe[nrec].normal.energy_required then
+					if data.raw.recipe[nrec].normal.energy_required < 1 then
+						data.raw.recipe[nrec].normal.energy_required = 1
+					end
+				else data.raw.recipe[nrec].normal.energy_required = 1
+				end
+			elseif rfCategory == "recycle-intermediates" then
+				rf.maxResults[2] = math.max(rf.maxResults[2],#nrecData.normal.results)
+				if data.raw.recipe[nrec].normal.energy_required then
+					if data.raw.recipe[nrec].normal.energy_required < 2 then
+						data.raw.recipe[nrec].normal.energy_required = 2
+					end
+				else data.raw.recipe[nrec].normal.energy_required = 2
+				end
+			elseif rfCategory == "recycle-with-fluids" then
+				rf.maxResults[3] = math.max(rf.maxResults[3],#nrecData.normal.results)
+				if data.raw.recipe[nrec].normal.energy_required then
+					if data.raw.recipe[nrec].normal.energy_required < 3 then
+						data.raw.recipe[nrec].normal.energy_required = 3
+					end
+				else data.raw.recipe[nrec].normal.energy_required = 3
+				end
+			elseif rfCategory == "recycle-productivity" then
+				rf.maxResults[4] = math.max(rf.maxResults[4],#nrecData.normal.results)
+				if data.raw.recipe[nrec].normal.energy_required then
+					if data.raw.recipe[nrec].normal.energy_required < 4 then
+						data.raw.recipe[nrec].normal.energy_required = 4
+					end
+				else data.raw.recipe[nrec].normal.energy_required = 4
+				end
+			end
+		end
+	end
+
+	if nrecData.expensive then
+		if nrecData.expensive.results then
+			if rfCategory == "recycle-products" then
+				rf.maxResults[1] = math.max(rf.maxResults[1],#nrecData.expensive.results)
+				if data.raw.recipe[nrec].expensive.energy_required then
+					if data.raw.recipe[nrec].expensive.energy_required < 1 then
+						data.raw.recipe[nrec].expensive.energy_required = 1
+					end
+				else data.raw.recipe[nrec].expensive.energy_required = 1
+				end
+			elseif rfCategory == "recycle-intermediates" then
+				rf.maxResults[2] = math.max(rf.maxResults[2],#nrecData.expensive.results)
+				if data.raw.recipe[nrec].expensive.energy_required then
+					if data.raw.recipe[nrec].expensive.energy_required < 2 then
+						data.raw.recipe[nrec].expensive.energy_required = 2
+					end
+				else data.raw.recipe[nrec].expensive.energy_required = 2
+				end
+			elseif rfCategory == "recycle-with-fluids" then
+				rf.maxResults[3] = math.max(rf.maxResults[3],#nrecData.expensive.results)
+				if data.raw.recipe[nrec].expensive.energy_required then
+					if data.raw.recipe[nrec].expensive.energy_required < 3 then
+						data.raw.recipe[nrec].expensive.energy_required = 3
+					end
+				else data.raw.recipe[nrec].expensive.energy_required = 3
+				end
+			elseif rfCategory == "recycle-productivity" then
+				rf.maxResults[4] = math.max(rf.maxResults[4],#nrecData.expensive.results)
+				if data.raw.recipe[nrec].expensive.energy_required then
+					if data.raw.recipe[nrec].expensive.energy_required < 4 then
+						data.raw.recipe[nrec].expensive.energy_required = 4
+					end
+				else data.raw.recipe[nrec].expensive.energy_required = 4
+				end
+			end
+		end
+	end
+
+end
 
 
 
