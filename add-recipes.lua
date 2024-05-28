@@ -8,14 +8,16 @@ function addRecipes(category)
 		local recipe = data.raw.recipe[item_name] and data.raw.recipe[item_name] or data.raw.recipe[item_name..yuokiSuffix]
 		--If recipe is not nil
 		if recipe then
-				--For recipes without normal/expensive versions
-				if recipe.ingredients then if next(recipe.ingredients) then
-				
-					if uncraftable(recipe, item) then new_recipe = createRecipe(recipe, item) end
-				end end
-				if recipe.normal then if recipe.normal.ingredients then
-					new_recipe = createDualRecipe(recipe, item)
-				end end
+			--Check if simple recipes has ingredients table, and at least one ingredient under that table
+			if recipe.ingredients then if next(recipe.ingredients) then
+				if uncraftable(recipe, item) then new_recipe = createRecipe(recipe, item) end
+			end end
+			--Same check, but for normal/expensive recipes; fails unless both recipe types were properly defined
+			if recipe.normal then if recipe.normal.ingredients then if next(recipe.normal.ingredients) then
+				if recipe.expensive then if recipe.expensive.ingredients then if next(recipe.expensive.ingredients) then
+					if uncraftable(recipe,item) then new_recipe = createDualRecipe(recipe, item) end
+				end end end
+			end end end
 		end
 		table.insert(rf.recipes, new_recipe)
 	end
@@ -105,15 +107,26 @@ function createDualRecipe(recipe, item)
 	return new_recipe
 end
 
---Always true if safety is toggled off. Safety prevents ingredient loss
+--Always true if safety is toggled off. Safety prevents ingredient loss. Only works for simple and normal variant recipes.
 function uncraftable(recipe, item)
 	uncraft = true
 	if rf.safety then
-		for _, ingred in ipairs(recipe.ingredients) do
-			--Do not attempt to uncraft if one of the ingredients exceeds its stack size
-			if (data.raw.item[ingred[1]]) then
-				if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
-					uncraft=false
+		if recipe.ingredients then
+			for _, ingred in ipairs(recipe.ingredients) do
+				--Do not attempt to uncraft if one of the ingredients exceeds its stack size
+				if (data.raw.item[ingred[1]]) then
+					if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
+						uncraft=false
+					end
+				end
+			end
+		elseif recipe.normal.ingredients then
+			for _, ingred in ipairs(recipe.normal.ingredients) do
+				--Do not attempt to uncraft if one of the ingredients exceeds its stack size
+				if (data.raw.item[ingred[1]]) then
+					if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
+						uncraft=false
+					end
 				end
 			end
 		end
@@ -121,3 +134,48 @@ function uncraftable(recipe, item)
 	if not uncraft then log("Item cannot be uncrafted: "..item.name) end
 	return uncraft
 end
+
+--[[
+--Checks recipe for inconsistencies; Possibly no longer necessary
+function errorCheck(nrec, orec, item)
+	local noError = false
+	local step = 0
+	--If simple recipe has ingredients, no error
+	if nrec.ingredients then
+		noError = true
+	--If complex recipe has normal and expensive ingredients, no error
+	--Otherwise, log last successful step, and provide a courtesy error
+	elseif nrec.normal then
+		step = 1
+		if nrec.normal.ingredients then
+			step = 2
+			if nrec.expensive then
+				step = 3
+				if nrec.expensive.ingredients then
+					noError = true
+				end
+			end
+		end
+	end
+	--If there was an error, report the recipe name, and what step it failed (if applicable)
+	if not noError then
+		local message = "\nThis recipe was not properly created: " .. item.name
+		message = message.."\n".."You should report this error to the creator of that item"
+		if step == 1 then
+			message = message.."\n\n".."This recipe has no ingredients listed under its normal.ingredients"
+			message = message.."\n".."Recipe info listed below for your convenience"
+			message = message.."\n\n"..serpent.block(orec)
+		elseif step == 2 then
+			message = message.."\n\n".."This recipe has no expensive field in its recipe"
+			message = message.."\n".."Recipe info listed below for your convenience"
+			message = message.."\n\n"..serpent.block(orec)
+		elseif step == 3 then
+			message = message.."\n\n".."This recipe has no ingredients listed under its expensive.ingredients"
+			message = message.."\n".."Recipe info listed below for your convenience"
+			message = message.."\n\n"..serpent.block(orec)
+		end
+		error(message)
+	end
+	return noError 
+end
+]]--
