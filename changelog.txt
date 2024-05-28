@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 7.0.1
+Date: February 9, 2020
+  Info:
+    - Fixed bug with recipes that have icons field instead of icon (thanks to clampi!)
+---------------------------------------------------------------------------------------------------
 Version: 7.0.0
 Date: January 24, 2020
   Info:
