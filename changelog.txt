@@ -1,6 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.10
+Date: July 24, 2019
+  Bugfixes:
+    - Fixed issue with recycler result size not matching recycling recipes.
+    - Fixed issue with higher tier recyclers not accomodating for lower tier recipes.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.9
-Date: July 23, 2019
+Date: July 24, 2019
   Bugfixes:
     - Fixed load error regarding nil defined expensive recipes.
 ---------------------------------------------------------------------------------------------------

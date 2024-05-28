@@ -14,12 +14,13 @@ for _, itemType in pairs(itemTypes) do
 	addRecipes(itemType, data.raw[itemType])
 end
 
+fixMaxResults()
 
 --Set result size of entities based on largest recipe count in current game
 for n=1,4 do
 	data.raw["furnace"]["reverse-factory-"..n].result_inventory_size = rf.maxResults[n]
 end
 
---rf.debug(data.raw.recipe["rf-iron-plate"])
+--log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
 --rf.debug(rf.maxResults)
 --rf.debug(data.raw.module["productivity-module"].limitation)

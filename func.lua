@@ -227,7 +227,7 @@ function makeRecipe(itemType, recipe)
 
 	removeResults(nrec)
 	formatResults(nrec,recipe)
-	fixCategory(nrec)
+	fixCategory(nrec,rfCategory)
 	--rf.debug(nrecData)
 end
 
@@ -344,6 +344,15 @@ function checkResults(itemType,recipe)
 	end
 
 	--Upgrade to higher tier depending on ingredient count.
+	if recipe.ingredients then
+		if #recipe.ingredients > 15 then
+			category = "recycle-productivity"
+		elseif #recipe.ingredients > 10 then
+			category = "recycle-with-fluids"
+		elseif #recipe.ingredients > 5 then
+			category = "recycle-intermediates"
+		end
+	end
 	if recipe.normal then
 		if recipe.normal.ingredients then
 			if #recipe.normal.ingredients > 15 then
@@ -364,15 +373,6 @@ function checkResults(itemType,recipe)
 			elseif #recipe.expensive.ingredients > 5 then
 				category = "recycle-intermediates"
 			end
-		end
-	end
-	if recipe.ingredients then
-		if #recipe.ingredients > 15 then
-			category = "recycle-productivity"
-		elseif #recipe.ingredients > 10 then
-			category = "recycle-with-fluids"
-		elseif #recipe.ingredients > 5 then
-			category = "recycle-intermediates"
 		end
 	end
 
@@ -419,6 +419,7 @@ end
 function formatResults(nrec,recipe)
 	local nrecData = data.raw.recipe[nrec]
 	if recipe.normal then
+		nrecData.normal.results = {}
 		for _, ingred in pairs(recipe.normal.ingredients) do
 			if ingred.type then
 				newResult = {type=ingred.type, name=ingred.name, amount = (math.ceil(rf.efficiency*ingred.amount/100))}
@@ -430,6 +431,7 @@ function formatResults(nrec,recipe)
 		end
 	end
 	if recipe.expensive then
+		nrecData.expensive.results = {}
 		for _, ingred in pairs(recipe.expensive.ingredients) do
 			if ingred.type then
 				newResult = {type=ingred.type, name=ingred.name, amount = (math.ceil(rf.efficiency*ingred.amount/100))}
@@ -450,12 +452,11 @@ function formatResults(nrec,recipe)
 				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
 			end
 			table.insert(nrecData.results, newResult)
-			
 		end
 	end
 end
 
-function fixCategory(nrec)
+function fixCategory(nrec,rfCategory)
 	local nrecData = data.raw.recipe[nrec]
 
 	if nrecData.results then
@@ -572,6 +573,12 @@ function fixCategory(nrec)
 
 end
 
+--Ensure that t2 recyclers make enough room for t1 and t2 recipes, and so on for each tier.
+function fixMaxResults()
+	rf.maxResults[2] = math.max(rf.maxResults[1],rf.maxResults[2])
+	rf.maxResults[3] = math.max(rf.maxResults[1],rf.maxResults[2],rf.maxResults[3])
+	rf.maxResults[4] = math.max(rf.maxResults[1],rf.maxResults[2],rf.maxResults[3],rf.maxResults[4])
+end
 
 
 
