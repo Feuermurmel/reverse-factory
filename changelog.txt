@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.16
+Date: September 13, 2019
+  Bugfixes:
+    - Fixed minor bug with reverse factory 3 tech prerequisites with Industrial Revolution.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.15
 Date: September 10, 2019
   Minor Features:

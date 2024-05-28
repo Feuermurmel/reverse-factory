@@ -87,6 +87,7 @@ if rf.mods == "DIR" then
 	Tech("reverse-factory-2"):add_prereq("deadlock-electronics-1")
 	Tech("reverse-factory-2"):remove_prereq("automation-2")
 	Tech("reverse-factory-3"):add_prereq("deadlock-electronics-2")
+	Tech("reverse-factory-3"):remove_prereq("advanced-material-processing-2")
 	Tech("reverse-factory-4"):remove_prereq("automation-3")
 	Tech("reverse-factory-4"):add_prereq("deadlock-electronics-3")
 
