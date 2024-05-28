@@ -1,6 +1,11 @@
 local Recipe = require('__stdlib__/stdlib/data/recipe')
 local Technology = require('__stdlib__/stdlib/data/technology')
 
+--List of recipes that need to be manually added to the list
+--  These technically could be added by the original mod author
+--  but it's technically simpler and easier to add them myself.
+require("prototypes/added_manual_recipes")
+
 if mods["IndustrialRevolution"] then
 	--Hide and disable the scrapper recipe
 	Recipe("iron-scrapper"):remove_unlock("automation-2")
