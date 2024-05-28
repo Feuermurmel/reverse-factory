@@ -31,10 +31,19 @@ function addRecipes(t_elts)
 							uncraft = false end
 						--Default fluid is false, true if fluid detected
 						fluid = false
-						if uncraft then for _, ingred in ipairs(recipe.ingredients) do
-							if ingred.type == "fluid"
-								then fluid=true end
-						end end
+						if uncraft then
+							for _, ingred in ipairs(recipe.ingredients) do
+								if ingred.type == "fluid" then 
+									fluid=true
+								end
+								--Do not attempt to uncraft if one of the ingredients exceeds its stack size
+								if (data.raw.item[ingred[1]]) then
+									if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
+										uncraft=false
+									end
+								end
+							end
+						end
 						--If no fluid ingredients detected, create reverse recipe
 						if uncraft and (not fluid) then
 							local count = recipe.result_count and recipe.result_count or 1
@@ -120,8 +129,15 @@ function addRecipes(t_elts)
 							--Default fluid is false, true if fluid detected
 							fluid = false
 							if uncraft then for _, ingred in ipairs(recipe.normal.ingredients) do
-								if ingred.type == "fluid"
-									then fluid=true end
+								if ingred.type == "fluid" then 
+									fluid=true
+								end
+								--Do not attempt to uncraft if one of the ingredients exceeds its stack size
+								if (data.raw.item[ingred[1]]) then
+									if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
+										uncraft=false
+									end
+								end
 							end end
 							--If no fluid ingredients detected, create reverse recipe
 							if uncraft and (not fluid) then
