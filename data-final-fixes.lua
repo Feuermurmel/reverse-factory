@@ -66,3 +66,5 @@ end
 data.raw.item["reverse-factory-2"].subgroup = data.raw.item["reverse-factory-1"].subgroup
 data.raw.item["reverse-factory-2"].order = data.raw.item["reverse-factory-1"].order.."-b"
 ]]--
+
+--error(serpent.block(data.raw.armor["light-armor"]))

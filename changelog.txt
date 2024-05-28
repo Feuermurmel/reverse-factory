@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.0.8
+Date: June 17, 2019
+  Changes:
+    - When both Robot Army and Construction Drones are detected, prevent recycling of flamebot.
+  Bugfixes:
+    - Removal of recycling flamebot in above situation prevents "not stackable" error.
+---------------------------------------------------------------------------------------------------
 Version: 6.0.7
 Date: June 6, 2019
   Changes:
