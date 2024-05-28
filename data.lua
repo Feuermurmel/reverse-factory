@@ -3,6 +3,7 @@ require "util"
 require("base-alter")
 
 --Realistic Reverse Factory
+require("prototypes.pipe-covers")
 require("prototypes.category")
 require("prototypes.entity")
 require("prototypes.group")

@@ -28,7 +28,7 @@ data:extend({
     collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
     selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
     allowed_effects = {"consumption", "speed", "pollution"},
-    crafting_categories = {"recycling"},
+    crafting_categories = {"recycle", "recycle-with-fluid"},
     result_inventory_size = 10,
     crafting_speed = 30,
     energy_usage = "100kW",
@@ -100,6 +100,23 @@ data:extend({
                 shift = {0.0625, -1.234375}
             }
         }
+    },
+	fluid_boxes =
+    {
+      {
+        production_type = "output",
+		pipe_picture = rfpipepictures(),
+        pipe_covers = pipecoverspictures(),
+        base_level = 1,
+        pipe_connections = {{ position = {-1, -2} }}
+      },
+      {
+        production_type = "output",
+		pipe_picture = rfpipepictures(),
+        pipe_covers = pipecoverspictures(),
+        base_level = 1,
+        pipe_connections = {{ position = {1, -2} }}
+      }
     }
 }
 })

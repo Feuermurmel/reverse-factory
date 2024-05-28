@@ -1,7 +1,10 @@
 data:extend({
---NEW CATEGORY
-{
-    type = "recipe-category",
-    name = "recycling"
-}
+	{
+		type = "recipe-category",
+		name = "recycle"
+	},
+	{
+		type = "recipe-category",
+		name = "recycle-with-fluid"
+	}
 })
