@@ -1,10 +1,10 @@
 --Remove Bio Industries dissassemble recipes
 if data.raw.recipe["bi_steel_furnace_disassemble"] then
-  data.raw.recipe["bi_steel_furnace_disassemble"] = nil
-  data.raw.recipe["bi_burner_mining_drill_disassemble"] = nil
-  data.raw.recipe["bi_stone_furnace_disassemble"] = nil
-  data.raw.recipe["bi_burner_inserter_disassemble"] = nil
-  data.raw.recipe["bi_long_handed_inserter_disassemble"] = nil
+  data.raw.recipe["bi_steel_furnace_disassemble"].hidden = true
+  data.raw.recipe["bi_burner_mining_drill_disassemble"].hidden = true
+  data.raw.recipe["bi_stone_furnace_disassemble"].hidden = true
+  data.raw.recipe["bi_burner_inserter_disassemble"].hidden = true
+  data.raw.recipe["bi_long_handed_inserter_disassemble"].hidden = true
   thxbob.lib.tech.remove_recipe_unlock("advanced-material-processing", "bi_steel_furnace_disassemble")
   thxbob.lib.tech.remove_recipe_unlock("automation-2", "bi_burner_mining_drill_disassemble")
   thxbob.lib.tech.remove_recipe_unlock("automation-2", "bi_stone_furnace_disassemble")
