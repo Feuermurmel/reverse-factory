@@ -56,7 +56,7 @@ if rf.mods == "DIR" then
 	{"assembling-machine-1",1},
 	{"bronze-chassis-large",1},
 	{"copper-motor",2},
-	{"bronze-piston",2},
+	{"copper-piston",2},
 	{"bronze-gear-wheel",4},
 	}
 	data.raw.recipe["reverse-factory-2"].ingredients = {

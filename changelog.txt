@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.18
+Date: October 13, 2019
+  Bugfixes:
+    - Fixed bronze piston error by changing t1 recycler recipe to use copper piston.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.17
 Date: September 21, 2019
   Bugfixes:
