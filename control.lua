@@ -79,13 +79,15 @@ end)
 script.on_event(defines.events.on_tick, function(event)
 	if global.delay then
 		if event.tick % global.delay == 0 then
-			--game.players[1].print((#global.recyclers))
-			--game.players[1].print(serpent.block(global.recyclers))
 			checkinvs()
 		end
 	--else game.players[1].print(("Global delay not yet set."))
 	end
-	--game.players[1].print((serpent.block(global)))
+	if global.activeSurfaces then
+		if event.tick % 60 == 0 then
+			--game.players[1].print(serpent.block(global))
+		end
+	end
 end)
 
 --When a recycler is placed, add it to the list
@@ -119,18 +121,46 @@ script.on_event(defines.events.on_pre_player_mined_item, function(event)
 	killRecycler(event.entity, event.entity.surface.name)
 end)
 
+--When the surface is created
 script.on_event(defines.events.on_surface_created, function(event)
 	addActiveSurface(game.surfaces[event.surface_index].name)
 end)
 
+--Just after the surface is cleared
+script.on_event(defines.events.on_surface_cleared, function(event)
+	addActiveSurface(game.surfaces[event.surface_index].name)
+end)
+
+--Just before the surface is deleted
 script.on_event(defines.events.on_pre_surface_deleted, function(event)
 	--game.players[1].print(game.surfaces[event.surface_index].name)
 	removeActiveSurface(game.surfaces[event.surface_index].name)
 end)
 
+--Just before the surface is cleared of all entites
+script.on_event(defines.events.on_pre_surface_cleared, function(event)
+	local surface = game.surfaces[event.surface_index].name
+	removeActiveSurface(game.surfaces[event.surface_index].name)
+	if global[surface] then
+		global[surface] = {}
+	end
+	--[[
+		for _, recycler in pairs (global[surface]) do
+			game.players[1].print(serpent.block(recycler[1]))
+			killRecycler(recycler[1], surface)
+		end
+	end]]--
+end)
+
+--When the surface is renamed?
 script.on_event(defines.events.on_surface_renamed, function(event)
 	removeActiveSurface(event.old_name)
 	addActiveSurface(event.new_name)
+end)
+
+--When a player joins the game
+script.on_event(defines.events.on_player_joined_game, function(event)
+	addActiveSurface(game.players[event.player_index].surface.name)
 end)
 
 --When a player changes surfaces (Warptorio 2)
@@ -166,12 +196,15 @@ end
 function addActiveSurface(surface)
 	local addSurface = true
 	for _, oldSurface in pairs (global.activeSurfaces) do
-		if string.match(surface, oldSurface) then
+		if string.find(surface, oldSurface, 1, true) then
 			addSurface = false
+			--game.players[1].print("Duplicate was located. addSurface = "..tostring(addSurface))
 		end
 	end
 	if addSurface then
+		--game.players[1].print("Current list: "..serpent.block(global.activeSurfaces))
 		table.insert(global.activeSurfaces, surface)
+		--game.players[1].print("Added: "..surface)
 	end
 end
 
