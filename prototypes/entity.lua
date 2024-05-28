@@ -4,6 +4,7 @@ data:extend({
     type = "furnace",
     name = "reverse-factory",
     icon = "__reverse-factory__/graphics/item/reverse-factory.png",
+	icon_size = 32,
     flags = {"placeable-neutral", "placeable-player", "player-creation"},
     minable =
     {
