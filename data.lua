@@ -42,6 +42,9 @@ end
 if mods["warptorio2"] then
 	table.insert(rf.norecycle_items, "warptorio-armor")
 end
+if mods["anarchy"] then
+	table.insert(rf.norecycle_items, "ultra-armor")
+end
 
 --Prevent duplication of crushed stone
 table.insert(rf.norecycle_items, "stone-crushed")
