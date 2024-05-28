@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 7.0.10
+Date: October 29, 2020
+  Info:
+    - Fixed minor typo in settings description.
+    - Added name and icon for recycling recipe group.
+      Should only appear in mod menus like Helmod, Factory Planner, etc.
+---------------------------------------------------------------------------------------------------
 Version: 7.0.9
 Date: September 26, 2020
   Bugfixes:

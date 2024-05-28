@@ -20,8 +20,8 @@ data:extend({
 	{
 		type = "item-group",
 		name = "recycling",
-		icon = "__core__/graphics/questionmark.png",
-		icon_size = 64,
+		icon = "__reverse-factory__/graphics/technology/reverse-factory.png",
+		icon_size = 128,
 		order = "z",
 	},
 	{
