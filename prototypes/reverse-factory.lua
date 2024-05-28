@@ -280,7 +280,7 @@ local function rfTech(n)
 		name = "reverse-factory-"..n,
 		icon = "__reverse-factory__/graphics/technology/reverse-factory.png",
 		icon_size = 128,
-		prerequisites = {},
+		--prerequisites = {},
 		effects =
 		{
 			{

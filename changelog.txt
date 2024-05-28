@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 7.0.5
+Date: June 22, 2020
+  Bugfixes:
+    - Fixed compatibility issue when running with Krastorio 2 and Space Exploration.
+      Tier 1 reverse factories will require red chips with both mods enabled.
+---------------------------------------------------------------------------------------------------
 Version: 7.0.4
 Date: June 22, 2020
   Bugfixes:

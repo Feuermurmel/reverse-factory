@@ -18,11 +18,12 @@ Tech("reverse-factory-1"):add_prereq("automation")
 Tech("reverse-factory-2"):add_prereq("automation-2")
 Tech("reverse-factory-3"):add_prereq("advanced-material-processing-2")
 Tech("reverse-factory-4"):add_prereq("automation-3")
-Tech("reverse-factory-1"):set_field("unit",Tech("automation"):get_field("unit"))
+if not (mods["Krastorio2"] and mods["space-exploration"]) then
+	Tech("reverse-factory-1"):set_field("unit",Tech("automation"):get_field("unit"))
+end
 Tech("reverse-factory-2"):set_field("unit",Tech("automation-2"):get_field("unit"))
 Tech("reverse-factory-3"):set_field("unit",Tech("advanced-material-processing-2"):get_field("unit"))
 Tech("reverse-factory-4"):set_field("unit",Tech("automation-3"):get_field("unit"))
-
 
 --If bobs intermediates is detected, then check if these items exist, and replace ingredients.
 if rf.mods == "bobplates" then
@@ -128,7 +129,7 @@ if rf.mods == "fantario" then
 	Data("reverse-factory-4","item"):set_field("order",Data("assembling-machine-4","item"):get_field("order").."-z")
 end
 
-
+--rf.debug(data.raw.technology["reverse-factory-1"])
 
 
 
