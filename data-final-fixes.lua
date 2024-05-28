@@ -37,7 +37,7 @@ end
 
 --List of item types to be recycled
 local itemTypes = {
-	"ammo","armor","item","gun","capsule","module","tool","repair-tool","fluid"
+	"ammo","armor","item","rail-planner","gun","capsule","module","tool","repair-tool","fluid"
 }
 --Disables vehicle recycling
 if rf.vehicles then 
@@ -65,3 +65,4 @@ end
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
 --rf.debug(data.raw.recipe["rf-coal"])
 --rf.debug(data.raw.module["productivity-module"].limitation)
+--rf.debug(data.raw["rail-planner"].rail)
