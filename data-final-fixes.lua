@@ -12,34 +12,37 @@ function addRecipes(t_elts)
         local recipe = data.raw.recipe[elt_name] and data.raw.recipe[elt_name] or data.raw.recipe[elt_name .. yuokiSuffix]
         --After the search of the recipe if recipe is sill not nil, we add the reverse factory recipe
         if recipe then
-            --Set default value for recipe without category property (default value = "crafting")
-            recipe.category = recipe.category and recipe.category or "crafting"
-            --Check accepted categories
-            for _, acceptedCategory in pairs(acceptedCategories) do
-                if recipe.category == acceptedCategory then
-                    local count = recipe.result_count and recipe.result_count or 1
-                    local name = string.gsub(recipe.name, yuokiSuffix, "")
-                    local new_recipe =
-                    {
-                        type = "recipe",
-                        name = "rf-" .. name,
-                        icon =  elt.icon,
-                        category = "recycling",
-                        hidden = "true",
-                        energy_required = 30,
-                        ingredients = {{name, count}},
-                        results = recipe.ingredients
-                    }
+			--Check if recipe has ingredients (can't uncraft into nothing)
+		    if next(recipe.ingredients) then
+				--Set default value for recipe without category property (default value = "crafting")
+				recipe.category = recipe.category and recipe.category or "crafting"
+				--Check accepted categories
+				for _, acceptedCategory in pairs(acceptedCategories) do
+					if recipe.category == acceptedCategory then
+						local count = recipe.result_count and recipe.result_count or 1
+						local name = string.gsub(recipe.name, yuokiSuffix, "")
+						local new_recipe =
+						{
+							type = "recipe",
+							name = "rf-" .. name,
+							icon =  elt.icon,
+							category = "recycling",
+							hidden = "true",
+							energy_required = 30,
+							ingredients = {{name, count}},
+							results = recipe.ingredients
+						}
 
-                    if #new_recipe.results > 1 then
-                        new_recipe.subgroup = "rf-multiple-outputs"
-                    end
-                    
-                    --Add the recipe to rf_recipes
-                    table.insert(rf_recipes, new_recipe)
-                    break
-                end
-            end
+						if #new_recipe.results > 1 then
+							new_recipe.subgroup = "rf-multiple-outputs"
+						end
+						
+						--Add the recipe to rf_recipes
+						table.insert(rf_recipes, new_recipe)
+						break
+					end
+				end
+			end
         end
     end
 end
