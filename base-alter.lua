@@ -1,4 +1,5 @@
---set fuel value for "wooden-chest", "small-electric-pole" and "wood" to zero so it can be disassemble by the Realistic Reverse Factory
-data.raw.item["wooden-chest"].fuel_value = "0MJ"
-data.raw.item["small-electric-pole"].fuel_value = "0MJ"
-data.raw.item["wood"].fuel_value = "0MJ"
+--Set stack size of end game rocket items so satellite can be uncrafted
+data.raw.item["low-density-structure"].stack_size = 50
+data.raw.item["rocket-fuel"].stack_size = 50
+data.raw.item["rocket-control-unit"].stack_size = 50
+data.raw.item["rocket-part"].stack_size = 50
