@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.0.8
+Date: August 26, 2021
+  Bugfixes:
+    - Improved compatibility when playing with Bobs Assembly without Bobs Intermediates.
+      Potential fix for other unrelated issues.
+  Info:
+    - Skipped over v8.0.7, in case anybody had updated to that flawed version
+---------------------------------------------------------------------------------------------------
 Version: 8.0.6
 Date: August 12, 2021
   Bugfixes:

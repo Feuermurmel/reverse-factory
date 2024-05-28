@@ -183,7 +183,12 @@ if rf.mods == "fantario" then
 	Data("reverse-factory-4","item"):set_field("order",Data("assembling-machine-4","item"):get_field("order").."-z")
 end
 
-
+--If bobs assembly without bobs intermediates
+if rf.mods == "bobassembly" then
+	Tech("reverse-factory-4"):remove_prereq("automation-3")
+	Tech("reverse-factory-4"):add_prereq("advanced-material-processing-3")
+	Tech("reverse-factory-4"):set_field("unit",Tech("advanced-material-processing-3"):get_field("unit"))
+end
 
 
 

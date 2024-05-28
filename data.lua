@@ -23,6 +23,8 @@ elseif mods["IndustrialRevolution"] then
 	rf.mods = "DIR"
 elseif mods["Fantario"] then
 	rf.mods = "fantario"
+elseif mods["bobassembly"] then
+	rf.mods = "bobassembly"
 end
 
 --This is where the magic happens
