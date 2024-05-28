@@ -3,8 +3,6 @@ require("prototypes.pipe-covers")
 require("prototypes.reverse-factory")
 --Setup for the reverse recipe groups and categories
 require("prototypes.catgroups")
-
-
 --Insantiating tables needed for the rest of the mod to function
 rf = {}
 rf.recipes = {}
@@ -17,7 +15,9 @@ rf.norecycle_subgroups = {}
 rf.maxResults = {5,5,5,5}
 
 --If certain mods are detected, change some recipes later
-if mods["bobplates"] then
+if mods ["nullius"] then
+	rf.mods = "nullius"
+elseif mods["bobplates"] then
 	rf.mods = "bobplates"
 elseif mods["IndustrialRevolution"] then
 	rf.mods = "DIR"
@@ -25,6 +25,8 @@ elseif mods["Fantario"] then
 	rf.mods = "fantario"
 end
 
+--This is where the magic happens
+require('func')
 require('dbug')
 
 --[[
@@ -56,6 +58,9 @@ end
 if mods["homeworld_redux"] then
 	table.insert(rf.norecycle_categories, "seeder")
 	table.insert(rf.norecycle_categories, "terraformer")
+end
+if mods ["nullius"] then
+	nulliusRecycling()
 end
 
 --Prevent duplication of crushed stone

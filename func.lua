@@ -235,6 +235,10 @@ function makeRecipe(itemType, recipe)
 	formatResults(nrec,recipe)
 	fixCategory(nrec,rfCategory)
 	
+	if mods ["nullius"] then
+		Recipe(nrec):set_field("order","nullius-b")
+	end
+	
 	--rf.debug(nrecData)
 end
 
@@ -621,7 +625,29 @@ function strReplace(str, what, with)
     return string.gsub(str, what, with)
 end
 
-
+function nulliusRecycling()
+	for n = 1,4 do
+		oldRecipe = "reverse-factory-"..n
+		newRecipe = "nullius-reverse-factory-"..n
+		Data(oldRecipe, "item"):copy(newRecipe)
+		Data(oldRecipe, "recipe"):copy(newRecipe)
+		Data(oldRecipe, "technology"):copy(newRecipe)
+		Data(oldRecipe, "furnace"):copy(newRecipe)
+		Data(newRecipe, "item"):set_field("order", "nullius-dd")
+		Data(newRecipe, "technology"):set_field("order", "nullius-dd")
+		Data(newRecipe, "technology"):set_field("effects",
+		{
+			{
+			  type = "unlock-recipe",
+			  recipe = "nullius-reverse-factory-"..n,
+			}
+		})
+		if n > 1 then
+			Data(newRecipe, "technology"):set_field("prerequisites",
+			{"nullius-reverse-factory-"..(n-1)})
+		end
+	end
+end
 
 
 

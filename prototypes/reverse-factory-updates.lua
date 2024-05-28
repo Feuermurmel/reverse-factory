@@ -25,6 +25,50 @@ Tech("reverse-factory-2"):set_field("unit",Tech("automation-2"):get_field("unit"
 Tech("reverse-factory-3"):set_field("unit",Tech("advanced-material-processing-2"):get_field("unit"))
 Tech("reverse-factory-4"):set_field("unit",Tech("automation-3"):get_field("unit"))
 
+--Only one of the below conditions will ever be true at one time.
+--Priority follows what is set under data.lua, so intercompatibility is not guaranteed
+
+--If Nullius mod is installed, total rewrite recipes and technologies
+if rf.mods == "nullius" then
+	--Clear ingredients, then copy ingredients from modded machine, and add previous tier
+	Recipe("nullius-reverse-factory-1"):set_field("ingredients",{})
+	Recipe("nullius-reverse-factory-1"):add_ingredient("nullius-small-assembler-1")
+	for _, ingredient in pairs(data.raw.recipe["nullius-small-assembler-1"].ingredients) do
+		Recipe("nullius-reverse-factory-1"):add_ingredient(ingredient)
+	end
+	Recipe("nullius-reverse-factory-2"):set_field("ingredients",{})
+	Recipe("nullius-reverse-factory-2"):add_ingredient("nullius-reverse-factory-1")
+	Recipe("nullius-reverse-factory-2"):add_ingredient("nullius-medium-assembler-1")
+	for _, ingredient in pairs(data.raw.recipe["nullius-medium-assembler-1"].ingredients) do
+		Recipe("nullius-reverse-factory-2"):add_ingredient(ingredient)
+	end
+	Recipe("nullius-reverse-factory-3"):set_field("ingredients",{})
+	Recipe("nullius-reverse-factory-3"):add_ingredient("nullius-reverse-factory-2")
+	Recipe("nullius-reverse-factory-3"):add_ingredient("nullius-large-assembler-2")
+	for _, ingredient in pairs(data.raw.recipe["nullius-large-assembler-2"].ingredients) do
+		Recipe("nullius-reverse-factory-3"):add_ingredient(ingredient)
+	end
+	Recipe("nullius-reverse-factory-4"):set_field("ingredients",{})
+	Recipe("nullius-reverse-factory-4"):add_ingredient("nullius-reverse-factory-3")
+	Recipe("nullius-reverse-factory-4"):add_ingredient("nullius-medium-furnace-2")
+	for _, ingredient in pairs(data.raw.recipe["nullius-medium-furnace-2"].ingredients) do
+		Recipe("nullius-reverse-factory-4"):add_ingredient(ingredient)
+	end
+	
+	--Remove all existing vanilla prereqs
+	Tech("nullius-reverse-factory-1"):remove_prereq("automation")
+	Tech("nullius-reverse-factory-2"):remove_prereq("automation-2")
+	Tech("nullius-reverse-factory-3"):remove_prereq("advanced-material-processing-2")
+	Tech("nullius-reverse-factory-4"):remove_prereq("automation-3")
+	
+	--rf.debug(data.raw.technology["nullius-automation"].unit)
+	--Then add the nullius prereqs
+	Tech("nullius-reverse-factory-1"):set_field("unit",Tech("nullius-automation"):get_field("unit"))
+	Tech("nullius-reverse-factory-2"):set_field("unit",Tech("nullius-mass-production-1"):get_field("unit"))
+	Tech("nullius-reverse-factory-3"):set_field("unit",Tech("nullius-mass-production-2"):get_field("unit"))
+	Tech("nullius-reverse-factory-4"):set_field("unit",Tech("nullius-metallurgy-3"):get_field("unit"))
+end
+
 --If bobs intermediates is detected, then check if these items exist, and replace ingredients.
 if rf.mods == "bobplates" then
 	Recipe("reverse-factory-1"):add_ingredient("iron-gear-wheel",5)
@@ -66,16 +110,19 @@ if rf.mods == "DIR" then
 		Recipe("reverse-factory-1"):add_ingredient(ingredient)
 	end
 	Recipe("reverse-factory-2"):set_field("ingredients",{})
+	Recipe("reverse-factory-2"):add_ingredient("reverse-factory-1")
 	Recipe("reverse-factory-2"):add_ingredient("assembling-machine-2")
 	for _, ingredient in pairs(data.raw.recipe["assembling-machine-2"].expensive.ingredients) do
 		Recipe("reverse-factory-2"):add_ingredient(ingredient)
 	end
 	Recipe("reverse-factory-3"):set_field("ingredients",{})
+	Recipe("reverse-factory-3"):add_ingredient("reverse-factory-2")
 	Recipe("reverse-factory-3"):add_ingredient("assembling-machine-3")
 	for _, ingredient in pairs(data.raw.recipe["assembling-machine-3"].ingredients) do
 		Recipe("reverse-factory-3"):add_ingredient(ingredient)
 	end
 	Recipe("reverse-factory-4"):set_field("ingredients",{})
+	Recipe("reverse-factory-4"):add_ingredient("reverse-factory-3")
 	Recipe("reverse-factory-4"):add_ingredient("arc-furnace")
 	for _, ingredient in pairs(data.raw.recipe["arc-furnace"].ingredients) do
 		Recipe("reverse-factory-4"):add_ingredient(ingredient)
@@ -126,8 +173,6 @@ if rf.mods == "fantario" then
 	Data("reverse-factory-4","item"):set_field("subgroup",Data("assembling-machine-4","item"):get_field("subgroup"))
 	Data("reverse-factory-4","item"):set_field("order",Data("assembling-machine-4","item"):get_field("order").."-z")
 end
-
---rf.debug(data.raw.technology["reverse-factory-1"])
 
 
 

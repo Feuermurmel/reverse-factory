@@ -1,5 +1,3 @@
---This is where the magic happens
-require('func')
 local Recipe = require('__stdlib__/stdlib/data/recipe')
 local Technology = require('__stdlib__/stdlib/data/technology')
 
@@ -56,11 +54,15 @@ fixMaxResults()
 --Set result size of entities based on largest recipe count in current game
 for n=1,4 do
 	data.raw["furnace"]["reverse-factory-"..n].result_inventory_size = rf.maxResults[n]
+	if mods["nullius"] then
+		data.raw["furnace"]["nullius-reverse-factory-"..n].result_inventory_size = rf.maxResults[n]
+	end
 end
 
 
+
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
---rf.debug(data.raw.technology["reverse-factory-2"])
---rf.debug(data.raw.recipe["rf-lubricant"])
+--rf.debug(data.raw.technology["reverse-factory-1"])
+--rf.debug(data.raw.item["nullius-foundry-3"].order)
 --rf.debug(data.raw.module["productivity-module"].limitation)
 --rf.debug(data.raw["rail-planner"].rail)
