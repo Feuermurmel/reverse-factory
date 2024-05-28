@@ -2,8 +2,8 @@ local Recipe = require('__stdlib__/stdlib/data/recipe')
 local Technology = require('__stdlib__/stdlib/data/technology')
 
 --List of recipes that need to be manually added to the list
---  These technically could be added by the original mod author
---  but it's technically simpler and easier to add them myself.
+--  These technically could/should be added by the original mod author
+--  but it's faster to add them myself.
 require("prototypes/added_manual_recipes")
 
 if mods["IndustrialRevolution"] then
@@ -122,7 +122,7 @@ if not rf.prevented_final_fixes then
 end
 
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
---rf.debug(data.raw.recipe["rf-wooden-chest"])
+--rf.debug(data.raw.recipe["vs-condensed-void-stone"])
 --rf.debug(data.raw.recipe["rf-sweater"])
 --rf.debug(data.raw.technology["reverse-factory-1"])
 --rf.debug(data.raw.armor["starry-armor"])

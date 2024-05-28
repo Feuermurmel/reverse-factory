@@ -499,7 +499,7 @@ function fixCategory(nrec,rfCategory)
 		if rfCategory == "recycle-products" then
 			rf.maxResults[1] = math.max(rf.maxResults[1],#nrecData.results)
 			if Recipe(nrec):get_field("energy_required") then
-				if Recipe(nrec):get_field("energy_required") < 1 then
+				if tonumber(Recipe(nrec):get_field("energy_required")) < 1 then
 					Recipe(nrec):set_field("energy_required",1)
 				end
 			else Recipe(nrec):set_field("energy_required",1)
@@ -507,7 +507,7 @@ function fixCategory(nrec,rfCategory)
 		elseif rfCategory == "recycle-intermediates" then
 			rf.maxResults[2] = math.max(rf.maxResults[2],#nrecData.results)
 			if Recipe(nrec):get_field("energy_required") then
-				if Recipe(nrec):get_field("energy_required") < 2 then
+				if tonumber(Recipe(nrec):get_field("energy_required")) < 2 then
 					Recipe(nrec):set_field("energy_required",2)
 				end
 			else Recipe(nrec):set_field("energy_required",2)
@@ -515,7 +515,7 @@ function fixCategory(nrec,rfCategory)
 		elseif rfCategory == "recycle-with-fluids" then
 			rf.maxResults[3] = math.max(rf.maxResults[3],#nrecData.results)
 			if Recipe(nrec):get_field("energy_required") then
-				if Recipe(nrec):get_field("energy_required") < 3 then
+				if tonumber(Recipe(nrec):get_field("energy_required")) < 3 then
 					Recipe(nrec):set_field("energy_required",3)
 				end
 			else Recipe(nrec):set_field("energy_required",3)
@@ -523,7 +523,7 @@ function fixCategory(nrec,rfCategory)
 		elseif rfCategory == "recycle-productivity" then
 			rf.maxResults[4] = math.max(rf.maxResults[4],#nrecData.results)
 			if Recipe(nrec):get_field("energy_required") then
-				if Recipe(nrec):get_field("energy_required") < 4 then
+				if tonumber(Recipe(nrec):get_field("energy_required")) < 4 then
 					Recipe(nrec):set_field("energy_required",4)
 				end
 			else Recipe(nrec):set_field("energy_required",4)
@@ -536,7 +536,7 @@ function fixCategory(nrec,rfCategory)
 			if rfCategory == "recycle-products" then
 				rf.maxResults[1] = math.max(rf.maxResults[1],#nrecData.normal.results)
 				if data.raw.recipe[nrec].normal.energy_required then
-					if data.raw.recipe[nrec].normal.energy_required < 1 then
+					if tonumber(data.raw.recipe[nrec].normal.energy_required) < 1 then
 						data.raw.recipe[nrec].normal.energy_required = 1
 					end
 				else data.raw.recipe[nrec].normal.energy_required = 1
@@ -544,7 +544,7 @@ function fixCategory(nrec,rfCategory)
 			elseif rfCategory == "recycle-intermediates" then
 				rf.maxResults[2] = math.max(rf.maxResults[2],#nrecData.normal.results)
 				if data.raw.recipe[nrec].normal.energy_required then
-					if data.raw.recipe[nrec].normal.energy_required < 2 then
+					if tonumber(data.raw.recipe[nrec].normal.energy_required) < 2 then
 						data.raw.recipe[nrec].normal.energy_required = 2
 					end
 				else data.raw.recipe[nrec].normal.energy_required = 2
@@ -552,7 +552,7 @@ function fixCategory(nrec,rfCategory)
 			elseif rfCategory == "recycle-with-fluids" then
 				rf.maxResults[3] = math.max(rf.maxResults[3],#nrecData.normal.results)
 				if data.raw.recipe[nrec].normal.energy_required then
-					if data.raw.recipe[nrec].normal.energy_required < 3 then
+					if tonumber(data.raw.recipe[nrec].normal.energy_required) < 3 then
 						data.raw.recipe[nrec].normal.energy_required = 3
 					end
 				else data.raw.recipe[nrec].normal.energy_required = 3
@@ -560,7 +560,7 @@ function fixCategory(nrec,rfCategory)
 			elseif rfCategory == "recycle-productivity" then
 				rf.maxResults[4] = math.max(rf.maxResults[4],#nrecData.normal.results)
 				if data.raw.recipe[nrec].normal.energy_required then
-					if data.raw.recipe[nrec].normal.energy_required < 4 then
+					if tonumber(data.raw.recipe[nrec].normal.energy_required) < 4 then
 						data.raw.recipe[nrec].normal.energy_required = 4
 					end
 				else data.raw.recipe[nrec].normal.energy_required = 4
@@ -574,7 +574,7 @@ function fixCategory(nrec,rfCategory)
 			if rfCategory == "recycle-products" then
 				rf.maxResults[1] = math.max(rf.maxResults[1],#nrecData.expensive.results)
 				if data.raw.recipe[nrec].expensive.energy_required then
-					if data.raw.recipe[nrec].expensive.energy_required < 1 then
+					if tonumber(data.raw.recipe[nrec].normal.energy_required) < 1 then
 						data.raw.recipe[nrec].expensive.energy_required = 1
 					end
 				else data.raw.recipe[nrec].expensive.energy_required = 1
@@ -582,7 +582,7 @@ function fixCategory(nrec,rfCategory)
 			elseif rfCategory == "recycle-intermediates" then
 				rf.maxResults[2] = math.max(rf.maxResults[2],#nrecData.expensive.results)
 				if data.raw.recipe[nrec].expensive.energy_required then
-					if data.raw.recipe[nrec].expensive.energy_required < 2 then
+					if tonumber(data.raw.recipe[nrec].normal.energy_required) < 2 then
 						data.raw.recipe[nrec].expensive.energy_required = 2
 					end
 				else data.raw.recipe[nrec].expensive.energy_required = 2
@@ -590,7 +590,7 @@ function fixCategory(nrec,rfCategory)
 			elseif rfCategory == "recycle-with-fluids" then
 				rf.maxResults[3] = math.max(rf.maxResults[3],#nrecData.expensive.results)
 				if data.raw.recipe[nrec].expensive.energy_required then
-					if data.raw.recipe[nrec].expensive.energy_required < 3 then
+					if tonumber(data.raw.recipe[nrec].normal.energy_required) < 3 then
 						data.raw.recipe[nrec].expensive.energy_required = 3
 					end
 				else data.raw.recipe[nrec].expensive.energy_required = 3
@@ -598,7 +598,7 @@ function fixCategory(nrec,rfCategory)
 			elseif rfCategory == "recycle-productivity" then
 				rf.maxResults[4] = math.max(rf.maxResults[4],#nrecData.expensive.results)
 				if data.raw.recipe[nrec].expensive.energy_required then
-					if data.raw.recipe[nrec].expensive.energy_required < 4 then
+					if tonumber(data.raw.recipe[nrec].normal.energy_required) < 4 then
 						data.raw.recipe[nrec].expensive.energy_required = 4
 					end
 				else data.raw.recipe[nrec].expensive.energy_required = 4

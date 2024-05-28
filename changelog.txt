@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.2.4
+Date: February 21, 2024
+  Bugfixes:
+    - Fixed issue with strings being used in "energy_required" field of recipes.
+---------------------------------------------------------------------------------------------------
 Version: 8.2.3
 Date: February 21, 2024
   Bugfixes:
