@@ -598,21 +598,22 @@ function fixCategory(nrec,rfCategory)
 end
 
 function checkForGrids(ingredient)
-	if data.raw.armor[object] then
-		if data.raw.armor[object].equipment_grid then
+	if data.raw.armor[ingredient] then
+		if data.raw.armor[ingredient].equipment_grid then
 			possibleGrid = true
 		end
 	end
-	if data.raw.car[object] then
-		if data.raw.car[object].equipment_grid then
+	if data.raw.car[ingredient] then
+		if data.raw.car[ingredient].equipment_grid then
 			possibleGrid = true
 		end
 	end
-	if data.raw["spider-vehicle"][object] then
-		if data.raw["spider-vehicle"][object].equipment_grid then
+	if data.raw["spider-vehicle"][ingredient] then
+		if data.raw["spider-vehicle"][ingredient].equipment_grid then
 			possibleGrid = true
 		end
 	end
+	return possibleGrid
 end
 
 --Ensure that t2 recyclers make enough room for t1 and t2 recipes, and so on for each tier.
