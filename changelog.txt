@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.21
+Date: January 28, 2024
+  Minor Features:
+    - Added compatibility with King Jo's Fuels, per request by Mr.Thomas
+---------------------------------------------------------------------------------------------------
 Version: 8.1.20
 Date: January 22, 2024
   Bugfixes:
