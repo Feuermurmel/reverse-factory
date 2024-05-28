@@ -25,18 +25,21 @@ function checkinvs()
 	end
 end
 
-script.on_init( function()
-	rf = {}
-	rf.recyclers = {}
-end)
-
-script.on_configuration_changed( function()
+function scanworld()
 	rf = {}
 	rf.recyclers = {}
 	for _, surface in pairs(game.surfaces) do
 		local recyclers = surface.find_entities_filtered{name= "reverse-factory"}
 		rf.recyclers = recyclers
 	end
+end
+
+script.on_init( function()
+	scanworld()
+end)
+
+script.on_configuration_changed( function()
+	scanworld()
 end)
 
 script.on_event(defines.events.on_tick, function(event)
@@ -47,8 +50,7 @@ end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
 	if not rf then
-		rf = {}
-		rf.recyclers = {}
+		scanworld()
 	end
 	if event.created_entity.name == "reverse-factory" then
 		table.insert(rf.recyclers, event.created_entity)
@@ -57,8 +59,7 @@ end)
 
 script.on_event(defines.events.on_built_entity, function(event)
 	if not rf then
-		rf = {}
-		rf.recyclers = {}
+		scanworld()
 	end
 	if event.created_entity.name == "reverse-factory" then
 		table.insert(rf.recyclers, event.created_entity)
@@ -66,6 +67,9 @@ script.on_event(defines.events.on_built_entity, function(event)
 end)
 
 script.on_event(defines.events.on_entity_died, function(event)
+	if not rf then
+		scanworld()
+	end
 	if event.entity.name == "reverse-factory" then
 		for key, entity in pairs(rf.recyclers) do
 			if entity == event.entity then
@@ -76,6 +80,9 @@ script.on_event(defines.events.on_entity_died, function(event)
 end)
 
 script.on_event(defines.events.on_robot_pre_mined, function(event)
+	if not rf then
+		scanworld()
+	end
 	if event.entity.name == "reverse-factory" then
 		for key, entity in pairs(rf.recyclers) do
 			if entity == event.entity then
@@ -86,6 +93,9 @@ script.on_event(defines.events.on_robot_pre_mined, function(event)
 end)
 
 script.on_event(defines.events.on_preplayer_mined_item, function(event)
+	if not rf then
+		scanworld()
+	end
 	if event.entity.name == "reverse-factory" then
 		for key, entity in pairs(rf.recyclers) do
 			if entity == event.entity then
