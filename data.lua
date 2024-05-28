@@ -18,6 +18,8 @@ rf.maxResults = {5,5,5,5}
 --If certain mods are detected, change some recipes later
 if mods["bobplates"] then
 	rf.mods = "bobplates"
+elseif mods["IndustrialRevolution"] then
+	rf.mods = "DIR"
 elseif mods["Fantario"] then
 	rf.mods = "fantario"
 end

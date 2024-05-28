@@ -580,15 +580,36 @@ function fixMaxResults()
 	rf.maxResults[3] = math.max(rf.maxResults[1],rf.maxResults[2],rf.maxResults[3])
 	rf.maxResults[4] = math.max(rf.maxResults[1],rf.maxResults[2],rf.maxResults[3],rf.maxResults[4])
 end
+--[[
+function removeFromAllTechs(recipe)
+	tech = seekTech(recipe)
+	while tech do
+		Recipe(recipe):remove_unlock(tech)
+		tech = seekTech(recipe)
+	end
+end
+
+function seekTech(recipe)
+	for _, tech in pairs(data.raw.technology) do
+		if tech.effects and (not string.find(tech.name, "demo-")) then
+			for _, effect in pairs (tech.effects) do
+				if recipe == effect.recipe then
+					return tech.name
+				end			
+			end
+		end
+	end
+end
 
 
 
+]]--
 
-
-
-
-
-
+function strReplace(str, what, with)
+    what = string.gsub(what, "[%(%)%.%+%-%*%?%[%]%^%$%%]", "%%%1") -- escape pattern
+    with = string.gsub(with, "[%%]", "%%%%") -- escape replacement
+    return string.gsub(str, what, with)
+end
 
 
 

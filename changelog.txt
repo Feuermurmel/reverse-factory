@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.15
+Date: September 10, 2019
+  Minor Features:
+    - Added fully featured compatibility with Industrial Revolution.
+      Removes iron disassembler entity and technology, in favor of reverse factories.
+      Also hides and disables all disassemble recipes from technology and crafting menu.
+      Reverse factory recipes are altered to include IR ingredients.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.14
 Date: July 29, 2019
   Bugfixes:
