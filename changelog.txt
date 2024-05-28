@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.1.3
+Date: July 12, 2019
+  Changes:
+    - Set maxmimum different results for lower tier machines.
+      T1 max of 5 products, T2 max of 10 products, T3 max of 15 products, T4 unlimited.
+      Only noticeable with certain mods (Fantario)
+    - Rebalanced recycling recipe time costs. Originally 3 times the base recipe cost.
+      Changed to a minimum of 5 seconds, and if greater, set to the base recipe cost.
+---------------------------------------------------------------------------------------------------
 Version: 6.1.2
 Date: July 11, 2019
   Minor Features:
@@ -6,9 +15,6 @@ Date: July 11, 2019
       T1-3 machines rely on heat as power source; T4 machine locked behind space science.
       Recipes and technologies rebalanced for Fantario progression.
   Changes:
-    - Set maxmimum results for lower tier machines.
-      T1 max of 5 products, T2 max of 10 products, T3 max of 15 products, T4 unlimited.
-      Only noticeable with certain mods (Fantario)
     - Rebalanced module slots of machines to make T1 noticeably weaker.
     - Reduced time in recipe for reverse factories from 20s to 5s.
       Now it can actually recycle itself in a resonable amount of time.

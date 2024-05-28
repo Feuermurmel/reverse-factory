@@ -89,7 +89,8 @@ function makeRecipe(itemType, recipe)
 	local nrec = "rf-"..recipe.name
 	local rfCategory, normalCount, expenCount = checkResults(itemType,recipe)
 	local toAdd = {category = rfCategory, subgroup = "recycling", enabled = true, allow_decomposition = false}
-	local energyMult = 3
+	--local energyMult = 3
+	local energyMin = 5
 	
 	Data(recipe):copy(nrec)
 	Recipe(nrec):clear_ingredients()
@@ -116,12 +117,14 @@ function makeRecipe(itemType, recipe)
 		data.raw.recipe[nrec].normal.allow_decomposition = false
 		data.raw.recipe[nrec].expensive.allow_decomposition = false
 		if data.raw.recipe[nrec].normal.energy_required then
-			data.raw.recipe[nrec].normal.energy_required = energyMult*data.raw.recipe[nrec].normal.energy_required
-			else data.raw.recipe[nrec].normal.energy_required = energyMult
+			if data.raw.recipe[nrec].normal.energy_required < energyMin then
+				data.raw.recipe[nrec].normal.energy_required = energyMin
+			end
 		end
 		if data.raw.recipe[nrec].expensive.energy_required then
-			data.raw.recipe[nrec].expensive.energy_required = energyMult*data.raw.recipe[nrec].expensive.energy_required
-		else data.raw.recipe[nrec].expensive.energy_required = energyMult
+			if data.raw.recipe[nrec].expensive.energy_required < energyMin then
+				data.raw.recipe[nrec].expensive.energy_required = energyMin
+			end
 		end
 	else
 		if itemType == "fluid" then
@@ -131,9 +134,9 @@ function makeRecipe(itemType, recipe)
 		end
 		Recipe(nrec):set_field("hidden", true)
 		if Recipe(nrec):get_field("energy_required") then
-			newEnergy = energyMult*Recipe(nrec):get_field("energy_required")
-			Recipe(nrec):set_field("energy_required", newEnergy)
-		else Recipe(nrec):set_field("energy_required",energyMult)
+			if Recipe(nrec):get_field("energy_required") < energyMin then
+				Recipe(nrec):set_field("energy_required",energyMin)
+			end
 		end
 	end
 
@@ -262,6 +265,40 @@ function checkResults(itemType,recipe)
 			end
 		end
 	end
+
+	--Upgrade to higher tier depending on ingredient count.
+	if recipe.normal then
+		if recipe.normal.ingredients then
+			if #recipe.normal.ingredients > 15 then
+				category = "recycle-productivity"
+			elseif #recipe.normal.ingredients > 10 then
+				category = "recycle-with-fluids"
+			elseif #recipe.normal.ingredients > 5 then
+				category = "recycle-intermediates"
+			end
+		end
+	end	
+	if recipe.expensive then
+		if recipe.expensive.ingredients then
+			if #recipe.expensive.ingredients > 15 then
+				category = "recycle-productivity"
+			elseif #recipe.expensive.ingredients > 10 then
+				category = "recycle-with-fluids"
+			elseif #recipe.expensive.ingredients > 5 then
+				category = "recycle-intermediates"
+			end
+		end
+	end
+	if recipe.ingredients then
+		if #recipe.ingredients > 15 then
+			category = "recycle-productivity"
+		elseif #recipe.ingredients > 10 then
+			category = "recycle-with-fluids"
+		elseif #recipe.ingredients > 5 then
+			category = "recycle-intermediates"
+		end
+	end
+
 	return category, normalCount, expenCount
 end
 

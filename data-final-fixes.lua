@@ -10,7 +10,6 @@ if rf.vehicles then
 	table.insert(itemTypes,"item-with-entity-data")
 end
 
-
 for _, itemType in pairs(itemTypes) do
 	addRecipes(itemType, data.raw[itemType])
 end
