@@ -1,5 +1,10 @@
 REVERSE FACTORY
 ---------------------------------------------------------------------------------------------------
+Version: 6.0.1
+  Changes:
+    - Added optional dependencies to GDIW and Bobs Assembling Machines
+    - Should improve load order compatibility
+---------------------------------------------------------------------------------------------------
 Version: 6.0.0
   Changes:
     - Updated for 0.17 experimental
