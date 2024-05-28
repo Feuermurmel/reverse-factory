@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 7.0.8
+Date: September 24, 2020
+  Bugfixes:
+    - Fixed recycling ingredient count defaulting to 1, when original result_count was defined.
+---------------------------------------------------------------------------------------------------
 Version: 7.0.7
 Date: June 26, 2020
   Bugfixes:

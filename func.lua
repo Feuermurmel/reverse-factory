@@ -211,7 +211,7 @@ function makeRecipe(itemType, recipe)
 		data.raw.recipe[nrec].expensive.hidden = true
 		data.raw.recipe[nrec].expensive.allow_decomposition = false
 	end
-
+	
 	--If expenCount is defined, then expensive must be defined
 	if expenCount then
 		--This implies only expensive is defined, while normal is empty
@@ -231,9 +231,10 @@ function makeRecipe(itemType, recipe)
 	Recipe(nrec):set_enabled(true)
 	Recipe(nrec):set_fields(toAdd)
 
-	removeResults(nrec)
+	removeResults(nrec)	
 	formatResults(nrec,recipe)
 	fixCategory(nrec,rfCategory)
+	
 	--rf.debug(nrecData)
 end
 
@@ -270,7 +271,9 @@ function checkResults(itemType,recipe)
 			end
 		--Default back to 1
 		elseif recipe.normal.result then
-			normalCount = 1
+			if recipe.normal.result_count then
+				normalCount = recipe.normal.result_count
+			else normalCount = 1 end
 		end
 		--Recycling items or fluids into fluids are tier 3
 		if recipe.normal.ingredients then
@@ -299,7 +302,9 @@ function checkResults(itemType,recipe)
 			end
 		--Default back to 1
 		elseif recipe.expensive.result then
-			expenCount = 1
+			if recipe.expensive.result_count then
+				expenCount = recipe.expensive.result_count
+			else expenCount = 1 end
 		end
 		--Recycling items or fluids into fluids are tier 3
 		if recipe.expensive.ingredients then
