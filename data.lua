@@ -45,6 +45,13 @@ end
 if mods["anarchy"] then
 	table.insert(rf.norecycle_items, "ultra-armor")
 end
+if mods["spaceblock"] then
+	table.insert(rf.norecycle_items, "coal")
+	table.insert(rf.norecycle_items, "copper-ore")
+	table.insert(rf.norecycle_items, "iron-ore")
+	table.insert(rf.norecycle_items, "stone")
+	table.insert(rf.norecycle_items, "uranium-ore")
+end
 
 --Prevent duplication of crushed stone
 table.insert(rf.norecycle_items, "stone-crushed")
