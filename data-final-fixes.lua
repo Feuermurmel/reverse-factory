@@ -1,3 +1,6 @@
+--Main reverse recipe function
+require("add-recipes")
+
 --Remove Bio Industries dissassemble recipes
 if data.raw.recipe["bi_steel_furnace_disassemble"] then
   data.raw.recipe["bi_steel_furnace_disassemble"].hidden = true
@@ -12,8 +15,15 @@ if data.raw.recipe["bi_steel_furnace_disassemble"] then
   thxbob.lib.tech.remove_recipe_unlock("automation-2", "bi_long_handed_inserter_disassemble")
 end
 
---Main reverse recipe function
-require("add-recipes")
+--Manually add Bio Industries terraformer
+if data.raw.recipe["bi_Arboretum"] then if data.raw.item["bi-Arboretum-Area"] then
+	createManualDualRecipe(data.raw.recipe["bi_Arboretum"], data.raw.item["bi-Arboretum-Area"])
+end end
+
+--Manually add Natural Evolution Buildings copper firearm magazine
+if data.raw.recipe["copper_bullets"] then if data.raw.item["copper-bullet-magazine"] then
+	createManualSimpleRecipe(data.raw.recipe["copper_bullets"], data.raw.item["copper-bullet-magazine"])
+end end
 
 --Create recycling recipes
 addRecipes(data.raw.ammo)					--Create recipes for all ammunitions
@@ -33,7 +43,7 @@ data:extend(rf.recipes)
 --Extend outputs to max number of results in currently scanned game
 data.raw.furnace["reverse-factory-1"].result_inventory_size = rf.maxt1
 data.raw.furnace["reverse-factory-2"].result_inventory_size = rf.maxt2
-
+--[[
 --Fixes recipes to the end of the assembling machine row
 if data.raw.item["mini-assembler-6"] then 
 	data.raw.item["reverse-factory-1"].subgroup = data.raw.item["mini-assembler-6"].subgroup
@@ -50,3 +60,4 @@ else
 end
 data.raw.item["reverse-factory-2"].subgroup = data.raw.item["reverse-factory-1"].subgroup
 data.raw.item["reverse-factory-2"].order = data.raw.item["reverse-factory-1"].order.."-b"
+]]--

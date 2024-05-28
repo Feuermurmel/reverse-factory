@@ -10,7 +10,7 @@ function addRecipes(category)
 		if recipe then
 			--Check if simple recipes has ingredients table, and at least one ingredient under that table
 			if recipe.ingredients then if next(recipe.ingredients) then
-				if uncraftable(recipe, item) then new_recipe = createRecipe(recipe, item) end
+				if uncraftable(recipe, item) then new_recipe = createSimpleRecipe(recipe, item) end
 			end end
 			--Same check, but for normal/expensive recipes; fails unless both recipe types were properly defined
 			if recipe.normal then if recipe.normal.ingredients then if next(recipe.normal.ingredients) then
@@ -24,7 +24,7 @@ function addRecipes(category)
 end
 
 --Used for basic recipes
-function createRecipe(recipe, item)
+function createSimpleRecipe(recipe, item)
 	local rec_count = recipe.result_count and recipe.result_count or 1
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
 	local new_recipe = {}
@@ -107,9 +107,77 @@ function createDualRecipe(recipe, item)
 	return new_recipe
 end
 
+--Used to manually add simple recipes whose items are named differently (not caught by the automatic function)
+function createManualSimpleRecipe(recipe, item)
+	local rec_count = recipe.result_count and recipe.result_count or 1
+	local new_recipe = {
+		type = "recipe",
+		name = "rf-"..recipe.name,
+		icon = item.icon,
+		icon_size = item.icon_size,
+		category = "recycle",
+		hidden = "true",
+		energy_required = 30,
+		ingredients = {{item.name, rec_count}},
+		subgroup="rf-multiple-outputs"
+	}
+	--Icons supercede the use of icon
+	if item.icons then
+		new_recipe.icons = item.icons
+	end
+	--Fluid determines max products for tier 2 recycler
+	if fluid then
+		new_recipe.category = "recycle-with-fluids"
+		rf.maxt2 = math.max(#recipe.normal.ingredients, #recipe.expensive.ingredients, rf.maxt2, rf.maxt1)
+	else rf.maxt1 = math.max(#recipe.normal.ingredients, #recipe.expensive.ingredients, rf.maxt1)
+	end
+	table.insert(rf.recipes, new_recipe)
+end
+
+--Used to manually add dual recipes whose items are named differently (not caught by the automatic function)
+function createManualDualRecipe(recipe, item)
+	local normacount = recipe.normal.result_count and recipe.normal.result_count or 1
+	local expencount = recipe.expensive.result_count and recipe.expensive.result_count or 1
+	local new_recipe = {
+		type = "recipe",
+		name = "rf-"..recipe.name,
+		icon = item.icon,
+		icon_size = item.icon_size,
+		category = "recycle",
+		normal = {
+			ingredients = {{item.name, normacount}},
+			results = recipe.normal.ingredients,
+			hidden = "true",
+			energy_required = 30,
+			},
+		expensive = {
+			ingredients = {{item.name, expencount}},
+			results = recipe.expensive.ingredients,
+			hidden = "true",
+			energy_required = 30,
+			},
+		subgroup="rf-multiple-outputs"
+	}
+	--Icons supercede the use of icon
+	if item.icons then
+		new_recipe.icons = item.icons
+	end
+	--Fluid determines max products for tier 2 recycler
+	if fluid then
+		new_recipe.category = "recycle-with-fluids"
+		rf.maxt2 = math.max(#recipe.normal.ingredients, #recipe.expensive.ingredients, rf.maxt2, rf.maxt1)
+	else rf.maxt1 = math.max(#recipe.normal.ingredients, #recipe.expensive.ingredients, rf.maxt1)
+	end
+	table.insert(rf.recipes, new_recipe)
+end
+
 --Always true if safety is toggled off. Safety prevents ingredient loss. Only works for simple and normal variant recipes.
+--I also borrowed it to disable an angels crushed stone recipe (which just duplicates, for some reason)
 function uncraftable(recipe, item)
 	uncraft = true
+	if recipe.name == "stone-crushed" then
+		uncraft = false
+	end
 	if rf.safety then
 		if recipe.ingredients then
 			for _, ingred in ipairs(recipe.ingredients) do
