@@ -121,9 +121,7 @@ function addRecipes(itemType, group)
 			if reversible then
 				if checkProbs(recipe,item) then
 					if noRecycle(recipe,item) then
-						if checkForGrids(recipe) then
-							makeRecipe(itemType,item,recipe)
-						end
+						makeRecipe(itemType,item,recipe)
 					end
 				end
 			end
@@ -176,28 +174,6 @@ function noRecycle(recipe,item)
 	--Output list of items that could not be recycled.
 	if not uncraft then log("Item is on list of Unrecyclables: "..item.name) end
 	return uncraft
-end
-
---Check if recipe contains unstackable items with equipment grid as ingredients
-function checkForGrids(recipe)
-	local noGrid = true
-	if recipe.ingredients then
-		noGrid = checkIngreds(recipe.ingredients)
-	end
-
-	if recipe.normal then
-		if recipe.normal.ingredients then
-			noGrid = checkIngreds(recipe.normal.ingredients)
-		end
-	end
-
-	if recipe.expensive then
-		if recipe.expensive.ingredients then
-			noGrid = checkIngreds(recipe.expensive.ingredients)
-		end
-	end
-		
-	return noGrid
 end
 
 --Create a reverse recipe for input recipe
@@ -464,7 +440,10 @@ function formatResults(nrec,recipe)
 				newResult = {type=ingred.type, name=ingred.name, amount = (math.ceil(rf.efficiency*ingred.amount/100))}
 			else
 				ingredAmount = ingred[2] or ingred.amount 
-				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
+				newResult = {type="item", name=ingred[1] or ingred.name, amount=(math.ceil(rf.efficiency*ingredAmount/100))}
+			end
+			if checkForGrids(newResult.name) then
+				newResult.amount = 1
 			end
 			table.insert(nrecData.normal.results, newResult)
 		end
@@ -478,6 +457,9 @@ function formatResults(nrec,recipe)
 				ingredAmount = ingred[2] or ingred.amount
 				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
 			end
+			if checkForGrids(newResult.name) then
+				newResult.amount = 1
+			end
 			table.insert(nrecData.expensive.results, newResult)
 		end
 	end
@@ -489,6 +471,9 @@ function formatResults(nrec,recipe)
 			else
 				ingredAmount = ingred[2] or ingred.amount
 				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
+			end
+			if checkForGrids(newResult.name) then
+				newResult.amount = 1
 			end
 			table.insert(nrecData.results, newResult)
 		end
@@ -612,42 +597,22 @@ function fixCategory(nrec,rfCategory)
 
 end
 
---Cheeks ingredients for equipment grids
---Returns false if an ingredient has equipment grid and uses more than one in recipe
---Otherwise returns true
-function checkIngreds(ingredients)
-	local possibleGrid = false
-	local ingredCount = 0
-	--Check every ingredient in the list for equipment grid, and record ingredient count
-	for _, ingred in pairs(ingredients) do
-		for _, object in pairs(ingred) do
-			if type(object) == "string" and object ~= "item" and object ~= "fluid" then
-				if data.raw.armor[object] then
-					if data.raw.armor[object].equipment_grid then
-						possibleGrid = true
-					end
-				end
-				if data.raw.car[object] then
-					if data.raw.car[object].equipment_grid then
-						possibleGrid = true
-					end
-				end
-				if data.raw["spider-vehicle"][object] then
-					if data.raw["spider-vehicle"][object].equipment_grid then
-						possibleGrid = true
-					end
-				end
-			end
-			if type(object) == "number" then
-				ingredCount = object
-			end 
-		end
-		--If an ingredient has equipment grid and more than one in ingredient count, return false
-		if possibleGrid and ingredCount > 1 then
-			return false
+function checkForGrids(ingredient)
+	if data.raw.armor[object] then
+		if data.raw.armor[object].equipment_grid then
+			possibleGrid = true
 		end
 	end
-	return true
+	if data.raw.car[object] then
+		if data.raw.car[object].equipment_grid then
+			possibleGrid = true
+		end
+	end
+	if data.raw["spider-vehicle"][object] then
+		if data.raw["spider-vehicle"][object].equipment_grid then
+			possibleGrid = true
+		end
+	end
 end
 
 --Ensure that t2 recyclers make enough room for t1 and t2 recipes, and so on for each tier.
@@ -710,73 +675,7 @@ function nulliusRecycling()
 		end
 	end
 end
---[[
-function makeManualRecipe(item, itemType, recipe)
-	local nrec = "rf-"..item.name
-	local rfCategory, normalCount, expenCount = checkResults(itemType,item,recipe)
-	local toAdd = {category = rfCategory, subgroup = "recycling", enabled = true, hidden = true, allow_decomposition = false}
-	--local energyMult = 3
-	local energyMin = 5
-	
-	Data(recipe):copy(nrec)
-	Recipe(nrec):clear_ingredients()
 
-	--Copy icon or icons from item if recipe did not have it set
-	if not recipe.icon and not recipe.icons then
-		if data.raw[itemType][item.name].icon then
-			Recipe(nrec):set_field("icon",data.raw[itemType][item.name].icon)
-		end
-		if data.raw[itemType][item.name].icons then
-			Recipe(nrec):set_field("icons",data.raw[itemType][item.name].icons)
-		end
-		if data.raw[itemType][item.name].icon_size then
-			Recipe(nrec):set_field("icon_size",data.raw[itemType][item.name].icon_size)
-		end
-		if data.raw[itemType][item.name].icon_mipmaps then
-			Recipe(nrec):set_field("icon_mipmaps",data.raw[itemType][item.name].icon_mipmaps)
-		end
-	end
-
-	--If normal/expensive recipe, make edits to those parts as well
-	if data.raw.recipe[nrec].normal then
-		data.raw.recipe[nrec].normal.hidden = true
-		data.raw.recipe[nrec].normal.allow_decomposition = false
-	end
-	if data.raw.recipe[nrec].expensive then
-		data.raw.recipe[nrec].expensive.hidden = true
-		data.raw.recipe[nrec].expensive.allow_decomposition = false
-	end
-	
-	--If expenCount is defined, then expensive must be defined
-	if expenCount then
-		--This implies only expensive is defined, while normal is empty
-		if Recipe(nrec):get_field("normal") == Recipe(nrec):get_field("expensive") then
-			Recipe(nrec):add_ingredient({item.name,normalCount})
-		else --Otherwise, both normal and expensive are defined
-			Recipe(nrec):add_ingredient({item.name,normalCount},{item.name,expenCount})
-		end
-	else --Otherwise, only normal or only recipe is defined, but not expensive
-		if itemType == "fluid" then
-			Recipe(nrec):add_ingredient({type="fluid",name=item.name,amount=normalCount})
-		else  --This has the unintentional side effect of converting normal to simply recipe
-			Recipe(nrec):add_ingredient({item.name,normalCount})
-		end
-	end
-
-	Recipe(nrec):set_enabled(true)
-	Recipe(nrec):set_fields(toAdd)
-
-	removeResults(nrec)	
-	formatResults(nrec,recipe)
-	fixCategory(nrec,rfCategory)
-	
-	if mods ["nullius"] then
-		Recipe(nrec):set_field("order","nullius-b")
-	end
-	
-	--rf.debug(data.raw.recipe[nrec])
-end
-]]--
 
 
 

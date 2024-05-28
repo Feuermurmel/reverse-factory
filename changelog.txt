@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.2
+Date: October 2, 2021
+  Bugfixes:
+    - Fixed error with previous version of the non-stackable items fix
+      Recipes which use items that have equipment grids are now reduced to 1 (if higher)
+---------------------------------------------------------------------------------------------------
 Version: 8.1.1
 Date: September 1, 2021
   Bugfixes:

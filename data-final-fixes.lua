@@ -69,6 +69,6 @@ end
 
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
 --rf.debug(data.raw.technology["reverse-factory-1"])
---rf.debug(data.raw.item["nullius-foundry-3"].order)
+--rf.debug(data.raw.recipe["bob-tank-3"])
 --rf.debug(data.raw.module["productivity-module"].limitation)
 --rf.debug(data.raw["rail-planner"].rail)
