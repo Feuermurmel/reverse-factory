@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
-Version: 8.1.21
+Version: 8.2.0
 Date: January 28, 2024
-  Minor Features:
-    - Added compatibility with King Jo's Fuels, per request by Mr.Thomas
+  Major Features:
+    - Rewrote the code for the auto ingredient push setting, so it should work more properly now.
+      Added new options for the timer and delay. Still not tested in multiplayer.
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.20
 Date: January 22, 2024
