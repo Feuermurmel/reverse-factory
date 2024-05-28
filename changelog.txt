@@ -1,51 +1,53 @@
 ---------------------------------------------------------------------------------------------------
+Version: 5.1.7
+  Changes:
+    - Fixed compatibility with angels bio processing
+---------------------------------------------------------------------------------------------------
 Version: 5.1.6
   Changes:
-    - Fixed duplication bug with bobs plates, hopefully doesn't mess up compatibility with other mods.
-	- Added toggle for recycling vehicles and power armors (off by default)
-	- Added changelog.txt for a prettier changelog (many thanks to SuperSandro2000)
+    - Fixed duplication bug with bobs plates
+    - Added toggle for recycling vehicles and power armors (off by default)
+    - Added changelog.txt for a prettier changelog (many thanks to SuperSandro2000)
 ---------------------------------------------------------------------------------------------------
 Version: 5.1.3
   Changes:
     - Improved compatibility with angels refining and bio industries.
-	- Prevents crushed stone duplication in recyclers.
-	- Allows bio industries terraformer to be recycled.
+    - Prevents crushed stone duplication in recyclers.
+    - Allows bio industries terraformer to be recycled.
 ---------------------------------------------------------------------------------------------------
 Version: 5.1.2
   Changes:
     - Potential final bugfix for rf-recipe related errors
-	- Small fix to safety toggle so it applies to normal/expensive recipes
+    - Small fix to safety toggle so it applies to normal/expensive recipes
 ---------------------------------------------------------------------------------------------------
 Version: 5.1.1
   Changes:
     - Minor bugfix for angel's smelting
-	- If angel's smelting detected, uses advanced invar processing instead of invar ally processing as a dependency for recycling machine t2
-	- Prevents crushed stone duplication in recyclers.
+    - Prevents crushed stone duplication in recyclers.
 ---------------------------------------------------------------------------------------------------
 Version: 5.1.0
   Changes:
     - Massive rewrite of core mod
-	- Recyclers come in 2 tiers; t1 can recycle into solids only, and t2 can recycle into solids and fluids
-	- Recycler icons now use powerbars, edited from Zombiee's ShinyBobGFX mod
-	- T1 recycler is easier to research, requiring only red science, electronics and automation
-	- T1 recipe requires more resources (2 t1 assemblers and green circuits) and is marginally slower, but retains its 2 module slots
-	- T2 recycler is harder to craft and research, requiring steel, red circuits, and 2 t2 assemblers
-	- T2 recycler is almost twice as fast as before, with 4 module slots
-	- Recyclers adhere to new normal/expensive mode, dynamically changing reverse recipes accordingly
-	- Recyclers require alloy processing from bobs mods if detected (bronze for t1, invar for t2)
-	- Recyclers output slots will stretch to fill the largest ingrediant amount in the game (5 and 7 for vanilla, roughly 10 and 12 for bobs mods)
-	- Added new safety toggle, which prevents the recycling of dense recipes (on by default; disable to remove the restriction, though any ingredients above their stack limit will be deleted)
-	- Removed redundant settings (normal/expensive difficulty toggle, and dynamic uncrafting toggle), implemented into core mod
-	- Automatic Ingredient push setting still exists and works with new tier of recycler, though it may not migrate properly with existing games; any existing recyclers should be upgraded into t2's
+    - Recyclers come in 2 tiers; t1 produces solids, t2 produces solids and fluids
+    - Recycler icons now use powerbars, edited from Zombiee's ShinyBobGFX mod
+    - T1 recycler is easier to research, requiring only red science, electronics and automation
+    - T1 recipe requires more resources and is marginally slower, but retains its 2 module slots
+    - T2 recycler is harder to craft and research, requiring steel, red circuits, and 2 t2 assemblers
+    - T2 recycler is almost twice as fast as before, with 4 module slots
+    - Recyclers adhere to new normal/expensive mode, dynamically changing reverse recipes accordingly
+    - Recyclers require alloy processing from bobs mods if detected (bronze for t1, invar for t2)
+    - Recyclers output slots will stretch to fill the largest ingrediant amount in the game
+    - Added new safety toggle, which prevents the recycling of dense recipes
+    - Removed redundant settings, implemented into core mod
+    - Automatic Ingredient push setting still exists and works with new tier of recycler
 ---------------------------------------------------------------------------------------------------
 Version: 5.0.1
   Changes:
     - Added 2 module slots to recycler, allowing beacon effects to apply (excluding productivity)
 ---------------------------------------------------------------------------------------------------
-Version: 5.1.3
+Version: 5.0.0
   Changes:
     - Updated to Factorio v0.16
 ---------------------------------------------------------------------------------------------------
-NOTE: Any earlier changelogs can be found [HERE](https://mods.factorio.com/mod/reverse-factory/discussion/5a5f1b0dadcc441024d769dc)
-
-This is a test to see if markdown works from a txt file, but I doubt it. Makes hyperlinks a bit more annoying, but oh well. Such is the price of beauty
+NOTE: Any earlier changelogs can be found at 
+https://mods.factorio.com/mod/reverse-factory/discussion/5a5f1b0dadcc441024d769dc

@@ -29,9 +29,9 @@ end
 --Used for basic recipes
 function createSimpleRecipe(recipe, item)
 	local rec_count = recipe.result_count and recipe.result_count or 1
-	if recipe.results then if recipe.results[1] then
+	if recipe.results then if recipe.results[1] then if recipe.results[1].amount then
 		rec_count = recipe.results[1].amount
-	end end
+	end end end
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
 	local new_recipe = {}
 	new_recipe = {
@@ -68,7 +68,13 @@ end
 --Used for normal/expensive recipes
 function createDualRecipe(recipe, item)
 	local normacount = recipe.normal.result_count and recipe.normal.result_count or 1
+	if recipe.normal.results then if recipe.normal.results[1] then if recipe.normal.results[1].amount then
+		normacount = recipe.normal.results[1].amount
+	end end end
 	local expencount = recipe.expensive.result_count and recipe.expensive.result_count or 1
+	if recipe.expensive.results then if recipe.expensive.results[1] then if recipe.expensive.results[1].amount then
+		expencount = recipe.expensive.results[1].amount
+	end end end
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
 	local new_recipe = {}
 	new_recipe = {
