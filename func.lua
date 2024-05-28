@@ -100,24 +100,24 @@ function addRecipes(itemType, group)
 			--Recipe must have ingredients to be uncraftable
 			if recipe.ingredients then
 				if next(recipe.ingredients) then
-					revRec = true
+					reversible = true
 				end
 			end
 			if recipe.normal then
 				if recipe.normal.ingredients then
 					if next(recipe.normal.ingredients) then 
-						revRec = true
+						reversible = true
 					end
 				end
 			end
 			if recipe.expensive then
 				if recipe.expensive.ingredients then
 					if next(recipe.expensive.ingredients) then 
-						revRec = true
+						reversible = true
 					end
 				end
 			end
-			if revRec then
+			if reversible then
 				if checkProbs(recipe,item) then
 					if checkRecipe(recipe,item) then
 						makeRecipe(itemType,recipe)
@@ -381,13 +381,9 @@ end
 
 function removeResults(nrec)
 	local nrecData = data.raw.recipe[nrec]
-	if nrecData.result then 
-		nrecData.results = {}
+	if nrecData.result then
 		nrecData.result = nil
 		nrecData.result_count = nil
-	end
-	if nrecData.results then
-		nrecData.results = {}
 	end
 	if nrecData.main_product then
 		nrecData.main_product = nil
@@ -445,6 +441,7 @@ function formatResults(nrec,recipe)
 		end
 	end
 	if recipe.ingredients then
+		nrecData.results = {}
 		for _, ingred in pairs(recipe.ingredients) do
 			if ingred.type then
 				newResult = {type=ingred.type, name=ingred.name, amount = (math.ceil(rf.efficiency*ingred.amount/100))}
@@ -453,6 +450,7 @@ function formatResults(nrec,recipe)
 				newResult = {type="item",name=ingred[1] or ingred.name,amount=(math.ceil(rf.efficiency*ingredAmount/100))}
 			end
 			table.insert(nrecData.results, newResult)
+			
 		end
 	end
 end
