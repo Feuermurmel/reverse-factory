@@ -96,6 +96,11 @@ function addRecipes(itemType, group)
 	for itemName, item in pairs(group) do
 		--Check if a canon recipe exists for the item in question
 		local recipe = data.raw.recipe[itemName] and (data.raw.recipe[itemName] or data.raw.recipe[itemName..yuoki])
+		--Fix for items from 248k mod
+		if rf.mod248k and string.match(itemName,"_item") then
+			recipeName = shorten248k(itemName)
+			recipe = data.raw.recipe[recipeName]
+		end
 		if recipe then
 			local reversible = false
 			--Recipe must have ingredients to be uncraftable
@@ -680,8 +685,12 @@ function nulliusRecycling()
 	end
 end
 
-
-
+function shorten248k (itemName)
+	recipeName = string.gsub(itemName,"_item","_recipe")
+	--val = string.strfind(itemName,"-item")
+	--recipeName = strsub(itemName, 0, val)
+	return recipeName
+end
 
 
 

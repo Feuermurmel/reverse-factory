@@ -14,6 +14,7 @@ rf.norecycle_categories = {}
 rf.norecycle_subgroups = {}
 rf.custom_recycle = {}  --Format of {item-type, item-name, recipe-name}
 rf.maxResults = {5,5,5,5}
+rf.mod248k = false
 
 --If certain mods are detected, change some recipes later
 if mods ["nullius"] then
@@ -26,6 +27,9 @@ elseif mods["Fantario"] then
 	rf.mods = "fantario"
 elseif mods["bobassembly"] then
 	rf.mods = "bobassembly"
+end
+if mods ["248k"] then
+	rf.mod248k = true
 end
 
 --This is where the magic happens
