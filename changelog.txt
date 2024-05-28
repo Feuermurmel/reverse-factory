@@ -1,5 +1,10 @@
 ---------------------------------------------------------------------------------------------------
-Version: 7.0.5
+Version: 7.0.7
+Date: June 26, 2020
+  Bugfixes:
+    - Hopefully fixed recipe icon/icons bug with Angel's, Bob's, and ShinyBobGFX.
+---------------------------------------------------------------------------------------------------
+Version: 7.0.6
 Date: June 24, 2020
   Bugfixes:
     - Improved compatibility with "Artisanal Reskins: Bob's Mods".
