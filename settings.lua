@@ -13,16 +13,16 @@ data:extend({
 	},
 	{
 		type = "bool-setting",
-		name = "rf-compat",
+		name = "rf-compati",
 		setting_type = "runtime-global",
-		default_value = "false",
+		default_value = "true",
 	},
 	{
 		type = "int-setting",
-		name = "rf-delay",
+		name = "rf-delays",
 		setting_type = "runtime-global",
-		default_value = "300",
-		minimum_value = "30",
+		default_value = "30",
+		minimum_value = "10",
 		maximum_value = "1200"
 	},
 })
