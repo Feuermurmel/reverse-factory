@@ -78,7 +78,7 @@ end)
 script.on_event(defines.events.on_tick, function(event)
 	if not global.marks then scanworld() end
 	if event.tick % settings.global["rf-delays"].value == 0 then
-		game.players[1].print(serpent.block(global.recyclers))
+		--game.players[1].print(serpent.block(global.recyclers))
 		checkinvs()
 	end
 end)
