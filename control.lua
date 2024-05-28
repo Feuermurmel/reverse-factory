@@ -42,13 +42,22 @@ function scanworld()
 	global.recyclers = {}
 	global.marks = {}
 	for _, surface in pairs(game.surfaces) do
-		local recyclers = surface.find_entities_filtered{name= "reverse-factory"}
+		local r1 = surface.find_entities_filtered{name="reverse-factory-1"}
+		local r2 = surface.find_entities_filtered{name="reverse-factory-2"}
+		local recyclers = {}
+		for _, value in pairs (r1) do
+			table.insert(recyclers, value)
+		end
+		for _, value in pairs (r2) do
+			table.insert(recyclers, value)
+		end
 		global.recyclers = recyclers
 	end
 	for i=0, (#global.recyclers) do
 		table.insert(global.marks,false)
 	end
 end
+
 script.on_init( function()
 	scanworld()
 end)
@@ -60,57 +69,63 @@ end)
 script.on_event(defines.events.on_tick, function(event)
 	if not global.marks then scanworld() end
 	if event.tick % settings.global["rf-delays"].value == 0 then
-		--game.players[1].print("TEST")
+		--game.players[1].print(serpent.block(global.recyclers))
 		checkinvs()
 	end
 end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
 	if not global.marks then scanworld() end
-	if event.created_entity.name == "reverse-factory" then
-		table.insert(global.recyclers, event.created_entity)
-	end
+	addRecycler(event.created_entity)
 end)
 
 script.on_event(defines.events.on_built_entity, function(event)
 	if not global.marks then scanworld() end
-	if event.created_entity.name == "reverse-factory" then
-		table.insert(global.recyclers, event.created_entity)
-	end
+	addRecycler(event.created_entity)
 end)
 
 script.on_event(defines.events.on_entity_died, function(event)
 	if not global.marks then scanworld() end
-	if event.entity.name == "reverse-factory" then
-		for key, entity in pairs(global.recyclers) do
-			if entity == event.entity then
-				table.remove(global.recyclers, key)
-			end
-		end
-	end
+	killRecycler(event.entity)
 end)
 
 script.on_event(defines.events.on_robot_pre_mined, function(event)
 	if not global.marks then scanworld() end
-	if event.entity.name == "reverse-factory" then
-		for key, entity in pairs(global.recyclers) do
-			if entity == event.entity then
-				table.remove(global.recyclers, key)
-			end
-		end
-	end
+	killRecycler(event.entity)
 end)
 
 script.on_event(defines.events.on_pre_player_mined_item, function(event)
 	if not global.marks then scanworld() end
-	if event.entity.name == "reverse-factory" then
-		for key, entity in pairs(global.recyclers) do
-			if entity == event.entity then
+	killRecycler(event.entity)
+end)
+
+function addRecycler(entity)
+	local p1 = string.find(entity.name, "reverse")
+	local p2 = string.find(entity.name, "factory")
+	if p1 and p2 then
+		table.insert(global.recyclers, entity)
+	end
+end
+
+function killRecycler(entity)
+	local p1 = string.find(entity.name, "reverse")
+	local p2 = string.find(entity.name, "factory")
+	if p1 and p2 then
+		for key, ent in pairs(global.recyclers) do
+			if ent == entity then
 				table.remove(global.recyclers, key)
 			end
 		end
 	end
-end)
+end
+
+
+
+
+
+
+
+
 
 
 end
