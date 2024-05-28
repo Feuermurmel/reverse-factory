@@ -97,6 +97,7 @@ function addRecipes(itemType, group)
 		--Check if a canon recipe exists for the item in question
 		local recipe = data.raw.recipe[itemName] and (data.raw.recipe[itemName] or data.raw.recipe[itemName..yuoki])
 		if recipe then
+			local reversible = false
 			--Recipe must have ingredients to be uncraftable
 			if recipe.ingredients then
 				if next(recipe.ingredients) then

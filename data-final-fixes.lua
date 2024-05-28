@@ -22,5 +22,5 @@ for n=1,4 do
 end
 
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
---rf.debug(rf.maxResults)
+--rf.debug(data.raw.recipe["rf-n-power"])
 --rf.debug(data.raw.module["productivity-module"].limitation)
