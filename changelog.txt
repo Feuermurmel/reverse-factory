@@ -1,8 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.2.5
+Date: March 27, 2024
+  Bugfixes:
+    - Fixed issue with automatic ingredient push with multiple surfaces.
+---------------------------------------------------------------------------------------------------
 Version: 8.2.4
 Date: February 21, 2024
   Bugfixes:
-    - Fixed issue with strings being used in "energy_required" field of recipes.
+    - Fixed issue when strings were being used in "energy_required" field of recipes.
 ---------------------------------------------------------------------------------------------------
 Version: 8.2.3
 Date: February 21, 2024
