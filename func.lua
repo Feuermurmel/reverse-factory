@@ -206,12 +206,12 @@ function makeRecipe(itemType,item,recipe)
 	--If normal/expensive recipe, make edits to those parts as well
 	if data.raw.recipe[nrec].normal then
 		data.raw.recipe[nrec].normal.hidden = true
-		data.raw.recipe[nrec].normal.unlock_results = true
+		data.raw.recipe[nrec].normal.unlock_results = false
 		data.raw.recipe[nrec].normal.allow_decomposition = false
 	end
 	if data.raw.recipe[nrec].expensive then
 		data.raw.recipe[nrec].expensive.hidden = true
-		data.raw.recipe[nrec].expensive.unlock_results = true
+		data.raw.recipe[nrec].expensive.unlock_results = false
 		data.raw.recipe[nrec].expensive.allow_decomposition = false
 	end
 	
