@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.0.7
+Date: June 6, 2019
+  Changes:
+    - Removed safety toggle, as dense recipes are no longer an issue.
+      Items such as nuclear reactor, rocket silo, etc can now be recycled.
+  Bugfixes:
+    - Any bugs relating to stack sizes of dense recipes should be fixed
+---------------------------------------------------------------------------------------------------
 Version: 6.0.6
 Date: April 23, 2019
   Major Features:

@@ -32,9 +32,6 @@ function createSimpleRecipe(recipe, item)
 	if recipe.results then if recipe.results[1] then if recipe.results[1].amount then
 		rec_count = recipe.results[1].amount
 	end end end
-	local new_ingreds = {}
-	if rf.safety then new_ingreds = recipe.ingredients
-	else new_ingreds = fixstackable(recipe.ingredients) end
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
 	local new_recipe = {}
 	new_recipe = {
@@ -47,7 +44,7 @@ function createSimpleRecipe(recipe, item)
 		hidden = "true",
 		energy_required = 30,
 		ingredients = {{rec_name, rec_count}},
-		results = new_ingreds,
+		results = recipe.ingredients,
 		allow_decomposition = false
 	}
 	--Icons supercede the use of icon
@@ -80,15 +77,6 @@ function createDualRecipe(recipe, item)
 		expencount = recipe.expensive.results[1].amount
 	end end end
 	local rec_name = string.gsub(recipe.name, yuokiSuffix, "")
-	local new_normal_ingreds = {} 
-	local new_expensive_ingreds = {}
-	if rf.safety then 
-		new_normal_ingreds = recipe.normal.ingredients
-		new_expensive_ingreds = recipe.expensive.ingredients
-	else
-		new_normal_ingreds = fixstackable(recipe.normal.ingredients)
-		new_expensive_ingreds = fixstackable(recipe.expensive.ingredients)
-	end
 	local new_recipe = {}
 	new_recipe = {
 		type = "recipe",
@@ -98,14 +86,14 @@ function createDualRecipe(recipe, item)
 		category = "recycle",
 		normal = {
 			ingredients = {{rec_name, normacount}},
-			results = new_normal_ingreds,
+			results = recipe.normal.ingredients,
 			hidden = "true",
 			energy_required = 30,
 			allow_decomposition = false
 			},
 		expensive = {
 			ingredients = {{rec_name, expencount}},
-			results = new_expensive_ingreds,
+			results = recipe.expensive.ingredients,
 			hidden = "true",
 			energy_required = 30,
 			allow_decomposition = false
@@ -217,271 +205,6 @@ function uncraftable(recipe, item)
 	end
 	if recipe.name == "stone-crushed" then
 		uncraft = false
-	end
-	if rf.safety then
-		if recipe.ingredients then
-			for _, ingred in ipairs(recipe.ingredients) do
-				--Do not attempt to uncraft if one of the ingredients exceeds its stack size
-				if ingred.name then
-					if (data.raw.ammo[ingred.name]) then
-						if (ingred.amount > data.raw.ammo[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.armor[ingred.name]) then
-						if (ingred.amount > data.raw.armor[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.item[ingred.name]) then
-						if (ingred.amount > data.raw.item[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.gun[ingred.name]) then
-						if (ingred.amount > data.raw.gun[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.capsule[ingred.name]) then
-						if (ingred.amount > data.raw.capsule[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.module[ingred.name]) then
-						if (ingred.amount > data.raw.module[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.tool[ingred.name]) then
-						if (ingred.amount > data.raw.tool[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["rail-planner"][ingred.name]) then
-						if (ingred.amount > data.raw["rail-planner"][ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["mining-tool"][ingred.name]) then
-						if (ingred.amount > data.raw["mining-tool"][ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["repair-tool"][ingred.name]) then
-						if (ingred.amount > data.raw["repair-tool"][ingred.name].stack_size) then
-							uncraft=false
-						end
-					end
-				elseif (data.raw.ammo[ingred[1]]) then
-					if (ingred[2] > data.raw.ammo[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.armor[ingred[1]]) then
-					if (ingred[2] > data.raw.armor[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.item[ingred[1]]) then
-					if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.gun[ingred[1]]) then
-					if (ingred[2] > data.raw.gun[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.capsule[ingred[1]]) then
-					if (ingred[2] > data.raw.capsule[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.module[ingred[1]]) then
-					if (ingred[2] > data.raw.module[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.tool[ingred[1]]) then
-					if (ingred[2] > data.raw.tool[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw["rail-planner"][ingred[1]]) then
-					if (ingred[2] > data.raw["rail-planner"][ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw["mining-tool"][ingred[1]]) then
-					if (ingred[2] > data.raw["mining-tool"][ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw["repair-tool"][ingred[1]]) then
-					if (ingred[2] > data.raw["repair-tool"][ingred[1]].stack_size) then
-						uncraft=false
-					end
-				end
-			end
-		elseif recipe.normal.ingredients then
-			for _, ingred in ipairs(recipe.normal.ingredients) do
-				--Do not attempt to uncraft if one of the ingredients exceeds its stack size
-				if ingred.name then
-					if (data.raw.ammo[ingred.name]) then
-						if (ingred.amount > data.raw.ammo[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.armor[ingred.name]) then
-						if (ingred.amount > data.raw.armor[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.item[ingred.name]) then
-						if (ingred.amount > data.raw.item[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.gun[ingred.name]) then
-						if (ingred.amount > data.raw.gun[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.capsule[ingred.name]) then
-						if (ingred.amount > data.raw.capsule[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.module[ingred.name]) then
-						if (ingred.amount > data.raw.module[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.tool[ingred.name]) then
-						if (ingred.amount > data.raw.tool[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["rail-planner"][ingred.name]) then
-						if (ingred.amount > data.raw["rail-planner"][ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["mining-tool"][ingred.name]) then
-						if (ingred.amount > data.raw["mining-tool"][ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["repair-tool"][ingred.name]) then
-						if (ingred.amount > data.raw["repair-tool"][ingred.name].stack_size) then
-							uncraft=false
-						end
-					end
-				elseif (data.raw.ammo[ingred[1]]) then
-					if (ingred[2] > data.raw.ammo[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.armor[ingred[1]]) then
-					if (ingred[2] > data.raw.armor[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.item[ingred[1]]) then
-					if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.gun[ingred[1]]) then
-					if (ingred[2] > data.raw.gun[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.capsule[ingred[1]]) then
-					if (ingred[2] > data.raw.capsule[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.module[ingred[1]]) then
-					if (ingred[2] > data.raw.module[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw.tool[ingred[1]]) then
-					if (ingred[2] > data.raw.tool[ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw["rail-planner"][ingred[1]]) then
-					if (ingred[2] > data.raw["rail-planner"][ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw["mining-tool"][ingred[1]]) then
-					if (ingred[2] > data.raw["mining-tool"][ingred[1]].stack_size) then
-						uncraft=false
-					end
-				elseif (data.raw["repair-tool"][ingred[1]]) then
-					if (ingred[2] > data.raw["repair-tool"][ingred[1]].stack_size) then
-						uncraft=false
-					end
-				end
-			end
-			if recipe.expensive.ingredients then
-				for _, ingred in ipairs(recipe.expensive.ingredients) do
-					--Do not attempt to uncraft if one of the ingredients exceeds its stack size
-				if ingred.name then
-					if (data.raw.ammo[ingred.name]) then
-						if (ingred.amount > data.raw.ammo[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.armor[ingred.name]) then
-						if (ingred.amount > data.raw.armor[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.item[ingred.name]) then
-						if (ingred.amount > data.raw.item[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.gun[ingred.name]) then
-						if (ingred.amount > data.raw.gun[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.capsule[ingred.name]) then
-						if (ingred.amount > data.raw.capsule[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.module[ingred.name]) then
-						if (ingred.amount > data.raw.module[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.tool[ingred.name]) then
-						if (ingred.amount > data.raw.tool[ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["rail-planner"][ingred.name]) then
-						if (ingred.amount > data.raw["rail-planner"][ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["mining-tool"][ingred.name]) then
-						if (ingred.amount > data.raw["mining-tool"][ingred.name].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["repair-tool"][ingred.name]) then
-						if (ingred.amount > data.raw["repair-tool"][ingred.name].stack_size) then
-							uncraft=false
-						end
-					end
-					elseif (data.raw.ammo[ingred[1]]) then
-						if (ingred[2] > data.raw.ammo[ingred[1]].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.armor[ingred[1]]) then
-						if (ingred[2] > data.raw.armor[ingred[1]].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.item[ingred[1]]) then
-						if (ingred[2] > data.raw.item[ingred[1]].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.gun[ingred[1]]) then
-						if (ingred[2] > data.raw.gun[ingred[1]].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.capsule[ingred[1]]) then
-						if (ingred[2] > data.raw.capsule[ingred[1]].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.module[ingred[1]]) then
-						if (ingred[2] > data.raw.module[ingred[1]].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw.tool[ingred[1]]) then
-						if (ingred[2] > data.raw.tool[ingred[1]].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["rail-planner"][ingred[1]]) then
-						if (ingred[2] > data.raw["rail-planner"][ingred[1]].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["mining-tool"][ingred[1]]) then
-						if (ingred[2] > data.raw["mining-tool"][ingred[1]].stack_size) then
-							uncraft=false
-						end
-					elseif (data.raw["repair-tool"][ingred[1]]) then
-						if (ingred[2] > data.raw["repair-tool"][ingred[1]].stack_size) then
-							uncraft=false
-						end
-					end
-				end
-			end
-		end
 	end
 	if rf.intermediates then
 		if item.subgroup == "intermediate-product" then uncraft = false end
