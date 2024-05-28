@@ -120,8 +120,10 @@ function addRecipes(itemType, group)
 			end
 			if reversible then
 				if checkProbs(recipe,item) then
-					if checkRecipe(recipe,item) then
-						makeRecipe(itemType,item,recipe)
+					if noRecycle(recipe,item) then
+						if checkForGrids(recipe) then
+							makeRecipe(itemType,item,recipe)
+						end
 					end
 				end
 			end
@@ -158,7 +160,7 @@ function checkProbs(recipe,item)
 end
 
 --Check if recipe should be recyclable.
-function checkRecipe(recipe,item)
+function noRecycle(recipe,item)
 	uncraft = true
 	--List of items and categories not to recycle; can be added to by other mods.
 	for _, item in pairs(rf.norecycle_items) do
@@ -174,6 +176,28 @@ function checkRecipe(recipe,item)
 	--Output list of items that could not be recycled.
 	if not uncraft then log("Item is on list of Unrecyclables: "..item.name) end
 	return uncraft
+end
+
+--Check if recipe contains unstackable items with equipment grid as ingredients
+function checkForGrids(recipe)
+	local noGrid = true
+	if recipe.ingredients then
+		noGrid = checkIngreds(recipe.ingredients)
+	end
+
+	if recipe.normal then
+		if recipe.normal.ingredients then
+			noGrid = checkIngreds(recipe.normal.ingredients)
+		end
+	end
+
+	if recipe.expensive then
+		if recipe.expensive.ingredients then
+			noGrid = checkIngreds(recipe.expensive.ingredients)
+		end
+	end
+		
+	return noGrid
 end
 
 --Create a reverse recipe for input recipe
@@ -586,6 +610,44 @@ function fixCategory(nrec,rfCategory)
 		end
 	end
 
+end
+
+--Cheeks ingredients for equipment grids
+--Returns false if an ingredient has equipment grid and uses more than one in recipe
+--Otherwise returns true
+function checkIngreds(ingredients)
+	local possibleGrid = false
+	local ingredCount = 0
+	--Check every ingredient in the list for equipment grid, and record ingredient count
+	for _, ingred in pairs(ingredients) do
+		for _, object in pairs(ingred) do
+			if type(object) == "string" and object ~= "item" and object ~= "fluid" then
+				if data.raw.armor[object] then
+					if data.raw.armor[object].equipment_grid then
+						possibleGrid = true
+					end
+				end
+				if data.raw.car[object] then
+					if data.raw.car[object].equipment_grid then
+						possibleGrid = true
+					end
+				end
+				if data.raw["spider-vehicle"][object] then
+					if data.raw["spider-vehicle"][object].equipment_grid then
+						possibleGrid = true
+					end
+				end
+			end
+			if type(object) == "number" then
+				ingredCount = object
+			end 
+		end
+		--If an ingredient has equipment grid and more than one in ingredient count, return false
+		if possibleGrid and ingredCount > 1 then
+			return false
+		end
+	end
+	return true
 end
 
 --Ensure that t2 recyclers make enough room for t1 and t2 recipes, and so on for each tier.

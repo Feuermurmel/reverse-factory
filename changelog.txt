@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.1
+Date: September 1, 2021
+  Bugfixes:
+    - Fixed error between Robot Army and Schall Primary Battery
+      This should also prevent any errors regarding non-stackable items in recipes.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.0
 Date: August 29, 2021
   Major Features:
