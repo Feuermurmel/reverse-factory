@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.2.12
+Date: May 25, 2024
+  Bugfixes:
+    - Fixed automatic ingredient push not working on surfaces created before the mod was added.
+---------------------------------------------------------------------------------------------------
 Version: 8.2.11
 Date: May 14, 2024
   Bugfixes:

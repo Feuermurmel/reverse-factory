@@ -185,6 +185,7 @@ function addRecycler(entity, surface)
 		local new_entity = {entity,timer}
 		--If the list does not yet exist for this surface, create the list first
 		if not global[surface] then
+			addSurface(surface)
 			global[surface] = {}
 		end
 		--game.players[1].print(("Recycler added to: "..surface))
