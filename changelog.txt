@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.6
+Date: February 18, 2022
+  Bugfixes:
+    - Fixed quickbar filter showing all items available through reverse recipes.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.5
 Date: February 18, 2022
   Bugfixes:

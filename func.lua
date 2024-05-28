@@ -180,7 +180,7 @@ end
 function makeRecipe(itemType,item,recipe)
 	local nrec = "rf-"..item.name
 	local rfCategory, normalCount, expenCount = checkResults(itemType,item,recipe)
-	local toAdd = {category = rfCategory, subgroup = "recycling", enabled = true, hidden = true, allow_decomposition = false}
+	local toAdd = {category = rfCategory, subgroup = "recycling", enabled = true, hidden = true, allow_decomposition = false, unlock_results = false}
 	--local energyMult = 3
 	local energyMin = 5
 	
