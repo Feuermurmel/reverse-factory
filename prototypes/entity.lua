@@ -28,6 +28,11 @@ data:extend({
     },
     collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
     selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
+	module_specification =
+    {
+      module_slots = 2,
+      module_info_icon_shift = {0, 0.8}
+    },
     allowed_effects = {"consumption", "speed", "pollution"},
     crafting_categories = {"recycle", "recycle-with-fluid"},
     result_inventory_size = 10,
