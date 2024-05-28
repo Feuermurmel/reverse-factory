@@ -483,6 +483,9 @@ function uncraftable(recipe, item)
 			end
 		end
 	end
+	if rf.intermediates then
+		if item.subgroup == "intermediate-product" then uncraft = false end
+	end
 	if not uncraft then log("Item cannot be uncrafted: "..item.name) end
 	return uncraft
 end
