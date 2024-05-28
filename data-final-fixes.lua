@@ -61,6 +61,6 @@ end
 
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
 --rf.debug(data.raw.technology["reverse-factory-2"])
---rf.debug(data.raw.recipe["reverse-factory-1"])
+--rf.debug(data.raw.recipe["rf-lubricant"])
 --rf.debug(data.raw.module["productivity-module"].limitation)
 --rf.debug(data.raw["rail-planner"].rail)

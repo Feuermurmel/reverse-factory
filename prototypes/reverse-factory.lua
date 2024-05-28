@@ -253,7 +253,7 @@ local function rfEntity(n)
 				production_type = "input",
 				pipe_picture = rfpipepictures(),
 				pipe_covers = pipecoverspictures(),
-				base_level = 1,
+				base_level = -1,
 				base_area = 10,
 				pipe_connections = {{ position = {-1, 2} }}
 			},
