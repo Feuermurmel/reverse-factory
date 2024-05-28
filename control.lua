@@ -2,7 +2,7 @@ if settings.global["rf-compati"].value then
 
 function checkinvs()
 	--Run through every currently active surface
-	for _, surface in pairs(global.activeSurfaces) do
+	for _, surface in pairs(global.surfaces) do
 		--If at least one recycler in the list..
 		if global[surface] then if next(global[surface]) then
 			--Check through the entire list..
@@ -45,30 +45,28 @@ end
 function initworld()
 	--It's easier to remake the list of recyclers, than to check for duplicates, on map load
 	global = {}
-	global.activeSurfaces = {}
+	global.surfaces = {}
 	global.delay = settings.global["rf-delay"].value
 	global.timer = settings.global["rf-timer"].value
-	scanworld()
-end
-
---Scan the world for recyclers and place them in a list, previously created by initworld()
-function scanworld()
 	--Check every game surface in the world
-	for _, surface in pairs(game.surfaces) do
+	for key, surface in pairs(game.surfaces) do
 		for n=1, 4 do
 			--Check the list of entities for any placed recyclers
 			local rfname = "reverse-factory-"..n
-			local list = surface.find_entities_filtered{name=rfname}
+			local list = game.surfaces[key].find_entities_filtered{name=rfname}
 			--And add them to the list for that specific surface
 			for _, entity in pairs(list) do
 				addRecycler(entity, surface.name)
 			end
 		end
 	end
-	--Check all players in the world to see what surfaces are activeSurfaces
-	for _, player in pairs (game.players) do
-		addActiveSurface(player.surface.name)
-	end
+end
+
+--Scan the world for recyclers and place them in a list, previously created by initworld()
+function scanworld(surface)
+	--game.players[1].print("Number of game surfaces :"..#game.surfaces)
+	--game.players[1].print("Number of global surfaces :"..#global.surfaces)
+	global[surface] = {}
 end
 
 --On game load, scan the world for existing recyclers
@@ -88,9 +86,11 @@ script.on_event(defines.events.on_tick, function(event)
 				checkinvs()
 			end
 		end
-		if global.activeSurfaces then
-			if event.tick % 60 == 0 then
-				--game.players[1].print(serpent.block(global))
+		if global.surfaces then
+			if event.tick % 120 == 0 then
+				--game.players[1].print("Recyclers on nauvis :"..#global.nauvis)
+				--game.players[1].print(serpent.block(global.nauvis))
+				--game.players[1].print(serpent.block(global.surfaces))
 			end
 		end
 	--else game.players[1].print(("Global variable not set."))
@@ -103,7 +103,6 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
 end)
 
 script.on_event(defines.events.on_built_entity, function(event)
-	--game.players[1].print((serpent.block(event.created_entity.surface.name)))
 	addRecycler(event.created_entity, event.created_entity.surface.name)
 end)
 
@@ -130,24 +129,23 @@ end)
 
 --When the surface is created
 script.on_event(defines.events.on_surface_created, function(event)
-	addActiveSurface(game.surfaces[event.surface_index].name)
+	addSurface(game.surfaces[event.surface_index].name)
 end)
 
 --Just after the surface is cleared
 script.on_event(defines.events.on_surface_cleared, function(event)
-	addActiveSurface(game.surfaces[event.surface_index].name)
+	addSurface(game.surfaces[event.surface_index].name)
 end)
 
 --Just before the surface is deleted
 script.on_event(defines.events.on_pre_surface_deleted, function(event)
-	--game.players[1].print(game.surfaces[event.surface_index].name)
-	removeActiveSurface(game.surfaces[event.surface_index].name)
+	removeSurface(game.surfaces[event.surface_index].name)
 end)
 
 --Just before the surface is cleared of all entites
 script.on_event(defines.events.on_pre_surface_cleared, function(event)
 	local surface = game.surfaces[event.surface_index].name
-	removeActiveSurface(game.surfaces[event.surface_index].name)
+	removeSurface(game.surfaces[event.surface_index].name)
 	if global[surface] then
 		global[surface] = {}
 	end
@@ -161,20 +159,23 @@ end)
 
 --When the surface is renamed?
 script.on_event(defines.events.on_surface_renamed, function(event)
-	removeActiveSurface(event.old_name)
-	addActiveSurface(event.new_name)
+	removeSurface(event.old_name)
+	addSurface(event.new_name)
 end)
 
 --When a player joins the game
 script.on_event(defines.events.on_player_joined_game, function(event)
-	addActiveSurface(game.players[event.player_index].surface.name)
+	addSurface(game.players[event.player_index].surface.name)
 end)
 
---When a player changes surfaces (Warptorio 2)
+--When a player changes surfaces
 script.on_event(defines.events.on_player_changed_surface, function(event)
-	removeActiveSurface(game.surfaces[event.surface_index].name)
-	addActiveSurface(game.players[event.player_index].surface.name)
-	scanworld()
+	--removeSurface(game.surfaces[event.surface_index].name)
+	addSurface(game.players[event.player_index].surface.name)
+	
+	if game.active_mods["warptorio2"] then
+		scanworld(game.surfaces[event.surface_index])
+	end
 end)
 
 --Check if the entity was a recycler, and if so, add it to the list with its own timer
@@ -186,7 +187,7 @@ function addRecycler(entity, surface)
 		if not global[surface] then
 			global[surface] = {}
 		end
-		game.players[1].print(("Recycler added to: "..surface))
+		--game.players[1].print(("Recycler added to: "..surface))
 		table.insert(global[surface],new_entity)
 	end
 end
@@ -197,31 +198,31 @@ function killRecycler(entity, surface)
 		for key, list_entity in pairs (global[surface]) do
 			if list_entity[1] == entity then
 				table.remove(global[surface],key)
+				--game.players[1].print(("Recycler removed from: "..surface))
 			end
 		end
 	end
 end
 
-function addActiveSurface(surface)
-	local addSurface = true
-	for _, oldSurface in pairs (global.activeSurfaces) do
+function addSurface(surface)
+	local toAddSurface = true
+	for _, oldSurface in pairs (global.surfaces) do
 		if string.find(surface, oldSurface, 1, true) then
-			addSurface = false
-			--game.players[1].print("Duplicate was located. addSurface = "..tostring(addSurface))
+			toAddSurface = false
+			--game.players[1].print("Duplicate entry: "..surface)
 		end
 	end
-	if addSurface then
-		--game.players[1].print("Current list: "..serpent.block(global.activeSurfaces))
-		table.insert(global.activeSurfaces, surface)
+	if toAddSurface then
+		--game.players[1].print("Current list: "..serpent.block(global.surfaces))
+		table.insert(global.surfaces, surface)
 		--game.players[1].print("Added: "..surface)
 	end
 end
 
-function removeActiveSurface(surface)
-	local removeSurface = false
-	for key, oldSurface in pairs (global.activeSurfaces) do
+function removeSurface(surface)
+	for key, oldSurface in pairs (global.surfaces) do
 		if string.match(surface, oldSurface) then
-			table.remove(global.activeSurfaces, key)
+			table.remove(global.surfaces, key)
 		end
 	end
 end
