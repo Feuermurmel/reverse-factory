@@ -89,6 +89,7 @@ table.insert(rf.norecycle_items, "stone-crushed")
 table.insert(rf.norecycle_subgroups, "smelting_fantario")
 table.insert(rf.norecycle_subgroups, "petrochem-catalysts")
 table.insert(rf.norecycle_categories, "seed-extractor")
+table.insert(rf.norecycle_categories, "fu_tokamak_reactor_crafting_category")
 
 --Examples for adding custom recipes to reverse-factory, for external mod use.
 --table.insert(rf.custom_recycle, {"item", "droid-smg-dummy", "droid-smg-deploy"})
