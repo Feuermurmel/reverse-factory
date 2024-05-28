@@ -598,6 +598,7 @@ function fixCategory(nrec,rfCategory)
 end
 
 function checkForGrids(ingredient)
+	local possibleGrid = false
 	if data.raw.armor[ingredient] then
 		if data.raw.armor[ingredient].equipment_grid then
 			possibleGrid = true

@@ -59,6 +59,9 @@ end
 fixMaxResults()
 
 --Set result size of entities based on largest recipe count in current game
+--Beta: Adding two extra output slots for the potential fluid outputs on the t3 and t4 machines
+--rf.maxResults[3] = 2 + rf.maxResults[3]
+--rf.maxResults[4] = 2 + rf.maxResults[4]
 for n=1,4 do
 	data.raw["furnace"]["reverse-factory-"..n].result_inventory_size = rf.maxResults[n]
 	if mods["nullius"] then
@@ -68,6 +71,7 @@ end
 
 
 --log(serpent.block(data.raw.recipe["advanced-foundry-mk01"]))
+--rf.debug(data.raw.recipe["rf-wooden-chest"])
 --rf.debug(data.raw.technology["reverse-factory-1"])
 --rf.debug(data.raw.armor["starry-armor"])
 --rf.debug(data.raw.module["productivity-module"].limitation)
