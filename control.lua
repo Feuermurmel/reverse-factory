@@ -103,6 +103,10 @@ script.on_event(defines.events.on_entity_died, function(event)
 	killRecycler(event.entity, event.entity.surface.name)
 end)
 
+script.on_event(defines.events.script_raised_destroy, function(event)
+	killRecycler(event.entity, event.entity.surface.name)
+end)
+
 script.on_event(defines.events.on_robot_pre_mined, function(event)
 	killRecycler(event.entity, event.entity.surface.name)
 end)
