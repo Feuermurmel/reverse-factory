@@ -11,3 +11,11 @@ rf = {}
 rf.recipes = {}
 rf.safety = settings.startup["rf-safety"].value
 rf.vehicles = settings.startup["rf-vehicles"].value
+rf.norecycle_items = {}
+rf.norecycle_categories = {}
+--table.insert(rf.norecycle_items, "electronic-circuit")
+table.insert(rf.norecycle_categories, "recycle")
+table.insert(rf.norecycle_categories, "recycle-with-fluids")
+table.insert(rf.norecycle_categories, "oil-processing")
+--table.insert(rf.norecycle_categories, "centrifuging")
+--table.insert(rf.norecycle_categories, "smelting")

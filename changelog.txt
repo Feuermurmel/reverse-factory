@@ -1,5 +1,9 @@
 REVERSE FACTORY
 ---------------------------------------------------------------------------------------------------
+Version: 6.0.5
+  Changes:
+    - Added feature to set non-recyclable recipes and categories for other mods to use (see FAQs)
+---------------------------------------------------------------------------------------------------
 Version: 6.0.4
   Changes:
     - Fixed compatibility with bobs + angels

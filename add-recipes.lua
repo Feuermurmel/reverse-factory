@@ -205,6 +205,16 @@ end
 --I also borrowed it to disable an angels crushed stone recipe (which just duplicates, for some reason)
 function uncraftable(recipe, item)
 	local uncraft = true
+	if next(rf.norecycle_items) then
+		for _, recipename in ipairs(rf.norecycle_items) do
+			if recipe.name == recipename then uncraft = false end
+		end
+	end
+	if next(rf.norecycle_categories) then
+		for _, category in ipairs(rf.norecycle_categories) do
+			if recipe.category == category then uncraft = false end
+		end
+	end
 	if recipe.name == "stone-crushed" then
 		uncraft = false
 	end
