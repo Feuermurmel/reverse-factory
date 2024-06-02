@@ -9,17 +9,17 @@ data:extend({
 		type = "int-setting",
 		name = "rf-delay",
 		setting_type = "runtime-global",
-		default_value = "60",
-		minimum_value = "10",
-		maximum_value = "1200"
+		default_value = "30",
+		minimum_value = "5",
+		maximum_value = "300"
 	},
 	{
 		type = "int-setting",
 		name = "rf-timer",
 		setting_type = "runtime-global",
-		default_value = "180",
+		default_value = "60",
 		minimum_value = "10",
-		maximum_value = "1200"
+		maximum_value = "300"
 	},
 	{
 		type = "bool-setting",

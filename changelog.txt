@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.2.13
+Date: May 27, 2024
+  Minor Features:
+    - Possible slight improvement to performance when automatic ingredient push is enabled.
+      Lowered minimum and default values of push delay and timer, for increased responsiveness.
+  Bugfixes:
+    - Fixed automatic ingredient push settings not updating properly when modified during game.
+    - Added SeaBlock as hidden optional dependency, potential fix for incorrect reverse recipes.
+---------------------------------------------------------------------------------------------------
 Version: 8.2.12
 Date: May 25, 2024
   Bugfixes:

@@ -34,7 +34,7 @@ function checkinvs()
 				--Resets the timer if the recycler was not stopped,
 				--or if the recycler has already pushed to output
 				if noResetTimer then
-					entity[2]=global.timer
+					entity[2]=settings.global["rf-timer"].value
 				end
 			end
 		end end
@@ -46,8 +46,8 @@ function initworld()
 	--It's easier to remake the list of recyclers, than to check for duplicates, on map load
 	global = {}
 	global.surfaces = {}
-	global.delay = settings.global["rf-delay"].value
-	global.timer = settings.global["rf-timer"].value
+	--global.delay = settings.global["rf-delay"].value
+	--global.timer = settings.global["rf-timer"].value
 	--Check every game surface in the world
 	for key, surface in pairs(game.surfaces) do
 		for n=1, 4 do
@@ -63,38 +63,35 @@ function initworld()
 end
 
 --Scan the world for recyclers and place them in a list, previously created by initworld()
+--That's what this function did originally, but now it just resets the surface list.
 function scanworld(surface)
 	--game.players[1].print("Number of game surfaces :"..#game.surfaces)
 	--game.players[1].print("Number of global surfaces :"..#global.surfaces)
 	global[surface] = {}
 end
 
---On game load, scan the world for existing recyclers
+--This sets up the timer to check recycler inventories every nth tick (defined in settings)
+--Initializes the function to be called on map load, and settings changed.
+function setup_checkinvs()
+    --Remove previously set up on_nth_tick() handler, if any.
+    script.on_nth_tick(nil)
+    script.on_nth_tick(settings.global["rf-delay"].value, checkinvs)
+end
+
+--When mod settings are changed, updates the "on nth tick" timer.
+script.on_event(defines.events.on_runtime_mod_setting_changed, setup_checkinvs)
+
+--Runs immediately on map load.
+setup_checkinvs()
+
+--This only runs when this mod is initially added to game.
 script.on_init( function()
 	initworld()
 end)
 
+--This runs whenever the modlist is updated or modified.
 script.on_configuration_changed( function()
 	initworld()
-end)
-
---Every 15 ticks, do a thing
-script.on_event(defines.events.on_tick, function(event)
-	if global then
-		if global.delay then
-			if event.tick % global.delay == 0 then
-				checkinvs()
-			end
-		end
-		if global.surfaces then
-			if event.tick % 120 == 0 then
-				--game.players[1].print("Recyclers on nauvis :"..#global.nauvis)
-				--game.players[1].print(serpent.block(global.nauvis))
-				--game.players[1].print(serpent.block(global.surfaces))
-			end
-		end
-	--else game.players[1].print(("Global variable not set."))
-	end
 end)
 
 --When a recycler is placed, add it to the list
@@ -181,7 +178,7 @@ end)
 --Check if the entity was a recycler, and if so, add it to the list with its own timer
 function addRecycler(entity, surface)
 	if string.find(entity.name, "reverse") and string.find(entity.name, "factory") then
-		local timer = global.timer
+		local timer = settings.global["rf-timer"].value
 		local new_entity = {entity,timer}
 		--If the list does not yet exist for this surface, create the list first
 		if not global[surface] then
@@ -230,7 +227,7 @@ end
 
 --Countdown timer by the delay amount
 function countdown(timer)
-	local timer = timer - global.delay
+	local timer = timer - settings.global["rf-delay"].value
 	return timer
 end
 
